@@ -1,0 +1,21 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse Project Files #
+.project
+.settings/
+.classpath
+target/
+
+dependency-reduced-pom.xml
+
+.DS_Store
+*.log
+vagrant/software/*.tar
+logs
+rebel*.xml
+.springBeans
