@@ -20,7 +20,7 @@ import uk.co.bluegecko.pay.upload.service.UploadService;
 public class UploadServiceBase implements UploadService
 {
 
-	private static Logger logger = LoggerFactory.getLogger( UploadService.class );
+	private static final Logger logger = LoggerFactory.getLogger( UploadService.class );
 
 	private final Source source;
 
@@ -40,9 +40,11 @@ public class UploadServiceBase implements UploadService
 		try (BufferedReader reader = new BufferedReader( new InputStreamReader( file.getInputStream() ) ))
 		{
 			String line;
+			int i = 0;
 			while ( ( line = reader.readLine() ) != null )
 			{
-				source.output().send( MessageBuilder.withPayload( line ).build() );
+				source.output().send( MessageBuilder.withPayload( line ).setSequenceNumber( i++ ).build() );
+				logger.info( "sent {}", line );
 			}
 		}
 

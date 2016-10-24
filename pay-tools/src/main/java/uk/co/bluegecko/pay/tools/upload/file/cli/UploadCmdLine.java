@@ -1,0 +1,28 @@
+package uk.co.bluegecko.pay.tools.upload.file.cli;
+
+
+import java.io.File;
+import java.net.URI;
+import java.util.List;
+
+import com.lexicalscope.jewel.cli.Option;
+import com.lexicalscope.jewel.cli.Unparsed;
+
+
+public interface UploadCmdLine
+{
+
+	@Option( defaultValue = "http://red-dragon.local:8081", shortName = "h", longName = "host",
+			description = "host URL of upload server" )
+	public URI host();
+
+	@Option( defaultValue = ".", shortName = "d", longName = "directory", description = "directory of files" )
+	public File directory();
+
+	@Unparsed( minimum = 1, name = "file(s) to upload", description = "list of file(s) to upload" )
+	public List< String > arguments();
+
+	@Option( helpRequest = true, shortName = "?", longName = "help" )
+	public boolean help();
+
+}

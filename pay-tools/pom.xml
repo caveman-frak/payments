@@ -27,6 +27,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.lexicalscope.jewelcli</groupId>
+			<artifactId>jewelcli</artifactId>
+		</dependency>
 	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.lexicalscope.jewelcli</groupId>
+				<artifactId>jewelcli</artifactId>
+				<version>0.8.9</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

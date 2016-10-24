@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.portfolio.service;
+package uk.co.bluegecko.pay.portfolio.service.base;
 
 
 import org.slf4j.Logger;
