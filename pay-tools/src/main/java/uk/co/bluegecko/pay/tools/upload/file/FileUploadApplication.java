@@ -1,14 +1,14 @@
 package uk.co.bluegecko.pay.tools.upload.file;
 
 
-import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +30,7 @@ public class FileUploadApplication
 
 	public static void main( final String... args )
 	{
-		SpringApplication.run( FileUploadApplication.class, args );
+		new SpringApplicationBuilder().sources( FileUploadApplication.class ).profiles( "dev" ).run( args );
 	}
 
 	@Bean
@@ -47,14 +47,7 @@ public class FileUploadApplication
 				final Cli< UploadCmdLine > cli = CliFactory.createCli( UploadCmdLine.class );
 				try
 				{
-					final UploadCmdLine commandLine = cli.parseArguments( args );
-
-					fileUploadService.checkConnection( commandLine.host() );
-
-					for ( final String arg : commandLine.arguments() )
-					{
-						processFile( fileUploadService, commandLine, arg );
-					}
+					fileUploadService.processFiles( cli.parseArguments( args ) );
 				}
 				catch ( final HelpRequestedException ex )
 				{
@@ -63,23 +56,13 @@ public class FileUploadApplication
 				catch ( final ArgumentValidationException | IllegalArgumentException ex )
 				{
 					logger.error( ex.getLocalizedMessage() );
+					logger.error( "args {}", ArrayUtils.toString( args ) );
 				}
 				catch ( final IOException ex )
 				{
 					logger.error( "Unable to connect to host" );
 				}
 			};
-	}
-
-	private void processFile( final FileUploadService fileUploadService, final UploadCmdLine commandLine,
-			final String arg )
-	{
-		final File file = new File( commandLine.directory(), arg );
-
-		if ( fileUploadService.isFileValid( file ) )
-		{
-			fileUploadService.uploadFile( commandLine.host(), file );
-		}
 	}
 
 }

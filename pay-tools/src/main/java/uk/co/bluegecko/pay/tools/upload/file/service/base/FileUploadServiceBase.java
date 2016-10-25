@@ -21,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import uk.co.bluegecko.pay.tools.upload.file.cli.UploadCmdLine;
 import uk.co.bluegecko.pay.tools.upload.file.service.FileUploadService;
 
 
@@ -42,24 +43,17 @@ public class FileUploadServiceBase implements FileUploadService
 	}
 
 	@Override
-	public void uploadFile( final URI host, final File file )
+	public void processFiles( final UploadCmdLine commandLine ) throws IOException
 	{
-		final MultiValueMap< String, Object > map = new LinkedMultiValueMap<>();
-		map.add( "file", new FileSystemResource( file ) );
+		final URI host = commandLine.host();
 
-		final HttpHeaders headers = new HttpHeaders();
-		headers.setContentType( MediaType.MULTIPART_FORM_DATA );
+		checkConnection( host );
 
-		final HttpEntity< MultiValueMap< String, Object > > requestEntity = new HttpEntity<>( map, headers );
-		final ResponseEntity< Void > result = restTemplate.exchange( host.resolve( UPLOAD ), HttpMethod.POST,
-				requestEntity, Void.class );
-
-		logger.warn( "Uploaded '{}' with response {}", file.getAbsolutePath(), result.getStatusCode() );
-		logger.warn( "Redirect to '{}'", result.getHeaders().getLocation() );
+		commandLine.arguments().stream().map( ( arg ) -> new File( commandLine.directory(), arg ) )
+				.filter( ( file ) -> isFileValid( file ) ).forEach( ( file ) -> uploadFile( host, file ) );
 	}
 
-	@Override
-	public void checkConnection( final URI host ) throws IOException
+	private void checkConnection( final URI host ) throws IOException
 	{
 		try (final Socket testSocket = new Socket())
 		{
@@ -67,8 +61,7 @@ public class FileUploadServiceBase implements FileUploadService
 		}
 	}
 
-	@Override
-	public boolean isFileValid( final File file )
+	private boolean isFileValid( final File file )
 	{
 		if ( !file.isFile() || !file.exists() )
 		{
@@ -84,6 +77,22 @@ public class FileUploadServiceBase implements FileUploadService
 		{
 			return true;
 		}
+	}
+
+	private void uploadFile( final URI host, final File file )
+	{
+		final MultiValueMap< String, Object > map = new LinkedMultiValueMap<>();
+		map.add( "file", new FileSystemResource( file ) );
+
+		final HttpHeaders headers = new HttpHeaders();
+		headers.setContentType( MediaType.MULTIPART_FORM_DATA );
+
+		final HttpEntity< MultiValueMap< String, Object > > requestEntity = new HttpEntity<>( map, headers );
+		final ResponseEntity< Void > result = restTemplate.exchange( host.resolve( UPLOAD ), HttpMethod.POST,
+				requestEntity, Void.class );
+
+		logger.warn( "Uploaded '{}' with response {}", file.getAbsolutePath(), result.getStatusCode() );
+		logger.warn( "Redirect to '{}'", result.getHeaders().getLocation() );
 	}
 
 }

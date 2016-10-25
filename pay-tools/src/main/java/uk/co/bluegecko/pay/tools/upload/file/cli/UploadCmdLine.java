@@ -12,6 +12,9 @@ import com.lexicalscope.jewel.cli.Unparsed;
 public interface UploadCmdLine
 {
 
+	@Option( defaultToNull = true, longName = "spring.output.ansi.enabled", hidden = true )
+	public String ansi();
+
 	@Option( defaultValue = "http://red-dragon.local:8081", shortName = "h", longName = "host",
 			description = "host URL of upload server" )
 	public URI host();
@@ -19,7 +22,8 @@ public interface UploadCmdLine
 	@Option( defaultValue = ".", shortName = "d", longName = "directory", description = "directory of files" )
 	public File directory();
 
-	@Unparsed( minimum = 1, name = "file(s) to upload", description = "list of file(s) to upload" )
+	@Unparsed( minimum = 1, name = "file(s) to upload (at least one)",
+			description = "list of file(s) to upload (at least one)" )
 	public List< String > arguments();
 
 	@Option( helpRequest = true, shortName = "?", longName = "help" )
