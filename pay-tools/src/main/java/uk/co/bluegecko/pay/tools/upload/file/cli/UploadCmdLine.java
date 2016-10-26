@@ -1,7 +1,6 @@
 package uk.co.bluegecko.pay.tools.upload.file.cli;
 
 
-import java.io.File;
 import java.net.URI;
 import java.util.List;
 
@@ -19,8 +18,8 @@ public interface UploadCmdLine
 			description = "host URL of upload server" )
 	public URI host();
 
-	@Option( defaultValue = ".", shortName = "d", longName = "directory", description = "directory of files" )
-	public File directory();
+	@Option( defaultValue = "", shortName = "d", longName = "directory", description = "directory of files" )
+	public String directory();
 
 	@Unparsed( minimum = 1, name = "file(s) to upload (at least one)",
 			description = "list of file(s) to upload (at least one)" )

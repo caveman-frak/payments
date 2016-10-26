@@ -30,7 +30,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
-			<artifactId>pay-common</artifactId>
+			<artifactId>pay-common-server</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>

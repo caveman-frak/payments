@@ -1,23 +1,23 @@
 package uk.co.bluegecko.pay.portfolio.service.base;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
-import org.springframework.integration.annotation.ServiceActivator;
+
+import reactor.core.publisher.Flux;
 
 
 @EnableBinding( Sink.class )
+@EnableAutoConfiguration
 public class InstructionSink
 {
 
-	private static Logger logger = LoggerFactory.getLogger( InstructionSink.class );
-
-	@ServiceActivator( inputChannel = Sink.INPUT )
-	public void loggerSink( final Object payload )
+	@StreamListener( Sink.INPUT )
+	public void instructionSink( final Flux< Object > input )
 	{
-		logger.info( "Received: " + payload );
+		input.log();
 	}
 
 }

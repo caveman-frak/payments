@@ -3,18 +3,22 @@ package uk.co.bluegecko.pay.common.config;
 
 import java.time.Clock;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import javax.validation.Validator;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
-@Configuration
 public class StandardConfiguration
 {
 
@@ -38,8 +42,17 @@ public class StandardConfiguration
 		objectMapper.enable( SerializationFeature.WRITE_ENUMS_USING_TO_STRING );
 		objectMapper.enable( DeserializationFeature.READ_ENUMS_USING_TO_STRING );
 		objectMapper.enable( DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS );
+		objectMapper.enable( MapperFeature.DEFAULT_VIEW_INCLUSION );
+		objectMapper.setVisibility( PropertyAccessor.ALL, Visibility.NONE );
+		objectMapper.setVisibility( PropertyAccessor.FIELD, Visibility.ANY );
 
 		return objectMapper;
+	}
+
+	@Bean
+	public Validator validatorFactory()
+	{
+		return new LocalValidatorFactoryBean();
 	}
 
 }

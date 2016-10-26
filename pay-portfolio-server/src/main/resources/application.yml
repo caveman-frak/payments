@@ -7,3 +7,4 @@ spring:
         input:
           destination: instruction
           group: portfolio
+          content-type: text/plain

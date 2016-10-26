@@ -10,13 +10,16 @@
 
 	<name>Payments Parent</name>
 	<description>Payments Parent and Build File</description>
-	
-	<organization><name>Blue Gecko Ltd</name></organization>
+
+	<organization>
+		<name>Blue Gecko Ltd</name>
+	</organization>
 
 	<modules>
 		<module>pay-common</module>
 		<module>pay-test</module>
 		<module>pay-portfolio-model</module>
+		<module>pay-common-server</module>
 		<module>pay-upload-server</module>
 		<module>pay-portfolio-server</module>
 		<module>pay-tools</module>
@@ -24,8 +27,19 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<compiler-plugin.version>3.1</compiler-plugin.version>
 		<payments.version>0.0.1-SNAPSHOT</payments.version>
+		<!-- plugin versions -->
+		<compiler-plugin.version>3.1</compiler-plugin.version>
+		<jar-plugin.version>2.6</jar-plugin.version>
+		<spring-boot-plugin.version>2.0.0.BUILD-SNAPSHOT</spring-boot-plugin.version>
+		<build-helper-plugin.version>1.9.1</build-helper-plugin.version>
+		<surefire-plugin.version>2.19.1</surefire-plugin.version>
+		<!-- dependency versions -->
+		<spring-cloud-sleuth.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-sleuth.version>
+		<spring-platform.version>Cairo-BUILD-SNAPSHOT</spring-platform.version>
+		<spring-boot.version>${spring-boot-plugin.version}</spring-boot.version>
+		<spring-cloud.version>Camden.BUILD-SNAPSHOT</spring-cloud.version>
+		<spring-cloud-stream.version>1.0.4.BUILD-SNAPSHOT</spring-cloud-stream.version>
 	</properties>
 
 	<dependencies>
@@ -46,41 +60,51 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-buffer</artifactId>
+				<version>4.0.34.Final</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-sleuth-core</artifactId>
-				<version>1.1.0.BUILD-SNAPSHOT</version>
+				<version>${spring-cloud-sleuth.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.spring.platform</groupId>
 				<artifactId>platform-bom</artifactId>
-				<version>Cairo-BUILD-SNAPSHOT</version>
+				<version>${spring-platform.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.0.0.BUILD-SNAPSHOT</version>
+				<version>${spring-boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Camden.BUILD-SNAPSHOT</version>
+				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-stream-dependencies</artifactId>
-				<version>1.0.4.BUILD-SNAPSHOT</version>
+				<version>${spring-cloud-stream.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>uk.co.bluegecko</groupId>
 				<artifactId>pay-common</artifactId>
+				<version>${payments.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>uk.co.bluegecko</groupId>
+				<artifactId>pay-common-server</artifactId>
 				<version>${payments.version}</version>
 			</dependency>
 			<dependency>
@@ -119,7 +143,7 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
-					<version>2.0.0.BUILD-SNAPSHOT</version>
+					<version>${spring-boot-plugin.version}</version>
 					<executions>
 						<execution>
 							<goals>
@@ -134,7 +158,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.6</version>
+					<version>${jar-plugin.version}</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -143,6 +167,47 @@
 								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 							</manifest>
 						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${build-helper-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>default-reserve-network-port</id>
+							<goals>
+								<goal>reserve-network-port</goal>
+							</goals>
+							<phase>process-resources</phase>
+							<configuration>
+								<portNames>
+									<portName>http.port</portName>
+									<portName>jmx.port</portName>
+								</portNames>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${surefire-plugin.version}</version>
+					<configuration>
+						<systemProperties>
+							<property>
+								<name>http.port</name>
+								<value>${http.port}</value>
+							</property>
+							<property>
+								<name>jmx.port</name>
+								<value>${jmx.port}</value>
+							</property>
+						</systemProperties>
+						<environmentVariables>
+							<http.port>${http.port}</http.port>
+							<jmx.port>${jmx.port}</jmx.port>
+							<targetDir>${project.build.directory}</targetDir>
+						</environmentVariables>
 					</configuration>
 				</plugin>
 			</plugins>

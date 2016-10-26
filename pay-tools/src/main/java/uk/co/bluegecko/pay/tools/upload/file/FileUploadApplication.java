@@ -2,6 +2,7 @@ package uk.co.bluegecko.pay.tools.upload.file;
 
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -30,7 +31,8 @@ public class FileUploadApplication
 
 	public static void main( final String... args )
 	{
-		new SpringApplicationBuilder().sources( FileUploadApplication.class ).profiles( "dev" ).run( args );
+		new SpringApplicationBuilder().sources( FileUploadApplication.class ).profiles( "dev" ).web( false )
+				.run( args );
 	}
 
 	@Bean
@@ -47,7 +49,7 @@ public class FileUploadApplication
 				final Cli< UploadCmdLine > cli = CliFactory.createCli( UploadCmdLine.class );
 				try
 				{
-					fileUploadService.processFiles( cli.parseArguments( args ) );
+					fileUploadService.processFiles( cli.parseArguments( args ), FileSystems.getDefault() );
 				}
 				catch ( final HelpRequestedException ex )
 				{

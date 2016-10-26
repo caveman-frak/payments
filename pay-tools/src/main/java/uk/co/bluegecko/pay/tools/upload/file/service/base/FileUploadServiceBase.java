@@ -1,16 +1,20 @@
 package uk.co.bluegecko.pay.tools.upload.file.service.base;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -43,17 +47,23 @@ public class FileUploadServiceBase implements FileUploadService
 	}
 
 	@Override
-	public void processFiles( final UploadCmdLine commandLine ) throws IOException
+	public void processFiles( final UploadCmdLine commandLine, final FileSystem fileSystem ) throws IOException
 	{
 		final URI host = commandLine.host();
 
 		checkConnection( host );
 
-		commandLine.arguments().stream().map( ( arg ) -> new File( commandLine.directory(), arg ) )
-				.filter( ( file ) -> isFileValid( file ) ).forEach( ( file ) -> uploadFile( host, file ) );
+		processFiles( commandLine.arguments().stream(), commandLine.directory(), fileSystem, host );
 	}
 
-	private void checkConnection( final URI host ) throws IOException
+	protected void processFiles( final Stream< String > stream, final String baseDir, final FileSystem fileSystem,
+			final URI host )
+	{
+		stream.map( arg -> fileSystem.getPath( baseDir, arg ) ).filter( file -> isFileValid( file ) )
+				.forEach( file -> uploadFile( host, file ) );
+	}
+
+	protected void checkConnection( final URI host ) throws IOException
 	{
 		try (final Socket testSocket = new Socket())
 		{
@@ -61,16 +71,12 @@ public class FileUploadServiceBase implements FileUploadService
 		}
 	}
 
-	private boolean isFileValid( final File file )
+	protected boolean isFileValid( final Path file )
 	{
-		if ( !file.isFile() || !file.exists() )
+		if ( !Files.exists( file, LinkOption.NOFOLLOW_LINKS ) || !Files.isRegularFile( file, LinkOption.NOFOLLOW_LINKS )
+				|| !Files.isReadable( file ) )
 		{
-			logger.error( "Unable to locate file '{}'", file.getAbsolutePath() );
-			return false;
-		}
-		else if ( !file.canRead() )
-		{
-			logger.error( "Unable to read file '{}'", file.getAbsolutePath() );
+			logger.error( "Unable to locate or read file '{}'", file.toString() );
 			return false;
 		}
 		else
@@ -79,10 +85,10 @@ public class FileUploadServiceBase implements FileUploadService
 		}
 	}
 
-	private void uploadFile( final URI host, final File file )
+	protected void uploadFile( final URI host, final Path file )
 	{
 		final MultiValueMap< String, Object > map = new LinkedMultiValueMap<>();
-		map.add( "file", new FileSystemResource( file ) );
+		map.add( "file", new PathResource( file ) );
 
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType( MediaType.MULTIPART_FORM_DATA );
@@ -91,7 +97,7 @@ public class FileUploadServiceBase implements FileUploadService
 		final ResponseEntity< Void > result = restTemplate.exchange( host.resolve( UPLOAD ), HttpMethod.POST,
 				requestEntity, Void.class );
 
-		logger.warn( "Uploaded '{}' with response {}", file.getAbsolutePath(), result.getStatusCode() );
+		logger.warn( "Uploaded '{}' with response {}", file.toString(), result.getStatusCode() );
 		logger.warn( "Redirect to '{}'", result.getHeaders().getLocation() );
 	}
 

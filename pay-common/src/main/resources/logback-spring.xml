@@ -7,30 +7,6 @@
 	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
 
-	<!-- Send debug messages to System.out -->
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
-		<encoder>
- 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n
-			</pattern>
- 		</encoder>
-	</appender>
-
-	<!-- 
-	<logger name="liquibase" level="INFO" additivity="true" />
-	<logger name="org.springframework" level="INFO" additivity="true" />
-	<logger name="uk.co.bluegecko" level="INFO" additivity="true" />
-
-	<springProfile name="test">
-		<logger name="uk.co.bluegecko" level="DEBUG" additivity="true" />
-	</springProfile>
-	<springProfile name="dev,prod">
-		<root level="WARN">
-			<appender-ref ref="CONSOLE" />
-		</root>
-	</springProfile>
-	-->
-
 	<!-- By default, the level of the root level is set to WARN -->
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />

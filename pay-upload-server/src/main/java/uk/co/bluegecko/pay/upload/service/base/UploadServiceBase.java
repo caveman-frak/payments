@@ -35,7 +35,7 @@ public class UploadServiceBase implements UploadService
 	@Override
 	public long processFile( final MultipartFile file ) throws IOException
 	{
-		logger.info( "processing {}", file.getOriginalFilename() );
+		logger.info( "processing: {}", file.getOriginalFilename() );
 
 		try (BufferedReader reader = new BufferedReader( new InputStreamReader( file.getInputStream() ) ))
 		{
@@ -44,7 +44,7 @@ public class UploadServiceBase implements UploadService
 			while ( ( line = reader.readLine() ) != null )
 			{
 				source.output().send( MessageBuilder.withPayload( line ).setSequenceNumber( i++ ).build() );
-				logger.info( "sent {}", line );
+				logger.info( "sent: {}", line );
 			}
 		}
 

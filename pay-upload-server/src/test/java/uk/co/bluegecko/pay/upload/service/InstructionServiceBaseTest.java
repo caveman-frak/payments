@@ -7,12 +7,16 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import uk.co.bluegecko.pay.test.harness.TestHarness;
+import uk.co.bluegecko.pay.upload.UploadApplication;
 
 
+@SpringBootTest( classes = UploadApplication.class, webEnvironment = WebEnvironment.MOCK )
 public class InstructionServiceBaseTest extends TestHarness
 {
 
