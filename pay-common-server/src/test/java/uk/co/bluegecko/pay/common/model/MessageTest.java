@@ -2,7 +2,7 @@ package uk.co.bluegecko.pay.common.model;
 
 
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -52,7 +52,7 @@ public class MessageTest extends TestHarness
 		assertThat( message.has( Classification.ERROR, KEY_1 ), is( true ) );
 		assertThat( message.text( Classification.ERROR, KEY_1 ), hasSize( 1 ) );
 		assertThat( message.has( Classification.ERROR, KEY_1 ), is( true ) );
-		assertThat( message.text( Classification.ERROR, KEY_1 ), containsInAnyOrder( MESSAGE_1 ) );
+		assertThat( message.text( Classification.ERROR, KEY_1 ), hasItem( MESSAGE_1 ) );
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class MessageTest extends TestHarness
 		assertThat( message.has( Classification.ERROR ), is( true ) );
 		assertThat( message.has( Classification.ERROR, KEY_1 ), is( true ) );
 		assertThat( message.text( Classification.ERROR, KEY_1 ), hasSize( 2 ) );
-		assertThat( message.text( Classification.ERROR, KEY_1 ), containsInAnyOrder( MESSAGE_1, MESSAGE_2 ) );
+		assertThat( message.text( Classification.ERROR, KEY_1 ), hasItems( MESSAGE_1, MESSAGE_2 ) );
 	}
 
 	@Test
@@ -73,10 +73,10 @@ public class MessageTest extends TestHarness
 		assertThat( message.has( Classification.ERROR ), is( true ) );
 		assertThat( message.has( Classification.ERROR, KEY_1 ), is( true ) );
 		assertThat( message.text( Classification.ERROR, KEY_1 ), hasSize( 1 ) );
-		assertThat( message.text( Classification.ERROR, KEY_1 ), containsInAnyOrder( MESSAGE_1 ) );
+		assertThat( message.text( Classification.ERROR, KEY_1 ), hasItem( MESSAGE_1 ) );
 		assertThat( message.has( Classification.ERROR, KEY_2 ), is( true ) );
 		assertThat( message.text( Classification.ERROR, KEY_2 ), hasSize( 1 ) );
-		assertThat( message.text( Classification.ERROR, KEY_2 ), containsInAnyOrder( MESSAGE_2 ) );
+		assertThat( message.text( Classification.ERROR, KEY_2 ), hasItem( MESSAGE_2 ) );
 	}
 
 	@Test
@@ -87,10 +87,10 @@ public class MessageTest extends TestHarness
 		assertThat( message.has( Classification.ERROR ), is( true ) );
 		assertThat( message.has( Classification.ERROR, KEY_1 ), is( true ) );
 		assertThat( message.text( Classification.ERROR, KEY_1 ), hasSize( 1 ) );
-		assertThat( message.text( Classification.ERROR, KEY_1 ), containsInAnyOrder( MESSAGE_1 ) );
+		assertThat( message.text( Classification.ERROR, KEY_1 ), hasItem( MESSAGE_1 ) );
 		assertThat( message.has( Classification.WARN, KEY_2 ), is( true ) );
 		assertThat( message.text( Classification.WARN, KEY_2 ), hasSize( 1 ) );
-		assertThat( message.text( Classification.WARN, KEY_2 ), containsInAnyOrder( MESSAGE_2 ) );
+		assertThat( message.text( Classification.WARN, KEY_2 ), hasItem( MESSAGE_2 ) );
 	}
 
 	@Test

@@ -10,7 +10,7 @@ import static org.junit.Assert.fail;
 public class ThrowableCaptor
 {
 
-	private static final ThreadLocal< Throwable > LAST_THROWN = new ThreadLocal< >();
+	private static final ThreadLocal< Throwable > LAST_THROWN = new ThreadLocal<>();
 
 	/**
 	 * Catch and return any exceptions thrown by the wrapped method.

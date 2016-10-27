@@ -44,7 +44,8 @@ public class UploadControllerTest extends TestHarness
 	{
 		final MockMultipartFile multipartFile = new MockMultipartFile( "file", "test.txt", "text/plain",
 				"Spring Framework".getBytes() );
-		mvc.perform( fileUpload( UploadController.UPLOAD ).file( multipartFile ) ).andExpect( status().isAccepted() )
+		mvc.perform( fileUpload( UploadController.UPLOAD ).file( multipartFile ) )
+				.andExpect( status().isAccepted() )
 				.andExpect( header().string( "Location", "/status/0" ) );
 
 		verify( uploadService ).processFile( multipartFile );
@@ -55,7 +56,8 @@ public class UploadControllerTest extends TestHarness
 	{
 		when( uploadService.getJobStatus( 1L ) ).thenReturn( "COMLETED: 1" );
 
-		mvc.perform( get( UploadController.STATUS, 1L ) ).andExpect( status().isOk() )
+		mvc.perform( get( UploadController.STATUS, 1L ) )
+				.andExpect( status().isOk() )
 				.andExpect( content().string( "COMLETED: 1" ) );
 
 		verify( uploadService ).getJobStatus( 1L );

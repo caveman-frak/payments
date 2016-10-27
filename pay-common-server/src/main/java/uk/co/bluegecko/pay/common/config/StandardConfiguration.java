@@ -27,7 +27,8 @@ public class StandardConfiguration
 	@Bean
 	public ObjectMapper objectMapper( final Jackson2ObjectMapperBuilder builder )
 	{
-		final ObjectMapper objectMapper = builder.createXmlMapper( false ).build();
+		final ObjectMapper objectMapper = builder.createXmlMapper( false )
+				.build();
 
 		objectMapper.registerModule( new JavaTimeModule() );
 		objectMapper.registerModule( new Jdk8Module() );

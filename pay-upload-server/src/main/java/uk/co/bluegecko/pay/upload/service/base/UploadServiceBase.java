@@ -43,7 +43,10 @@ public class UploadServiceBase implements UploadService
 			int i = 0;
 			while ( ( line = reader.readLine() ) != null )
 			{
-				source.output().send( MessageBuilder.withPayload( line ).setSequenceNumber( i++ ).build() );
+				source.output()
+						.send( MessageBuilder.withPayload( line )
+								.setSequenceNumber( i++ )
+								.build() );
 				logger.info( "sent: {}", line );
 			}
 		}

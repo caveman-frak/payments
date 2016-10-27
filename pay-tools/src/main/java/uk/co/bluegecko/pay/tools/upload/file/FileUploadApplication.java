@@ -31,7 +31,9 @@ public class FileUploadApplication
 
 	public static void main( final String... args )
 	{
-		new SpringApplicationBuilder().sources( FileUploadApplication.class ).profiles( "dev" ).web( false )
+		new SpringApplicationBuilder().sources( FileUploadApplication.class )
+				.profiles( "dev" )
+				.web( false )
 				.run( args );
 	}
 

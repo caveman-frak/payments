@@ -17,8 +17,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -62,7 +62,7 @@ public abstract class TestHarness
 	@Autowired
 	private Validator validator;
 
-	@Configuration
+	@TestConfiguration
 	public static class TestConfig extends StandardConfiguration
 	{
 
@@ -83,7 +83,8 @@ public abstract class TestHarness
 
 	protected String stripWhitespace( final String str )
 	{
-		return REGEX_WHITESPACE.matcher( str ).replaceAll( "" );
+		return REGEX_WHITESPACE.matcher( str )
+				.replaceAll( "" );
 	}
 
 	protected < T > Set< ConstraintViolation< T > > validate( final T model )

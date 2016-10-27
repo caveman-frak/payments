@@ -44,15 +44,21 @@ public class UploadController
 	{
 		final Long jobId = uploadService.processFile( file );
 
-		final URI location = UriComponentsBuilder.fromPath( STATUS ).buildAndExpand( jobId ).toUri();
-		return ResponseEntity.accepted().location( location ).build();
+		final URI location = UriComponentsBuilder.fromPath( STATUS )
+				.buildAndExpand( jobId )
+				.toUri();
+		return ResponseEntity.accepted()
+				.location( location )
+				.build();
 	}
 
 	@GetMapping( STATUS )
 	public HttpEntity< String > getJobStatus( @PathVariable( "jobId" ) final long jobId )
 	{
 		final String body = uploadService.getJobStatus( jobId );
-		return ResponseEntity.ok().contentType( MediaType.TEXT_PLAIN ).body( body );
+		return ResponseEntity.ok()
+				.contentType( MediaType.TEXT_PLAIN )
+				.body( body );
 	}
 
 }

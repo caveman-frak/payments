@@ -53,13 +53,15 @@ public class FileUploadServiceBase implements FileUploadService
 
 		checkConnection( host );
 
-		processFiles( commandLine.arguments().stream(), commandLine.directory(), fileSystem, host );
+		processFiles( commandLine.arguments()
+				.stream(), commandLine.directory(), fileSystem, host );
 	}
 
 	protected void processFiles( final Stream< String > stream, final String baseDir, final FileSystem fileSystem,
 			final URI host )
 	{
-		stream.map( arg -> fileSystem.getPath( baseDir, arg ) ).filter( file -> isFileValid( file ) )
+		stream.map( arg -> fileSystem.getPath( baseDir, arg ) )
+				.filter( file -> isFileValid( file ) )
 				.forEach( file -> uploadFile( host, file ) );
 	}
 
@@ -98,7 +100,8 @@ public class FileUploadServiceBase implements FileUploadService
 				requestEntity, Void.class );
 
 		logger.warn( "Uploaded '{}' with response {}", file.toString(), result.getStatusCode() );
-		logger.warn( "Redirect to '{}'", result.getHeaders().getLocation() );
+		logger.warn( "Redirect to '{}'", result.getHeaders()
+				.getLocation() );
 	}
 
 }

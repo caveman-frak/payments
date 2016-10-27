@@ -77,7 +77,8 @@ public class FileUploadServiceBaseTest extends TestHarness
 	@Test
 	public final void testFileIsValidPass() throws IOException
 	{
-		final Path file = fileSystemRule.getFileSystem().getPath( "/test.txt" );
+		final Path file = fileSystemRule.getFileSystem()
+				.getPath( "/test.txt" );
 		Files.write( file, Arrays.asList( "Line 1", "Line 2" ), StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
 		assertThat( fileUploadService.isFileValid( file ), is( true ) );
@@ -86,7 +87,8 @@ public class FileUploadServiceBaseTest extends TestHarness
 	@Test
 	public final void testFileIsValidFailNoFile()
 	{
-		final Path file = fileSystemRule.getFileSystem().getPath( "/test.txt" );
+		final Path file = fileSystemRule.getFileSystem()
+				.getPath( "/test.txt" );
 
 		assertThat( fileUploadService.isFileValid( file ), is( false ) );
 	}
@@ -94,7 +96,8 @@ public class FileUploadServiceBaseTest extends TestHarness
 	@Test
 	public final void testFileIsValidFailIsDirectory() throws IOException
 	{
-		final Path file = fileSystemRule.getFileSystem().getPath( "/test" );
+		final Path file = fileSystemRule.getFileSystem()
+				.getPath( "/test" );
 		Files.createDirectory( file );
 
 		assertThat( fileUploadService.isFileValid( file ), is( false ) );
@@ -107,7 +110,8 @@ public class FileUploadServiceBaseTest extends TestHarness
 				.andExpect( method( HttpMethod.POST ) )
 				.andRespond( withCreatedEntity( createURI( false ).resolve( "status/1" ) ) );
 
-		final Path file = fileSystemRule.getFileSystem().getPath( "/test.txt" );
+		final Path file = fileSystemRule.getFileSystem()
+				.getPath( "/test.txt" );
 		Files.write( file, Arrays.asList( "Line 1", "Line 2" ), StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
 		fileUploadService.uploadFile( createURI( false ), file );
@@ -131,7 +135,8 @@ public class FileUploadServiceBaseTest extends TestHarness
 			Files.write( fileSystem.getPath( fileNames[1] ), Arrays.asList( "Line 2.1", "Line 2.2" ),
 					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
-			fileUploadService.processFiles( Arrays.asList( fileNames ).stream(), "", fileSystem, createURI( false ) );
+			fileUploadService.processFiles( Arrays.asList( fileNames )
+					.stream(), "", fileSystem, createURI( false ) );
 		}
 		server.verify();
 	}

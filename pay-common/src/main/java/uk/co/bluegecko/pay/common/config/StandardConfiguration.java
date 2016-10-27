@@ -33,26 +33,23 @@ public class StandardConfiguration
 	@Bean
 	public ObjectMapper objectMapper( final Jackson2ObjectMapperBuilder builder )
 	{
-		final ObjectMapper objectMapper = builder.createXmlMapper( false )
-				.build();
-
-		objectMapper.registerModule( new JavaTimeModule() );
-		objectMapper.registerModule( new Jdk8Module() );
-		objectMapper.disable( SerializationFeature.WRITE_DATES_AS_TIMESTAMPS );
-		objectMapper.disable( SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS );
-		objectMapper.disable( DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS );
-		objectMapper.enable( SerializationFeature.INDENT_OUTPUT );
-		objectMapper.enable( SerializationFeature.WRITE_ENUMS_USING_TO_STRING );
-		objectMapper.enable( DeserializationFeature.READ_ENUMS_USING_TO_STRING );
-		objectMapper.enable( DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS );
-		objectMapper.enable( JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN );
-		objectMapper.disable( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES );
-		objectMapper.setSerializationInclusion( Include.NON_EMPTY );
-		objectMapper.enable( MapperFeature.DEFAULT_VIEW_INCLUSION );
-		objectMapper.setVisibility( PropertyAccessor.ALL, Visibility.NONE );
-		objectMapper.setVisibility( PropertyAccessor.FIELD, Visibility.ANY );
-
-		return objectMapper;
+		return builder.createXmlMapper( false )
+				.build()
+				.registerModule( new JavaTimeModule() )
+				.registerModule( new Jdk8Module() )
+				.disable( SerializationFeature.WRITE_DATES_AS_TIMESTAMPS )
+				.disable( SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS )
+				.disable( DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS )
+				.enable( SerializationFeature.INDENT_OUTPUT )
+				.enable( SerializationFeature.WRITE_ENUMS_USING_TO_STRING )
+				.enable( DeserializationFeature.READ_ENUMS_USING_TO_STRING )
+				.enable( DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS )
+				.enable( JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN )
+				.disable( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES )
+				.setSerializationInclusion( Include.NON_EMPTY )
+				.enable( MapperFeature.DEFAULT_VIEW_INCLUSION )
+				.setVisibility( PropertyAccessor.ALL, Visibility.NONE )
+				.setVisibility( PropertyAccessor.FIELD, Visibility.ANY );
 	}
 
 	@Bean
