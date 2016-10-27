@@ -1,7 +1,9 @@
-package uk.co.bluegecko.pay.portfolio.wire.v1;
+package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 
 import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,7 +26,11 @@ public class Account
 	private final String sortCode;
 	@Pattern( regexp = "\\d{8}" )
 	private final String number;
-	@Pattern( regexp = "[A-Z0-9]?" )
+	@Length( max = 18 )
+	@Pattern( regexp = "[A-Z \\-\\,]*" )
+	@JsonView( View.Detailed.class )
+	private final String name;
+	@Pattern( regexp = "[0-9]?" )
 	@JsonView( View.Detailed.class )
 	private final String type;
 

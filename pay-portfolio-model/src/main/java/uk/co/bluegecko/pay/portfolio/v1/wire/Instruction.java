@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.portfolio.wire.v1;
+package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 
 import java.math.BigDecimal;

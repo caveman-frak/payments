@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.portfolio.wire.v1;
+package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluegecko.pay.portfolio.wire.v1.Account.AccountBuilder;
+import uk.co.bluegecko.pay.portfolio.v1.wire.Account.AccountBuilder;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.view.View;
 
@@ -25,7 +25,8 @@ public class AccountTest extends TestHarness
 	{
 		accountBuilder = Account.builder()
 				.sortCode( "123456" )
-				.number( "12345678" );
+				.number( "12345678" )
+				.name( "JOE BLOGGS" );
 	}
 
 	@Test
@@ -33,14 +34,16 @@ public class AccountTest extends TestHarness
 	{
 		final Account account = accountBuilder.build();
 
-		final String str = stripWhitespace( mapper.writeValueAsString( account ) );
+		final String str = mapper.writeValueAsString( account );
 
-		assertThat( str, is( "{\"sortCode\":\"123456\",\"number\":\"12345678\",\"type\":null}" ) );
+		assertThat( stripWhitespace( str ),
+				is( "{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"JOEBLOGGS\"}" ) );
 
 		final Account result = mapper.readValue( str, Account.class );
 
 		assertThat( result.sortCode(), is( "123456" ) );
 		assertThat( result.number(), is( "12345678" ) );
+		assertThat( result.name(), is( "JOE BLOGGS" ) );
 		assertThat( result.type(), is( nullValue() ) );
 	}
 
@@ -49,15 +52,16 @@ public class AccountTest extends TestHarness
 	{
 		final Account account = accountBuilder.build();
 
-		final String str = stripWhitespace( mapper.writerWithView( View.Standard.class )
-				.writeValueAsString( account ) );
+		final String str = mapper.writerWithView( View.Standard.class )
+				.writeValueAsString( account );
 
-		assertThat( str, is( "{\"sortCode\":\"123456\",\"number\":\"12345678\"}" ) );
+		assertThat( stripWhitespace( str ), is( "{\"sortCode\":\"123456\",\"number\":\"12345678\"}" ) );
 
 		final Account result = mapper.readValue( str, Account.class );
 
 		assertThat( result.sortCode(), is( "123456" ) );
 		assertThat( result.number(), is( "12345678" ) );
+		assertThat( result.name(), is( nullValue() ) );
 		assertThat( result.type(), is( nullValue() ) );
 
 	}

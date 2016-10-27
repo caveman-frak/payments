@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.portfolio.wire.v1;
+package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 
 import static org.hamcrest.Matchers.is;
@@ -10,8 +10,9 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluegecko.pay.portfolio.wire.v1.Instruction.InstructionBuilder;
+import uk.co.bluegecko.pay.portfolio.v1.wire.Instruction.InstructionBuilder;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
+import uk.co.bluegecko.pay.view.View;
 
 
 public class InstructionTest extends TestHarness
@@ -25,10 +26,12 @@ public class InstructionTest extends TestHarness
 		final Account origin = Account.builder()
 				.sortCode( "123456" )
 				.number( "12345678" )
+				.name( "B.BAGGINS" )
 				.build();
 		final Account destination = Account.builder()
 				.sortCode( "654321" )
 				.number( "87654321" )
+				.type( "8" )
 				.build();
 
 		instructionBuilder = Instruction.builder()
@@ -54,11 +57,36 @@ public class InstructionTest extends TestHarness
 	{
 		final Instruction instruction = instructionBuilder.build();
 
-		final String str = stripWhitespace( mapper.writeValueAsString( instruction ) );
+		final String str = mapper.writeValueAsString( instruction );
 
-		assertThat( str,
-				is( "{\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\",\"type\":null},"
-						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\",\"type\":null},"
+		assertThat( stripWhitespace( str ),
+				is( "{\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"B.BAGGINS\"},"
+						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\",\"type\":\"8\"},"
+						+ "\"transactionType\":\"99\",\"amount\":10.01,\"serviceUserNumber\":\"123456\","
+						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
+
+		final Instruction result = mapper.readValue( str, Instruction.class );
+
+		assertThat( result.origin()
+				.sortCode(), is( "123456" ) );
+		assertThat( result.destination()
+				.number(), is( "87654321" ) );
+		assertThat( result.serviceUserNumber(), is( "123456" ) );
+		assertThat( result.reference(), is( "A-REFERENCE" ) );
+		assertThat( result.transactionType(), is( "99" ) );
+	}
+
+	@Test
+	public final void testMarshallingWithStandardView() throws IOException
+	{
+		final Instruction instruction = instructionBuilder.build();
+
+		final String str = mapper.writerWithView( View.Standard.class )
+				.writeValueAsString( instruction );
+
+		assertThat( stripWhitespace( str ),
+				is( "{\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\"},"
+						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\"},"
 						+ "\"transactionType\":\"99\",\"amount\":10.01,\"serviceUserNumber\":\"123456\","
 						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
 
