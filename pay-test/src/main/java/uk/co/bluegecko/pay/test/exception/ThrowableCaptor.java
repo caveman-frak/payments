@@ -10,8 +10,6 @@ import static org.junit.Assert.fail;
 public class ThrowableCaptor
 {
 
-	private static final ThreadLocal< Throwable > LAST_THROWN = new ThreadLocal<>();
-
 	/**
 	 * Catch and return any exceptions thrown by the wrapped method.
 	 *
@@ -23,15 +21,13 @@ public class ThrowableCaptor
 	 */
 	public static Throwable capture( final String message, final MethodCapture methodCapture )
 	{
-		// clear last thrown exception
-		LAST_THROWN.set( null );
 		try
 		{
 			methodCapture.captureMethodCall();
 		}
 		catch ( final Throwable caught )
 		{
-			return caught( caught );
+			return caught;
 		}
 		// fail if no exception was thrown
 		fail( message );
@@ -50,19 +46,4 @@ public class ThrowableCaptor
 		return capture( "failed-to-catch-exception", methodCapture );
 	}
 
-	private static Throwable caught( final Throwable caught )
-	{
-		LAST_THROWN.set( caught );
-		return LAST_THROWN.get();
-	}
-
-	/**
-	 * Return the last thrown exception.
-	 *
-	 * @return the last thrown exception
-	 */
-	public static Throwable caught()
-	{
-		return LAST_THROWN.get();
-	}
 }
