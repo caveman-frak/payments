@@ -6,7 +6,6 @@ import java.time.Clock;
 import javax.validation.Validator;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -32,7 +31,6 @@ public class StandardConfiguration
 	}
 
 	@Bean
-	@Primary
 	public ObjectMapper objectMapper( final Jackson2ObjectMapperBuilder builder )
 	{
 		return builder.createXmlMapper( false )
@@ -55,7 +53,6 @@ public class StandardConfiguration
 	}
 
 	@Bean
-	@Primary
 	public Validator validatorFactory()
 	{
 		return new LocalValidatorFactoryBean();

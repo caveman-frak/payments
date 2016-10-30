@@ -5,7 +5,7 @@
 
 	<artifactId>pay-common-server</artifactId>
 
-	<name>Common Components</name>
+	<name>Common Server Config</name>
 	<description>Payments - Common Server Components</description>
 
 	<parent>

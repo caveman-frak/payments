@@ -29,6 +29,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
+			<artifactId>pay-common-model</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>uk.co.bluegecko</groupId>
 			<artifactId>pay-common-server</artifactId>
 		</dependency>
 		<dependency>

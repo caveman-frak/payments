@@ -18,8 +18,10 @@
 	<modules>
 		<module>pay-common</module>
 		<module>pay-test</module>
-		<module>pay-portfolio-model</module>
+		<module>pay-common-model</module>
+		<module>pay-common-service</module>
 		<module>pay-common-server</module>
+		<module>pay-upload-service</module>
 		<module>pay-upload-server</module>
 		<module>pay-portfolio-server</module>
 		<module>pay-tools</module>
@@ -99,8 +101,23 @@
 				<scope>import</scope>
 			</dependency>
 			<dependency>
+				<groupId>io.projectreactor</groupId>
+				<artifactId>reactor-core</artifactId>
+			</dependency>
+			<!-- internal project dependencies -->
+			<dependency>
 				<groupId>uk.co.bluegecko</groupId>
 				<artifactId>pay-common</artifactId>
+				<version>${payments.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>uk.co.bluegecko</groupId>
+				<artifactId>pay-common-model</artifactId>
+				<version>${payments.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>uk.co.bluegecko</groupId>
+				<artifactId>pay-common-service</artifactId>
 				<version>${payments.version}</version>
 			</dependency>
 			<dependency>
@@ -112,10 +129,6 @@
 				<groupId>uk.co.bluegecko</groupId>
 				<artifactId>pay-test</artifactId>
 				<version>${payments.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.projectreactor</groupId>
-				<artifactId>reactor-core</artifactId>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -236,6 +249,51 @@
 						<generateGitPropertiesFile>true</generateGitPropertiesFile>
 						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.assertj</groupId>
+					<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
+					<version>2.0.0</version>
+					<executions>
+						<execution>
+							<id>default-generate-assertions</id>
+							<goals>
+								<goal>generate-assertions</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<packages>
+							<param>uk.co.bluegecko.pay.common.model</param>
+							<param>uk.co.bluegecko.pay.portfolio.v1.wire</param>
+						</packages>
+						<hierarchical>true</hierarchical>
+						<targetDir>${project.build.directory}/generated-test-sources/java</targetDir>
+						<entryPointClassPackage>uk.co.bluegecko.pay.test.asserts</entryPointClassPackage>
+						<generateAssertions>true</generateAssertions>
+						<generateBddAssertions>false</generateBddAssertions>
+						<generateSoftAssertions>true</generateSoftAssertions>
+						<generateJUnitSoftAssertions>true</generateJUnitSoftAssertions>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.9</version>
+					<executions>
+						<execution>
+							<id>add-source</id>
+							<phase>generate-test-sources</phase>
+							<goals>
+								<goal>add-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<source>${project.build.directory}/generated-test-sources/java</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

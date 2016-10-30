@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<!-- DTD can be pulled from the Jar or over the web -->
+<!DOCTYPE PZMAP SYSTEM "http://flatpack.sourceforge.net/flatpack.dtd" >
+<PZMAP>
+	<RECORD id="VOL1" startPosition="1" endPosition="4" indicator="VOL1">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="HRD1" startPosition="1" endPosition="4" indicator="HDR1">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="HDR2" startPosition="1" endPosition="4" indicator="HDR2">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="UHL1" startPosition="1" endPosition="4" indicator="UHL1">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="EOF1" startPosition="1" endPosition="4" indicator="EOF1">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="EOF2" startPosition="1" endPosition="4" indicator="EOF2">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="UTL1" startPosition="1" endPosition="4" indicator="UTL1">
+		<COLUMN name="INDICATOR" length="4" />
+	</RECORD>
+	<RECORD id="CONTRA" startPosition="65" endPosition="70" indicator="CONTRA">
+		<COLUMN name="INDICATOR" length="6" />
+	</RECORD>
+	<COLUMN name="DEST_SORT_CODE" length="6" />
+	<COLUMN name="DEST_AC_NUMBER" length="8" />
+	<COLUMN name="DEST_AC_TYPE" length="1" />
+	<COLUMN name="TRANS_CODE" length="2" />
+	<COLUMN name="ORIG_SORT_CODE" length="6" />
+	<COLUMN name="ORIG_AC_NUMBER" length="8" />
+	<COLUMN name="SNGL" length="4" />
+	<COLUMN name="AMOUNT" length="11" />
+	<COLUMN name="USER_NAME" length="18" />
+	<COLUMN name="DEST_REF" length="18" />
+	<COLUMN name="DEST_NAME" length="18" />
+	<COLUMN name="PROCESS_DATE" length="6" />
+</PZMAP> 

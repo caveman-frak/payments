@@ -6,4 +6,4 @@ spring:
       bindings:
         output:
           destination: instruction
-          content-type: application/json
+          content-type: text/plain
