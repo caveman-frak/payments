@@ -43,6 +43,7 @@
 		<spring-boot.version>${spring-boot-plugin.version}</spring-boot.version>
 		<spring-cloud.version>Camden.BUILD-SNAPSHOT</spring-cloud.version>
 		<spring-cloud-stream.version>1.0.4.BUILD-SNAPSHOT</spring-cloud-stream.version>
+		<reactor-core.version>3.0.2.RELEASE</reactor-core.version>
 	</properties>
 
 	<dependencies>
@@ -103,6 +104,7 @@
 			<dependency>
 				<groupId>io.projectreactor</groupId>
 				<artifactId>reactor-core</artifactId>
+				<version>${reactor-core.version}</version>
 			</dependency>
 			<!-- internal project dependencies -->
 			<dependency>
