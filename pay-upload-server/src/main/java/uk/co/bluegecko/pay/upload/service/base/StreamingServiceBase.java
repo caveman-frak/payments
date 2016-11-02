@@ -26,13 +26,13 @@ public class StreamingServiceBase implements StreamingService
 
 	@Override
 	@Output( value = Source.OUTPUT )
-	public void send( final Instruction instruction, final int index )
+	public void send( final Instruction instruction )
 	{
 		logger.info( "sending {}", instruction.reference() );
 
 		source.output()
 				.send( MessageBuilder.withPayload( instruction )
-						.setSequenceNumber( index )
+						.setSequenceNumber( instruction.index() )
 						.build() );
 	}
 

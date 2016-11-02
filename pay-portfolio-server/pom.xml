@@ -40,19 +40,6 @@
 			<artifactId>pay-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>uk.co.bluegecko</groupId>
-			<artifactId>pay-portfolio-model</artifactId>
-		</dependency>
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>uk.co.bluegecko</groupId>
-				<artifactId>pay-portfolio-model</artifactId>
-				<version>${payments.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>

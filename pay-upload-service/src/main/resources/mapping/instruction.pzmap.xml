@@ -4,27 +4,99 @@
 <PZMAP>
 	<RECORD id="VOL1" startPosition="1" endPosition="4" indicator="VOL1">
 		<COLUMN name="INDICATOR" length="4" />
+		<COLUMN name="SERIAL_NO" length="6" />
+		<COLUMN name="ACCESSIBILITY" length="1" />
+		<COLUMN name="RESERVED#1" length="26" />
+		<COLUMN name="BLANK#1" length="4" />
+		<COLUMN name="USER_NUMBER" length="6" />
+		<COLUMN name="BLANK#2" length="4" />
+		<COLUMN name="RESERVED#2" length="28" />
+		<COLUMN name="LABEL" length="1" />
 	</RECORD>
 	<RECORD id="HRD1" startPosition="1" endPosition="4" indicator="HDR1">
 		<COLUMN name="INDICATOR" length="4" />
+		<COLUMN name="FILE" length="17" />
+		<COLUMN name="SET" length="6" />
+		<COLUMN name="SECTION" length="4" />
+		<COLUMN name="SEQUENCE" length="4" />
+		<COLUMN name="GENERATION" length="4" />
+		<COLUMN name="VERSION" length="2" />
+		<COLUMN name="CREATED" length="6" />
+		<COLUMN name="EXPIRES" length="6" />
+		<COLUMN name="ACCESSIBILITY" length="1" />
+		<COLUMN name="BLOCK_COUNT" length="6" />
+		<COLUMN name="SYSTEM_CODE" length="13" />
+		<COLUMN name="RESERVED" length="7" />
 	</RECORD>
 	<RECORD id="HDR2" startPosition="1" endPosition="4" indicator="HDR2">
 		<COLUMN name="INDICATOR" length="4" />
-	</RECORD>
+		<COLUMN name="FORMAT" length="1" />
+		<COLUMN name="BLOCK" length="5" />
+		<COLUMN name="RECORD" length="5" />
+		<COLUMN name="RESERVED#1" length="35" />
+		<COLUMN name="OFFSET" length="2" />
+		<COLUMN name="RESERVED#2" length="28" />
+		</RECORD>
 	<RECORD id="UHL1" startPosition="1" endPosition="4" indicator="UHL1">
 		<COLUMN name="INDICATOR" length="4" />
-	</RECORD>
+		<COLUMN name="PROCESSING" length="6" />
+		<COLUMN name="DEST" length="10" />
+		<COLUMN name="CURRENCY" length="2" />
+		<COLUMN name="COUNTRY" length="6" />
+		<COLUMN name="WORK_CODE" length="9" />
+		<COLUMN name="FILE" length="3" />
+		<COLUMN name="RESERVED#1" length="7" />
+		<COLUMN name="AUDIT" length="7" />
+		<COLUMN name="RESERVED#2" length="26" />
+		</RECORD>
 	<RECORD id="EOF1" startPosition="1" endPosition="4" indicator="EOF1">
 		<COLUMN name="INDICATOR" length="4" />
+		<COLUMN name="FILE" length="17" />
+		<COLUMN name="SET" length="6" />
+		<COLUMN name="SECTION" length="4" />
+		<COLUMN name="SEQUENCE" length="4" />
+		<COLUMN name="GENERATION" length="4" />
+		<COLUMN name="VERSION" length="2" />
+		<COLUMN name="CREATED" length="6" />
+		<COLUMN name="EXPIRES" length="6" />
+		<COLUMN name="ACCESSIBILITY" length="1" />
+		<COLUMN name="BLOCK_COUNT" length="6" />
+		<COLUMN name="SYSTEM_CODE" length="13" />
+		<COLUMN name="RESERVED" length="7" />
 	</RECORD>
 	<RECORD id="EOF2" startPosition="1" endPosition="4" indicator="EOF2">
 		<COLUMN name="INDICATOR" length="4" />
+		<COLUMN name="FORMAT" length="1" />
+		<COLUMN name="BLOCK" length="5" />
+		<COLUMN name="RECORD" length="5" />
+		<COLUMN name="RESERVED#1" length="35" />
+		<COLUMN name="OFFSET" length="2" />
+		<COLUMN name="RESERVED#2" length="28" />
 	</RECORD>
 	<RECORD id="UTL1" startPosition="1" endPosition="4" indicator="UTL1">
 		<COLUMN name="INDICATOR" length="4" />
+		<COLUMN name="DEBIT_VALUE" length="13" />
+		<COLUMN name="CREDIT_VALUE" length="13" />
+		<COLUMN name="DEBIT_COUNT" length="7" />
+		<COLUMN name="CREDIT_COUNT" length="7" />
+		<COLUMN name="RESERVED" length="8" />
+		<COLUMN name="DDI_COUNT" length="7" />
+		<COLUMN name="SERVICE_USER" length="21" />	
 	</RECORD>
 	<RECORD id="CONTRA" startPosition="65" endPosition="70" indicator="CONTRA">
+		<COLUMN name="DEST_SORT_CODE" length="6" />
+		<COLUMN name="DEST_AC_NUMBER" length="8" />
+		<COLUMN name="DEST_AC_TYPE" length="1" />
+		<COLUMN name="TRANS_CODE" length="2" />
+		<COLUMN name="ORIG_SORT_CODE" length="6" />
+		<COLUMN name="ORIG_AC_NUMBER" length="8" />
+		<COLUMN name="FREE" length="4" />
+		<COLUMN name="AMOUNT" length="11" />
+		<COLUMN name="NARRATIVE" length="18" />
 		<COLUMN name="INDICATOR" length="6" />
+		<COLUMN name="RESERVED" length="12" />
+		<COLUMN name="ORIG_AC_NAME" length="18" />
+		<COLUMN name="PROCESSING" length="6" />
 	</RECORD>
 	<COLUMN name="DEST_SORT_CODE" length="6" />
 	<COLUMN name="DEST_AC_NUMBER" length="8" />
@@ -32,7 +104,7 @@
 	<COLUMN name="TRANS_CODE" length="2" />
 	<COLUMN name="ORIG_SORT_CODE" length="6" />
 	<COLUMN name="ORIG_AC_NUMBER" length="8" />
-	<COLUMN name="SNGL" length="4" />
+	<COLUMN name="RTI" length="4" />
 	<COLUMN name="AMOUNT" length="11" />
 	<COLUMN name="USER_NAME" length="18" />
 	<COLUMN name="DEST_REF" length="18" />

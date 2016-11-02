@@ -5,16 +5,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import uk.co.bluegecko.pay.view.View;
 
 
 @JsonDeserialize( builder = Instruction.InstructionBuilder.class )
@@ -26,14 +29,23 @@ public class Instruction
 
 	private static final String BACS_CHARACTERS = "[A-Z0-9\\.\\-/& ]*";
 
+	@Min( 1 )
+	@JsonView( View.Detailed.class )
+	private final Long id;
+	@Min( 1 )
+	private final int index;
+	@Min( 1 )
+	@JsonView( View.Detailed.class )
+	private final int lineNo;
 	private final Account origin;
 	private final Account destination;
 	@Pattern( regexp = "[A-Z0-9]{2}" )
 	private final String transactionType;
+	@Pattern( regexp = BACS_CHARACTERS )
+	@Length( max = 4 )
+	private final String rti;
 	@Digits( fraction = 2, integer = 11 )
 	private final BigDecimal amount;
-	@Pattern( regexp = "\\d{6}" )
-	private final String serviceUserNumber;
 	@Pattern( regexp = BACS_CHARACTERS )
 	@Length( max = 18 )
 	private final String reference;

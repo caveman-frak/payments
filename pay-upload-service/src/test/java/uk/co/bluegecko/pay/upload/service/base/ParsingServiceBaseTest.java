@@ -3,7 +3,6 @@ package uk.co.bluegecko.pay.upload.service.base;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -47,7 +46,7 @@ public class ParsingServiceBaseTest
 		{
 			parsingService.parse( in );
 
-			verify( streamingService, times( 1 ) ).send( argument.capture(), eq( 1 ) );
+			verify( streamingService, times( 1 ) ).send( argument.capture() );
 
 			final Instruction instruction = argument.getValue();
 
@@ -80,10 +79,10 @@ public class ParsingServiceBaseTest
 		{
 			parsingService.parse( in );
 
-			verify( streamingService, times( 1 ) ).send( argument.capture(), eq( 5 ) );
+			verify( streamingService, times( 1 ) ).send( argument.capture() );
 
 			assertThat( argument.getValue()
-					.reference(), is( "REF&LT 00000000006" ) );
+					.lineNo(), is( 5 ) );
 		}
 
 	}

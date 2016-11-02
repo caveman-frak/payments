@@ -35,10 +35,11 @@ public class InstructionTest extends TestHarness
 				.build();
 
 		instructionBuilder = Instruction.builder()
+				.index( 1 )
+				.lineNo( 3 )
 				.origin( origin )
 				.destination( destination )
 				.transactionType( "99" )
-				.serviceUserNumber( "123456" )
 				.pence( "1001" )
 				.julianDate( DATE.toEpochDay() )
 				.reference( "A-REFERENCE" );
@@ -60,10 +61,11 @@ public class InstructionTest extends TestHarness
 		final String str = mapper.writeValueAsString( instruction );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"B.BAGGINS\"},"
+				is( "{\"index\":1,\"lineNo\":3,"
+						+ "\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"B.BAGGINS\"},"
 						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\",\"type\":\"8\"},"
-						+ "\"transactionType\":\"99\",\"amount\":10.01,\"serviceUserNumber\":\"123456\","
-						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
+						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
+						+ "\"processingDate\":\"2015-06-01\"}" ) );
 
 		final Instruction result = mapper.readValue( str, Instruction.class );
 
@@ -71,7 +73,8 @@ public class InstructionTest extends TestHarness
 				.sortCode(), is( "123456" ) );
 		assertThat( result.destination()
 				.number(), is( "87654321" ) );
-		assertThat( result.serviceUserNumber(), is( "123456" ) );
+		assertThat( result.index(), is( 1 ) );
+		assertThat( result.lineNo(), is( 3 ) );
 		assertThat( result.reference(), is( "A-REFERENCE" ) );
 		assertThat( result.transactionType(), is( "99" ) );
 	}
@@ -85,10 +88,10 @@ public class InstructionTest extends TestHarness
 				.writeValueAsString( instruction );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\"},"
+				is( "{\"index\":1,\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\"},"
 						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\"},"
-						+ "\"transactionType\":\"99\",\"amount\":10.01,\"serviceUserNumber\":\"123456\","
-						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
+						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
+						+ "\"processingDate\":\"2015-06-01\"}" ) );
 
 		final Instruction result = mapper.readValue( str, Instruction.class );
 
@@ -96,7 +99,6 @@ public class InstructionTest extends TestHarness
 				.sortCode(), is( "123456" ) );
 		assertThat( result.destination()
 				.number(), is( "87654321" ) );
-		assertThat( result.serviceUserNumber(), is( "123456" ) );
 		assertThat( result.reference(), is( "A-REFERENCE" ) );
 		assertThat( result.transactionType(), is( "99" ) );
 	}
@@ -115,9 +117,9 @@ public class InstructionTest extends TestHarness
 	}
 
 	@Test
-	public final void testValidationFailServiceUserNumber()
+	public final void testValidationFailReference()
 	{
-		assertThat( isValid( instructionBuilder.serviceUserNumber( "A12345" )
+		assertThat( isValid( instructionBuilder.reference( "A12345__12" )
 				.build() ), is( false ) );
 	}
 

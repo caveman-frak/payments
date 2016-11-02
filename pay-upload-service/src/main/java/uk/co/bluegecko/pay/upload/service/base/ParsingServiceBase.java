@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 import org.springframework.stereotype.Service;
 
 import net.sf.flatpack.DataSet;
-import net.sf.flatpack.DefaultParserFactory;
 import net.sf.flatpack.Parser;
 import net.sf.flatpack.Record;
+import net.sf.flatpack.brparse.BuffReaderParseFactory;
 import uk.co.bluegecko.pay.portfolio.v1.wire.Instruction;
 import uk.co.bluegecko.pay.upload.readers.InstructionReader;
 import uk.co.bluegecko.pay.upload.service.ParsingService;
@@ -37,13 +37,14 @@ public class ParsingServiceBase implements ParsingService
 				getClass().getResourceAsStream( "/mapping/instruction.pzmap.xml" ) );
 				InputStreamReader dataFile = new InputStreamReader( inputStream ))
 		{
-			final Parser parser = DefaultParserFactory.getInstance()
+			final Parser parser = BuffReaderParseFactory.getInstance()
 					.newFixedLengthParser( definition, dataFile );
 			parser.setHandlingShortLines( true );
 			parser.setIgnoreExtraColumns( true );
 			parser.setNullEmptyStrings( true );
 			final DataSet dataSet = parser.parse();
 
+			int index = 1;
 			while ( dataSet.next() )
 			{
 				final Record record = dataSet.getRecord()
@@ -83,8 +84,9 @@ public class ParsingServiceBase implements ParsingService
 				}
 				else
 				{
-					final Instruction instruction = new InstructionReader().read( record );
-					streamingService.send( instruction, dataSet.getRowNo() );
+					System.out.println( "------------------- INSTR" );
+					final Instruction instruction = new InstructionReader().read( record, index++ );
+					streamingService.send( instruction );
 				}
 			}
 
