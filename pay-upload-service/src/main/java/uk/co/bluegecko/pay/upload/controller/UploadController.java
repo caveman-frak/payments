@@ -1,6 +1,11 @@
 package uk.co.bluegecko.pay.upload.controller;
 
 
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.FILE;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.JOB_ID;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.STATUS;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.UPLOAD;
+
 import java.io.IOException;
 import java.net.URI;
 
@@ -26,9 +31,6 @@ import uk.co.bluegecko.pay.upload.service.UploadService;
 public class UploadController
 {
 
-	protected static final String UPLOAD = "/upload/";
-	protected static final String STATUS = "/status/{jobId}";
-
 	private final UploadService uploadService;
 
 	@Autowired
@@ -40,7 +42,7 @@ public class UploadController
 	}
 
 	@PostMapping( UPLOAD )
-	public HttpEntity< Void > handleFileUpload( @RequestParam( "file" ) final MultipartFile file ) throws IOException
+	public HttpEntity< Void > handleFileUpload( @RequestParam( FILE ) final MultipartFile file ) throws IOException
 	{
 		final Long jobId = uploadService.processFile( file );
 
@@ -53,7 +55,7 @@ public class UploadController
 	}
 
 	@GetMapping( STATUS )
-	public HttpEntity< String > getJobStatus( @PathVariable( "jobId" ) final long jobId )
+	public HttpEntity< String > getJobStatus( @PathVariable( JOB_ID ) final long jobId )
 	{
 		final String body = uploadService.getJobStatus( jobId );
 		return ResponseEntity.ok()

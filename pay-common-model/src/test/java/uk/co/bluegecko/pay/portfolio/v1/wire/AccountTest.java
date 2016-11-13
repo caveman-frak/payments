@@ -34,12 +34,12 @@ public class AccountTest extends TestHarness
 	{
 		final Account account = accountBuilder.build();
 
-		final String str = mapper.writeValueAsString( account );
+		final String str = write( account );
 
 		assertThat( stripWhitespace( str ),
 				is( "{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"JOEBLOGGS\"}" ) );
 
-		final Account result = mapper.readValue( str, Account.class );
+		final Account result = read( str, Account.class );
 
 		assertThat( result.sortCode(), is( "123456" ) );
 		assertThat( result.number(), is( "12345678" ) );
@@ -52,12 +52,11 @@ public class AccountTest extends TestHarness
 	{
 		final Account account = accountBuilder.build();
 
-		final String str = mapper.writerWithView( View.Standard.class )
-				.writeValueAsString( account );
+		final String str = write( View.Standard.class, account );
 
 		assertThat( stripWhitespace( str ), is( "{\"sortCode\":\"123456\",\"number\":\"12345678\"}" ) );
 
-		final Account result = mapper.readValue( str, Account.class );
+		final Account result = read( str, Account.class );
 
 		assertThat( result.sortCode(), is( "123456" ) );
 		assertThat( result.number(), is( "12345678" ) );

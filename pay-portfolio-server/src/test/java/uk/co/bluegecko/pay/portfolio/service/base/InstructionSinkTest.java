@@ -22,7 +22,7 @@ public class InstructionSinkTest extends TestHarness
 	@Test
 	public final void testMarshal() throws JsonProcessingException
 	{
-		final String str = mapper.writeValueAsString( OffsetDateTime.now( clock ) );
+		final String str = write( OffsetDateTime.now( clock() ) );
 
 		assertThat( str ).isEqualTo( "\"2015-06-01T12:05:30.0000005Z\"" );
 	}

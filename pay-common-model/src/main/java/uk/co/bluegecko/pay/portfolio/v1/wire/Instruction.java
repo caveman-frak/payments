@@ -33,6 +33,9 @@ public class Instruction
 	@JsonView( View.Detailed.class )
 	private final Long id;
 	@Min( 1 )
+	@JsonView( View.Detailed.class )
+	private final Long batch;
+	@Min( 1 )
 	private final int index;
 	@Min( 1 )
 	@JsonView( View.Detailed.class )

@@ -23,6 +23,7 @@
 		<module>pay-common-server</module>
 		<module>pay-upload-service</module>
 		<module>pay-upload-server</module>
+		<module>pay-portfolio-service</module>
 		<module>pay-portfolio-server</module>
 		<module>pay-tools</module>
 	</modules>

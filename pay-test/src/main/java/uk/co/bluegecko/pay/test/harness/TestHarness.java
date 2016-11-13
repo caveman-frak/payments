@@ -1,6 +1,7 @@
 package uk.co.bluegecko.pay.test.harness;
 
 
+import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +27,9 @@ import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import uk.co.bluegecko.pay.common.config.StandardConfiguration;
@@ -53,11 +57,11 @@ public abstract class TestHarness
 	public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
 	@Autowired
-	protected Clock clock;
+	private Clock clock;
 
 	@Autowired
 	@Qualifier( "objectMapper" )
-	protected ObjectMapper mapper;
+	private ObjectMapper mapper;
 
 	@Autowired
 	private Validator validator;
@@ -81,6 +85,21 @@ public abstract class TestHarness
 
 	}
 
+	protected Clock clock()
+	{
+		return clock;
+	}
+
+	protected ObjectMapper mapper()
+	{
+		return mapper;
+	}
+
+	protected Validator validator()
+	{
+		return validator;
+	}
+
 	protected String stripWhitespace( final String str )
 	{
 		return REGEX_WHITESPACE.matcher( str )
@@ -96,6 +115,23 @@ public abstract class TestHarness
 	protected < T > boolean isValid( final T model )
 	{
 		return CollectionUtils.isEmpty( validator.validate( model ) );
+	}
+
+	protected String write( final Object o ) throws JsonProcessingException
+	{
+		return mapper.writeValueAsString( o );
+	}
+
+	protected String write( final Class< ? > view, final Object o ) throws JsonProcessingException
+	{
+		return mapper.writerWithView( view )
+				.writeValueAsString( o );
+	}
+
+	protected < T > T read( final String str, final Class< T > type )
+			throws IOException, JsonParseException, JsonMappingException
+	{
+		return mapper.readValue( str, type );
 	}
 
 }

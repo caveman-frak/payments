@@ -8,6 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.FILE;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.STATUS;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.UPLOAD;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,9 +49,9 @@ public class UploadControllerTest extends TestHarness
 	@Test
 	public final void testFileUpload() throws Exception
 	{
-		final MockMultipartFile multipartFile = new MockMultipartFile( "file", "test.txt", "text/plain",
+		final MockMultipartFile multipartFile = new MockMultipartFile( FILE, "test.txt", "text/plain",
 				"Spring Framework".getBytes() );
-		mvc.perform( fileUpload( UploadController.UPLOAD ).file( multipartFile ) )
+		mvc.perform( fileUpload( UPLOAD ).file( multipartFile ) )
 				.andExpect( status().isAccepted() )
 				.andExpect( header().string( "Location", "/status/0" ) );
 
@@ -60,7 +63,7 @@ public class UploadControllerTest extends TestHarness
 	{
 		when( uploadService.getJobStatus( 1L ) ).thenReturn( "COMLETED: 1" );
 
-		mvc.perform( get( UploadController.STATUS, 1L ) )
+		mvc.perform( get( STATUS, 1L ) )
 				.andExpect( status().isOk() )
 				.andExpect( content().string( "COMLETED: 1" ) );
 

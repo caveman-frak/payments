@@ -35,7 +35,6 @@
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
 			<artifactId>pay-upload-service</artifactId>
-			<version>${payments.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
@@ -48,4 +47,13 @@
 		</dependency>
 	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>uk.co.bluegecko</groupId>
+				<artifactId>pay-upload-service</artifactId>
+				<version>${payments.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

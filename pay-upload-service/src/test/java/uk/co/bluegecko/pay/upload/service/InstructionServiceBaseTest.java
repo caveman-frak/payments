@@ -19,7 +19,7 @@ public class InstructionServiceBaseTest extends TestHarness
 	@Test
 	public final void testMarshal() throws JsonProcessingException
 	{
-		final String str = mapper.writeValueAsString( OffsetDateTime.now( clock ) );
+		final String str = write( OffsetDateTime.now( clock() ) );
 
 		assertThat( str ).isEqualTo( "\"2015-06-01T12:05:30.0000005Z\"" );
 	}
@@ -27,7 +27,7 @@ public class InstructionServiceBaseTest extends TestHarness
 	@Test
 	public final void testUnmarshal() throws IOException
 	{
-		final OffsetDateTime time = mapper.readValue( "\"2015-06-01T12:05:30.0000005Z\"", OffsetDateTime.class );
+		final OffsetDateTime time = read( "\"2015-06-01T12:05:30.0000005Z\"", OffsetDateTime.class );
 
 		assertThat( time ).isEqualTo( DATE_TIME_ZONE );
 	}

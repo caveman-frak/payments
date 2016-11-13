@@ -58,7 +58,7 @@ public class InstructionTest extends TestHarness
 	{
 		final Instruction instruction = instructionBuilder.build();
 
-		final String str = mapper.writeValueAsString( instruction );
+		final String str = write( instruction );
 
 		assertThat( stripWhitespace( str ),
 				is( "{\"index\":1,\"lineNo\":3,"
@@ -67,7 +67,7 @@ public class InstructionTest extends TestHarness
 						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
 						+ "\"processingDate\":\"2015-06-01\"}" ) );
 
-		final Instruction result = mapper.readValue( str, Instruction.class );
+		final Instruction result = read( str, Instruction.class );
 
 		assertThat( result.origin()
 				.sortCode(), is( "123456" ) );
@@ -84,8 +84,7 @@ public class InstructionTest extends TestHarness
 	{
 		final Instruction instruction = instructionBuilder.build();
 
-		final String str = mapper.writerWithView( View.Standard.class )
-				.writeValueAsString( instruction );
+		final String str = write( View.Standard.class, instruction );
 
 		assertThat( stripWhitespace( str ),
 				is( "{\"index\":1,\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\"},"
@@ -93,7 +92,7 @@ public class InstructionTest extends TestHarness
 						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
 						+ "\"processingDate\":\"2015-06-01\"}" ) );
 
-		final Instruction result = mapper.readValue( str, Instruction.class );
+		final Instruction result = read( str, Instruction.class );
 
 		assertThat( result.origin()
 				.sortCode(), is( "123456" ) );

@@ -1,6 +1,9 @@
 package uk.co.bluegecko.pay.tools.upload.file.service.base;
 
 
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.FILE;
+import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.UPLOAD;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -33,7 +36,6 @@ import uk.co.bluegecko.pay.tools.upload.file.service.FileUploadService;
 public class FileUploadServiceBase implements FileUploadService
 {
 
-	private static final String UPLOAD = "/upload/";
 	private static final Logger logger = LoggerFactory.getLogger( FileUploadService.class );
 
 	private final RestTemplate restTemplate;
@@ -90,7 +92,7 @@ public class FileUploadServiceBase implements FileUploadService
 	protected void uploadFile( final URI host, final Path file )
 	{
 		final MultiValueMap< String, Object > map = new LinkedMultiValueMap<>();
-		map.add( "file", new PathResource( file ) );
+		map.add( FILE, new PathResource( file ) );
 
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType( MediaType.MULTIPART_FORM_DATA );

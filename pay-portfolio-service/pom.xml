@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>pay-portfolio-server</artifactId>
+	<artifactId>pay-portfolio-service</artifactId>
 
 	<name>Portfolio Server</name>
-	<description>Payments - Portfolio Micro-Server</description>
+	<description>Payments - Portfolio Service</description>
 
 	<parent>
 		<groupId>uk.co.bluegecko</groupId>
@@ -13,27 +13,14 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<start-class>uk.co.bluegecko.pay.portfolio.PortfolioApplication</start-class>
-	</properties>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
-			<artifactId>pay-common-server</artifactId>
+			<artifactId>pay-common-model</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
-			<artifactId>pay-portfolio-service</artifactId>
+			<artifactId>pay-common-service</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
@@ -42,13 +29,4 @@
 		</dependency>
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>uk.co.bluegecko</groupId>
-				<artifactId>pay-portfolio-service</artifactId>
-				<version>${payments.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>

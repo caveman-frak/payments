@@ -181,11 +181,11 @@ public class MessageTest extends TestHarness
 	@Test
 	public final void testMarshallingEmpty() throws IOException
 	{
-		final String str = mapper.writeValueAsString( message );
+		final String str = write( message );
 
 		assertThat( stripWhitespace( str ), is( "{}" ) );
 
-		final Message result = mapper.readValue( str, Message.class );
+		final Message result = read( str, Message.class );
 
 		assertThat( result.has( Classification.ERROR ), is( false ) );
 	}
@@ -194,11 +194,11 @@ public class MessageTest extends TestHarness
 	public final void testMarshallingWithText() throws IOException
 	{
 		message.add( Classification.ERROR, KEY_1, MESSAGE_1 );
-		final String str = mapper.writeValueAsString( message );
+		final String str = write( message );
 
 		assertThat( stripWhitespace( str ), is( "{\"messages\":{\"ERROR\":{\"foo1\":[\"bar1\"]}}}" ) );
 
-		final Message result = mapper.readValue( str, Message.class );
+		final Message result = read( str, Message.class );
 
 		assertThat( result.text( Classification.ERROR, KEY_1 ), hasItem( MESSAGE_1 ) );
 	}
