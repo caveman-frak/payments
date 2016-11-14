@@ -6,31 +6,38 @@ import static uk.co.bluegecko.pay.portfolio.v1.rest.BatchMapping.BATCH_BY_ID;
 import static uk.co.bluegecko.pay.portfolio.v1.rest.BatchMapping.BATCH_ID;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import uk.co.bluegecko.pay.portfolio.model.v1.WireService;
+import uk.co.bluegecko.pay.Mapping.View;
+import uk.co.bluegecko.pay.common.controller.AbstractController;
+import uk.co.bluegecko.pay.portfolio.model.WireService;
 import uk.co.bluegecko.pay.portfolio.service.BatchService;
 import uk.co.bluegecko.pay.portfolio.v1.wire.Batch;
 
 
 @RestController
-public class BatchController
+public class BatchController extends AbstractController
 {
 
-	private final WireService wireService;
+	private final WireService< uk.co.bluegecko.pay.portfolio.model.Batch, Batch > wireService;
 	private final BatchService batchService;
 
 	@Autowired
-	public BatchController( final WireService wireService, final BatchService batchService )
+	public BatchController( final WireService< uk.co.bluegecko.pay.portfolio.model.Batch, Batch > wireService,
+			final BatchService batchService )
 	{
 		super();
 
@@ -57,6 +64,18 @@ public class BatchController
 		final Batch batch = wireService.toWire( batchService.retreiveBatchById( batchId ) );
 
 		return ResponseEntity.ok( batch );
+	}
+
+	@GetMapping( BATCH )
+	public HttpEntity< MappingJacksonValue > getBatches(
+			@RequestParam( name = View.PARAM, defaultValue = View.SUMMARY ) final Class< ? > view )
+	{
+		final List< Batch > batches = batchService.retreiveBatches()
+				.stream()
+				.map( wireService::toWire )
+				.collect( Collectors.toList() );
+
+		return ResponseEntity.ok( entityWithView( view, batches ) );
 	}
 
 }

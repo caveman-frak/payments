@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import uk.co.bluegecko.pay.common.controller.AbstractController;
 import uk.co.bluegecko.pay.upload.service.UploadService;
 
 
 @RestController
 @MultipartConfig( maxFileSize = 10485760 )
-public class UploadController
+public class UploadController extends AbstractController
 {
 
 	private final UploadService uploadService;

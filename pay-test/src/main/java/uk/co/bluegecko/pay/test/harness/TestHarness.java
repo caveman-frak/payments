@@ -3,11 +3,6 @@ package uk.co.bluegecko.pay.test.harness;
 
 import java.io.IOException;
 import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -33,20 +28,15 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import uk.co.bluegecko.pay.common.config.StandardConfiguration;
+import uk.co.bluegecko.pay.test.FixedDates;
 import uk.co.bluegecko.pay.test.harness.TestHarness.TestConfig;
 
 
 @ContextConfiguration( classes =
 	{ TestConfig.class } )
 @ActiveProfiles( "test" )
-public abstract class TestHarness
+public abstract class TestHarness implements FixedDates
 {
-
-	protected static LocalDate DATE = LocalDate.of( 2015, 6, 1 );
-	protected static LocalTime TIME = LocalTime.of( 12, 5, 30, 500 );
-	protected static LocalDateTime DATE_TIME = LocalDateTime.of( DATE, TIME );
-	protected static ZoneOffset ZONE = ZoneOffset.UTC;
-	protected static OffsetDateTime DATE_TIME_ZONE = OffsetDateTime.of( DATE, TIME, ZONE );
 
 	private static final Pattern REGEX_WHITESPACE = Pattern.compile( "\\s" );
 

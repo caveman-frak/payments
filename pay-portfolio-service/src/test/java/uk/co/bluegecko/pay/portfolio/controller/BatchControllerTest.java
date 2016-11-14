@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import uk.co.bluegecko.pay.Mapping.View;
 import uk.co.bluegecko.pay.portfolio.TestPortfolioApplication;
 import uk.co.bluegecko.pay.portfolio.v1.wire.Batch;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
@@ -58,7 +59,23 @@ public class BatchControllerTest extends TestHarness
 	{
 		mvc.perform( get( BATCH_BY_ID, 101L ) )
 				.andExpect( status().isOk() )
-				.andExpect( content().json( "{\"id\":101,\"index\":15}" ) );
+				.andExpect( content().json( "{\"id\":101,\"index\":111}" ) );
+	}
+
+	@Test
+	public final void testGetBatchesWithDefaultView() throws Exception
+	{
+		mvc.perform( get( BATCH ) )
+				.andExpect( status().isOk() )
+				.andExpect( content().json( "[{\"index\":11},{\"index\":12}]" ) );
+	}
+
+	@Test
+	public final void testGetBatchesWithDetailedView() throws Exception
+	{
+		mvc.perform( get( BATCH ).param( View.PARAM, View.DETAILED ) )
+				.andExpect( status().isOk() )
+				.andExpect( content().json( "[{\"id\":1,\"index\":11},{\"id\":2,\"index\":12}]" ) );
 	}
 
 }
