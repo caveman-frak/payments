@@ -3,9 +3,37 @@
 <configuration>
 
 	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
-	<property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
-	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	<property name="LOG_FILE"
+		value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}" />
+	<include
+		resource="org/springframework/boot/logging/logback/console-appender.xml" />
 	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+
+	<springProperty scope="context" name="application-name" source="spring.application.name" default="unknown-app"/>
+	
+	<appender name="PAPERTRAIL" class="com.papertrailapp.logback.Syslog4jAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-5level %logger{35}: %m%n%xEx</pattern>
+		</layout>
+
+		<syslogConfig
+			class="org.productivity.java.syslog4j.impl.net.tcp.TCPNetSyslogConfig">
+			<!-- remote system to log to -->
+			<host>logs3.papertrailapp.com</host>
+			<!-- remote port to log to -->
+			<port>17764</port>
+			<!-- program name to log as -->
+			<ident>${application-name}</ident>
+			<!-- max log message length in bytes -->
+			<maxMessageLength>128000</maxMessageLength>
+		</syslogConfig>
+	</appender>
+	
+	<springProfile name="!test">
+		<root level="INFO">
+			<appender-ref ref="PAPERTRAIL" />
+		</root>
+	</springProfile>
 
 	<!-- By default, the level of the root level is set to WARN -->
 	<root level="INFO">

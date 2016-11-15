@@ -14,6 +14,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<papertrail-syslogj.version>1.0.0</papertrail-syslogj.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -32,6 +36,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.papertrailapp</groupId>
+			<artifactId>logback-syslog4j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -40,6 +49,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-collections4</artifactId>
 				<version>4.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.papertrailapp</groupId>
+				<artifactId>logback-syslog4j</artifactId>
+				<version>${papertrail-syslogj.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
