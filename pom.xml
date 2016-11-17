@@ -11,9 +11,55 @@
 	<name>Payments Parent</name>
 	<description>Payments Parent and Build File</description>
 
+	<url>https://github.com/caveman-frak/payments/</url>
+	<inceptionYear>1999</inceptionYear>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
 	<organization>
-		<name>Blue Gecko Ltd</name>
+		<name>Blue Gecko Limited</name>
+		<url>http://www.bluegecko.co.uk</url>
 	</organization>
+	<developers>
+		<developer>
+			<name>Caveman Frak</name>
+			<email>caveman-frak@bluegecko.co.uk</email>
+			<organization>Blue Gecko Limited</organization>
+			<organizationUrl>http://www.bluegecko.co.uk</organizationUrl>
+			<timezone>Europe/London</timezone>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:git@github.com:caveman-frak/payments.git</connection>
+		<developerConnection>scm:git:git@github.com:caveman-frak/payments.git</developerConnection>
+		<url>https://github.com/caveman-frak/payments/</url>
+		<tag>HEAD</tag>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/caveman-frak/payments/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/caveman-frak/payments</url>
+		<notifiers>
+			<notifier>
+				<address>caveman-frak@bluegecko.co.uk</address>
+				<type>mail</type>
+				<sendOnError>true</sendOnError>
+				<sendOnFailure>true</sendOnFailure>
+			</notifier>
+		</notifiers>
+	</ciManagement>
 
 	<modules>
 		<module>pay-common</module>
