@@ -1,0 +1,16 @@
+---
+sudo: false
+language: java
+jdk:
+    - oraclejdk8
+
+install:
+    mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -N
+    
+notifications:
+  webhooks:
+    urls:
+      - https://hooks.slack.com/services/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
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: always    # options: [always|never|change] default: always
