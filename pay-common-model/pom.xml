@@ -14,6 +14,11 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<flatpack.version>4.0.1</flatpack.version>
+		<jdom.version>1.1</jdom.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>uk.co.bluegecko</groupId>
@@ -25,9 +30,31 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>net.sf.flatpack</groupId>
+			<artifactId>flatpack</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.sf.flatpack</groupId>
+				<artifactId>flatpack</artifactId>
+				<version>${flatpack.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>${jdom.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

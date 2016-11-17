@@ -1,10 +1,10 @@
 package uk.co.bluegecko.pay.upload.controller;
 
 
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.FILE;
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.JOB_ID;
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.STATUS;
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.UPLOAD;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.FILE;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.JOB_ID;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.STATUS;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.UPLOAD;
 
 import java.io.IOException;
 import java.net.URI;

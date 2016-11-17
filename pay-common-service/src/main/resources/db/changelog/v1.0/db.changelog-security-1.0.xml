@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!--
+		Create Security schema.
+	-->
+
+	<changeSet author="tpickard" id="schema-01" dbms="derby, h2, hsql">
+		<sql>create schema if not exists security</sql>
+	</changeSet>
+
+	<!--
+		Create User Authority tables.
+	-->
+
+	<changeSet id="user-1" author="tpickard">
+		<comment>Spring Security Authentication - Users Table</comment>
+		<createTable schemaName="security" tableName="Users">
+			<column name="UserName" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Password" type="VARCHAR(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="Enabled" type="BOOLEAN">
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="user-2" author="tpickard">
+		<comment>Spring Security Authentication - Authorities Table</comment>
+		<createTable schemaName="security" tableName="Authorities">
+			<column name="UserName" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="Authority" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="user-3" author="tpickard">
+		<comment>Spring Security Authentication - Authorities Constraints</comment>
+		<addPrimaryKey constraintName="pk_Authorities"
+			schemaName="security" tableName="authorities" columnNames="UserName,Authority" />
+		<addForeignKeyConstraint constraintName="fk_Authorities_Users"
+			baseTableSchemaName="security" baseTableName="Authorities" baseColumnNames="UserName"
+			referencedTableSchemaName="security" referencedTableName="Users" referencedColumnNames="UserName" />
+	</changeSet>
+
+	<!--
+		Create Group Authority tables.
+	-->
+
+	<changeSet id="group-1" author="tpickard">
+		<comment>Spring Authentication- Group Table</comment>
+		<createTable schemaName="security" tableName="Groups">
+			<column name="Id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Group_Name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="group-2" author="tpickard">
+		<comment>Spring Authentication- Group Authorities Table</comment>
+		<createTable schemaName="security" tableName="Group_Authorities">
+			<column name="Group_Id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Authority" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="group-3" author="tpickard">
+		<comment>Spring Security Authentication - Group Authorities Constraints</comment>
+		<addForeignKeyConstraint constraintName="fk_Group_Authorities"
+			baseTableSchemaName="security" baseTableName="Group_Authorities" baseColumnNames="Group_Id"
+			referencedTableSchemaName="security" referencedTableName="Groups" referencedColumnNames="Id" />
+	</changeSet>
+	
+	<changeSet id="group-4" author="tpickard">
+		<comment>Spring Authentication- Group Members Table</comment>
+		<createTable schemaName="security" tableName="Group_Memebers">
+			<column name="Id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="UserName" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="Group_Id" type="bigint" autoIncrement="true">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="group-5" author="tpickard">
+		<comment>Spring Security Authentication - Group Members Constraints</comment>
+		<addUniqueConstraint constraintName="uk_Group_Members"
+			schemaName="security" tableName="Group_Memebers" columnNames="UserName, Group_Id" />
+		<addForeignKeyConstraint constraintName="fk_GroupMembers_Group"
+			baseTableSchemaName="security" baseTableName="Group_Memebers" baseColumnNames="Group_Id"
+			referencedTableSchemaName="security" referencedTableName="Groups" referencedColumnNames="Id" />
+		<addForeignKeyConstraint constraintName="fk_GroupMembers_User"
+			baseTableSchemaName="security" baseTableName="Group_Memebers" baseColumnNames="UserName"
+			referencedTableSchemaName="security" referencedTableName="Users" referencedColumnNames="UserName" />
+	</changeSet>
+	
+	<!--
+		Create RememberMe tables.
+	-->
+
+	<changeSet id="remember-me-1" author="tpickard">
+		<comment>Spring Security Authentication - Remember Me Table</comment>
+		<createTable schemaName="security" tableName="Persistent_Logins">
+			<column name="UserName" type="VARCHAR(64)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Series" type="VARCHAR(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="Token" type="VARCHAR(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="Last_Used" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<!--
+		Create ACL tables.
+	-->
+
+	<changeSet id="acl-1" author="tpickard">
+		<comment>Spring Security ACL - Sid Table</comment>
+		<createTable schemaName="security" tableName="acl_sid">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="sid" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="principal" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="acl-2" author="tpickard">
+		<comment>Spring Security ACL - Sid Constraints</comment>
+		<addUniqueConstraint constraintName="unique_acl_sid"
+			schemaName="security" tableName="acl_sid" columnNames="sid, principal" />
+	</changeSet>
+
+	<changeSet id="acl-3" author="tpickard">
+		<comment>Spring Security ACL - Class Table</comment>
+		<createTable schemaName="security" tableName="acl_class">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="class" type="varchar(100)">
+				<constraints unique="true" nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="acl-4" author="tpickard">
+		<comment>Spring Security ACL - Object Identity Table</comment>
+		<createTable schemaName="security" tableName="acl_object_identity">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="object_id_class" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="object_id_identity" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="parent_object" type="bigint" />
+			<column name="owner_sid" type="bigint" />
+			<column name="entries_inheriting" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="acl-5" author="tpickard">
+		<comment>Spring Security ACL - Object Identity Constraints</comment>
+		<addUniqueConstraint constraintName="unique_acl_object_identity"
+			schemaName="security" tableName="acl_object_identity" columnNames="object_id_class, object_id_identity" />
+		<addForeignKeyConstraint constraintName="fk_acl_oid_parent"
+			baseTableSchemaName="security" baseTableName="acl_object_identity" baseColumnNames="parent_object"
+			referencedTableSchemaName="security" referencedTableName="acl_object_identity" referencedColumnNames="id" />
+		<addForeignKeyConstraint constraintName="fk_acl_oid_class"
+			baseTableSchemaName="security" baseTableName="acl_object_identity" baseColumnNames="object_id_class"
+			referencedTableSchemaName="security" referencedTableName="acl_class" referencedColumnNames="id" />
+		<addForeignKeyConstraint constraintName="fk_acl_oid_sid"
+			baseTableSchemaName="security" baseTableName="acl_object_identity" baseColumnNames="owner_sid"
+			referencedTableSchemaName="security" referencedTableName="acl_sid" referencedColumnNames="id" />
+	</changeSet>
+
+	<changeSet id="acl-6" author="tpickard">
+		<comment>Spring Security ACL - Entry Table</comment>
+		<createTable schemaName="security" tableName="acl_entry">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="acl_object_identity" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="ace_order" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="sid" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="mask" type="integer">
+				<constraints nullable="false" />
+			</column>
+			<column name="granting" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="audit_success" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="audit_failure" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="acl-7" author="tpickard">
+		<comment>Spring Security ACL - Entry Constraints</comment>
+		<addUniqueConstraint constraintName="unique_acl_entry"
+			schemaName="security" tableName="acl_entry" columnNames="acl_object_identity, ace_order" />
+		<addForeignKeyConstraint constraintName="fk_acl_entry_oid"
+			baseTableSchemaName="security" baseTableName="acl_entry" baseColumnNames="acl_object_identity"
+			referencedTableSchemaName="security" referencedTableName="acl_object_identity" referencedColumnNames="id" />
+		<addForeignKeyConstraint constraintName="fk_entry_sid"
+			baseTableSchemaName="security" baseTableName="acl_entry" baseColumnNames="sid" referencedTableName="acl_sid"
+			referencedTableSchemaName="security" referencedColumnNames="id" />
+	</changeSet>
+
+	<changeSet id="user-data-1" author="tpickard" context="test">
+		<comment>Insert admin user</comment>
+		<insert schemaName="security" tableName="Users">
+			<column name="UserName" value="admin" />
+			<!-- md5("admin") = "21232f297a57a5a743894a0e4a801fc3" -->
+			<column name="Password" value="21232f297a57a5a743894a0e4a801fc3" />
+			<column name="Enabled" value="1" />
+		</insert>
+		<insert schemaName="security" tableName="Authorities">
+			<column name="UserName" value="admin" />
+			<column name="Authority" value="ROLE_ADMIN" />
+		</insert>
+		<insert schemaName="security" tableName="Authorities">
+			<column name="UserName" value="admin" />
+			<column name="Authority" value="ROLE_USER" />
+		</insert>
+		<insert schemaName="security" tableName="Users">
+			<column name="UserName" value="user" />
+			<!-- md5("secret") = "5ebe2294ecd0e0f08eab7690d2a6ee69" -->
+			<column name="Password" value="5ebe2294ecd0e0f08eab7690d2a6ee69" />
+			<column name="Enabled" value="1" />
+		</insert>
+		<insert schemaName="security" tableName="Authorities">
+			<column name="UserName" value="user" />
+			<column name="Authority" value="ROLE_ADMIN" />
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>

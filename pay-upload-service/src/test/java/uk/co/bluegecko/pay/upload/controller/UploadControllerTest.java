@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.FILE;
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.STATUS;
-import static uk.co.bluegecko.pay.upload.v1.rest.UploadMapping.UPLOAD;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.FILE;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.STATUS;
+import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.UPLOAD;
 
 import org.junit.Before;
 import org.junit.Test;

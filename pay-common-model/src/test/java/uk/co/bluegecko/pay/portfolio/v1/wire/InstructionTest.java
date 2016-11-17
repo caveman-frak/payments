@@ -10,8 +10,10 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluegecko.pay.portfolio.v1.wire.Instruction.InstructionBuilder;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
+import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
+import uk.co.bluegecko.pay.v1.portfolio.wire.Instruction;
+import uk.co.bluegecko.pay.v1.portfolio.wire.Instruction.InstructionBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 
@@ -40,8 +42,8 @@ public class InstructionTest extends TestHarness
 				.origin( origin )
 				.destination( destination )
 				.transactionType( "99" )
-				.pence( "1001" )
-				.julianDate( DATE.toEpochDay() )
+				.amount( "1001" )
+				.processingDate( DATE.toEpochDay() )
 				.reference( "A-REFERENCE" );
 	}
 

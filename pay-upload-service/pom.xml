@@ -28,16 +28,6 @@
 			<artifactId>pay-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.flatpack</groupId>
-			<artifactId>flatpack</artifactId>
-			<version>4.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>1.1</version>
-		</dependency>
 	</dependencies>
 
 </project>

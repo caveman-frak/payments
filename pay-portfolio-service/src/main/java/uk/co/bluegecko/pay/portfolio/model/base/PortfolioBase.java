@@ -1,6 +1,8 @@
 package uk.co.bluegecko.pay.portfolio.model.base;
 
 
+import org.hibernate.validator.constraints.Length;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 import uk.co.bluegecko.pay.portfolio.model.Portfolio;
@@ -12,5 +14,7 @@ public class PortfolioBase implements Portfolio
 {
 
 	private final Long id;
+	@Length( max = 50 )
+	private String name;
 
 }

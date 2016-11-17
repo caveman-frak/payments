@@ -24,7 +24,7 @@ public class Message
 
 	public enum Classification
 	{
-		ERROR, WARN, INFO, DUPLICATE
+		ERROR, WARN, INFO, DIFF
 	}
 
 	@JsonProperty
@@ -230,4 +230,63 @@ public class Message
 		}
 		return joiner.toString();
 	}
+
+	public static Builder builder()
+	{
+		return new Builder();
+	}
+
+	public static final class Builder
+	{
+
+		private final Message message;
+
+		protected Builder( final Message message )
+		{
+			this.message = message;
+		}
+
+		protected Builder()
+		{
+			this( new Message() );
+		}
+
+		protected Message message()
+		{
+			return message;
+		}
+
+		public ClassificationBuilder classification( final Classification classification )
+		{
+			return new ClassificationBuilder( this, classification );
+		}
+
+		public Message build()
+		{
+			return message;
+		}
+	}
+
+	public static final class ClassificationBuilder
+	{
+
+		private final Builder builder;
+		private final Classification classification;
+
+		protected ClassificationBuilder( final Builder builder, final Classification classification )
+		{
+			this.builder = builder;
+			this.classification = classification;
+		}
+
+		public Builder message( final String key, final String... text )
+		{
+			builder.message()
+					.add( classification, key, text );
+
+			return builder;
+		}
+
+	}
+
 }

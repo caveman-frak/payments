@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import uk.co.bluegecko.pay.portfolio.v1.wire.Instruction;
+import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
 import uk.co.bluegecko.pay.upload.service.ParsingService;
 import uk.co.bluegecko.pay.upload.service.StreamingService;
 
@@ -46,7 +46,7 @@ public class ParsingServiceBaseTest
 		{
 			parsingService.parse( in );
 
-			verify( streamingService, times( 1 ) ).send( argument.capture() );
+			verify( streamingService, times( 1 ) ).sendInstruction( argument.capture() );
 
 			final Instruction instruction = argument.getValue();
 
@@ -79,7 +79,7 @@ public class ParsingServiceBaseTest
 		{
 			parsingService.parse( in );
 
-			verify( streamingService, times( 1 ) ).send( argument.capture() );
+			verify( streamingService, times( 1 ) ).sendInstruction( argument.capture() );
 
 			assertThat( argument.getValue()
 					.lineNo(), is( 5 ) );

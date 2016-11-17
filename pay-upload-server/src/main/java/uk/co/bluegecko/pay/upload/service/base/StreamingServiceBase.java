@@ -10,7 +10,8 @@ import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import uk.co.bluegecko.pay.portfolio.v1.wire.Instruction;
+import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
+import uk.co.bluegecko.pay.bacs.std18.service.v1.InstructionWireStd18ToV1;
 import uk.co.bluegecko.pay.upload.service.StreamingService;
 
 
@@ -21,17 +22,26 @@ public class StreamingServiceBase implements StreamingService
 
 	private static final Logger logger = LoggerFactory.getLogger( StreamingService.class );
 
+	private final Source source;
+	private final InstructionWireStd18ToV1 instructionWireService;
+
 	@Autowired
-	Source source;
+	public StreamingServiceBase( final Source source, final InstructionWireStd18ToV1 instructionWireService )
+	{
+		super();
+
+		this.source = source;
+		this.instructionWireService = instructionWireService;
+	}
 
 	@Override
 	@Output( value = Source.OUTPUT )
-	public void send( final Instruction instruction )
+	public void sendInstruction( final Instruction instruction )
 	{
 		logger.info( "sending {}", instruction.reference() );
 
 		source.output()
-				.send( MessageBuilder.withPayload( instruction )
+				.send( MessageBuilder.withPayload( instructionWireService.toWire( instruction ) )
 						.setSequenceNumber( instruction.index() )
 						.build() );
 	}

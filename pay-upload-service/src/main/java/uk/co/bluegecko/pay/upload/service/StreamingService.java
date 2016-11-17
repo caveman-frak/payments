@@ -1,12 +1,12 @@
 package uk.co.bluegecko.pay.upload.service;
 
 
-import uk.co.bluegecko.pay.portfolio.v1.wire.Instruction;
+import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
 
 
 public interface StreamingService
 {
 
-	public void send( Instruction instruction );
+	public void sendInstruction( Instruction instruction );
 
 }

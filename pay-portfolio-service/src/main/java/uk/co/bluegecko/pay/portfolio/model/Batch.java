@@ -1,13 +1,18 @@
 package uk.co.bluegecko.pay.portfolio.model;
 
 
+import java.util.Optional;
+
+
 public interface Batch
 {
 
 	public Long id();
 
-	public int index();
+	public Integer index();
 
-	public Portfolio portfolio();
+	public Optional< Portfolio > portfolio();
+
+	public String userNumber();
 
 }

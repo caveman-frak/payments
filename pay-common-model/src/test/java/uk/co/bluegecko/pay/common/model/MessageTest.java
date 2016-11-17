@@ -203,4 +203,23 @@ public class MessageTest extends TestHarness
 		assertThat( result.text( Classification.ERROR, KEY_1 ), hasItem( MESSAGE_1 ) );
 	}
 
+	@Test
+	public final void testBuilder()
+	{
+		final Message message = Message.builder()
+				.classification( Classification.ERROR )
+				.message( KEY_1, MESSAGE_1 )
+				.classification( Classification.WARN )
+				.message( KEY_2, MESSAGE_2 )
+				.build();
+
+		assertThat( message.has( Classification.ERROR, KEY_1 ), is( true ) );
+		assertThat( message.text( Classification.ERROR, KEY_1 ), hasSize( 1 ) );
+		assertThat( message.text( Classification.ERROR, KEY_1 ), hasItem( MESSAGE_1 ) );
+		assertThat( message.has( Classification.WARN, KEY_2 ), is( true ) );
+		assertThat( message.text( Classification.WARN, KEY_2 ), hasSize( 1 ) );
+		assertThat( message.text( Classification.WARN, KEY_2 ), hasItem( MESSAGE_2 ) );
+		assertThat( message.has( Classification.INFO ), is( false ) );
+	}
+
 }

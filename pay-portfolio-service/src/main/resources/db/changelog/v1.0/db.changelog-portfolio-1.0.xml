@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!--
+		Create Portfolio schema.
+	-->
+
+	<changeSet author="tpickard" id="schema-01" dbms="derby, h2, hsql">
+		<sql>create schema if not exists portfolio</sql>
+	</changeSet>
+
+	<!--
+		Create Portfolio table.
+	-->
+
+	<changeSet author="tpickard" id="portfolio-01">
+		<createSequence schemaName="portfolio" sequenceName="seq_Portfolio"
+			incrementBy="10" ordered="false" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="portfolio-02">
+		<createTable schemaName="portfolio" tableName="Portfolio">
+			<column autoIncrement="${autoIncrement}" name="Id" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="pk_Portfolio" />
+			</column>
+			<column name="Tenant" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="Version" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="Name" type="VARCHAR(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CreatedBy" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="CreatedAt" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="LastModifiedBy" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="LastModifiedAt" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet author="tpickard" id="portfolio-03">
+		<addUniqueConstraint constraintName="uk_Portfolio_Name"
+			schemaName="portfolio" tableName="Portfolio" columnNames="Tenant, Name" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="portfolio-04">
+		<createIndex schemaName="portfolio" tableName="Portfolio"
+			indexName="idx_Portfolio_Tenant" unique="true">
+			<column name="Tenant" type="VARCHAR(255)" />
+			<column name="Id" type="BIGINT" />
+		</createIndex>
+	</changeSet>
+
+	<!--
+		Create Batch table.
+	-->
+
+	<changeSet author="tpickard" id="batch-01">
+		<createSequence schemaName="portfolio" sequenceName="seq_Batch"
+			incrementBy="10" ordered="false" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="batch-02">
+		<createTable schemaName="portfolio" tableName="Batch">
+			<column autoIncrement="${autoIncrement}" name="Id" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="pk_Batch" />
+			</column>
+			<column name="Tenant" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="Version" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="Portfolio" type="BIGINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="Idx" type="SMALLINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="Name" type="VARCHAR(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CreatedBy" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="CreatedAt" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="LastModifiedBy" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="LastModifiedAt" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet author="tpickard" id="batch-03">
+		<addForeignKeyConstraint constraintName="fk_Batch_Portfolio"
+			baseTableSchemaName="portfolio" baseTableName="Batch"
+			baseColumnNames="Portfolio" referencedTableSchemaName="portfolio"
+			referencedTableName="Portfolio" referencedColumnNames="Id" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="batch-04">
+		<addUniqueConstraint constraintName="uk_Batch_Idx"
+			schemaName="portfolio" tableName="Batch" columnNames="Portfolio, Idx" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="batch-05">
+		<addUniqueConstraint constraintName="uk_Batch_Name"
+			schemaName="portfolio" tableName="Batch" columnNames="Tenant, Name" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="batch-06">
+		<createIndex schemaName="portfolio" tableName="Batch"
+			indexName="idx_Batch_Tenant" unique="true">
+			<column name="Tenant" type="VARCHAR(255)" />
+			<column name="Id" type="BIGINT" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="tpickard" id="batch-07">
+		<createIndex schemaName="portfolio" tableName="Batch"
+			indexName="idx_Batch_Name" unique="true">
+			<column name="Tenant" type="VARCHAR(255)" />
+			<column name="Name" type="VARCHAR(80)" />
+		</createIndex>
+	</changeSet>
+
+	<!--
+		Create Instruction table.
+	-->
+
+	<changeSet author="tpickard" id="instruction-01">
+		<createSequence schemaName="portfolio" sequenceName="seq_Instruction"
+			incrementBy="50" ordered="false" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="instruction-02">
+		<createTable schemaName="portfolio" tableName="Instruction">
+			<column autoIncrement="${autoIncrement}" name="Id" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="pk_Instruction" />
+			</column>
+			<column name="Tenant" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="Version" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="Batch" type="BIGINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="Idx" type="SMALLINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="lineNo" type="SMALLINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="origin" type="CHAR(6)">
+				<constraints nullable="false" />
+			</column>
+			<column name="destination" type="CHAR(8)">
+				<constraints nullable="false" />
+			</column>
+			<column name="transactionType" type="CHAR(10)">
+				<constraints nullable="false" />
+			</column>
+			<column name="rti" type="CHAR(3)">
+				<constraints nullable="false" />
+			</column>
+			<column name="amount" type="NUMBER(11,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="reference" type="VARCHAR(32)">
+				<constraints nullable="false" />
+			</column>
+			<column name="processingDate" type="DATE">
+				<constraints nullable="false" />
+			</column>
+			<column name="CreatedBy" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="CreatedAt" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+			<column name="LastModifiedBy" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="LastModifiedAt" type="TIMESTAMP">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet author="tpickard" id="instruction-03">
+		<addForeignKeyConstraint constraintName="fk_Instruction_Batch"
+			baseTableSchemaName="portfolio" baseTableName="Instruction"
+			baseColumnNames="Batch" referencedTableSchemaName="portfolio"
+			referencedTableName="Batch" referencedColumnNames="Id" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="instruction-04">
+		<addUniqueConstraint constraintName="uk_Instruction_Idx"
+			schemaName="portfolio" tableName="Instruction" columnNames="Batch, Idx" />
+	</changeSet>
+
+	<changeSet author="tpickard" id="instruction-05">
+		<createIndex schemaName="portfolio" tableName="Instruction"
+			indexName="idx_Instruction_Tenant" unique="true">
+			<column name="Tenant" type="VARCHAR(255)" />
+			<column name="Id" type="BIGINT" />
+		</createIndex>
+	</changeSet>
+
+</databaseChangeLog>

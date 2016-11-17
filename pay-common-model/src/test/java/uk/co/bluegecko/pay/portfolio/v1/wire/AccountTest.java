@@ -10,8 +10,9 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluegecko.pay.portfolio.v1.wire.Account.AccountBuilder;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
+import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
+import uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 

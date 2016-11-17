@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.co.bluegecko.pay.portfolio.v1.rest.BatchMapping.BATCH;
-import static uk.co.bluegecko.pay.portfolio.v1.rest.BatchMapping.BATCH_BY_ID;
+import static uk.co.bluegecko.pay.v1.portfolio.rest.BatchMapping.BATCH;
+import static uk.co.bluegecko.pay.v1.portfolio.rest.BatchMapping.BATCH_BY_ID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import uk.co.bluegecko.pay.Mapping.View;
+import uk.co.bluegecko.pay.RestMapping.View;
 import uk.co.bluegecko.pay.portfolio.TestPortfolioApplication;
-import uk.co.bluegecko.pay.portfolio.v1.wire.Batch;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
+import uk.co.bluegecko.pay.v1.portfolio.wire.Batch;
 
 
 @SpringBootTest( classes = TestPortfolioApplication.class, webEnvironment = WebEnvironment.MOCK )
