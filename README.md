@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/caveman-frak/payments.png?label=ready&title=Ready)](https://waffle.io/caveman-frak/payments)
 Payments
 ========
 
