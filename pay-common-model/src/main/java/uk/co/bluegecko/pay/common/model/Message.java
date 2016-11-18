@@ -92,14 +92,12 @@ public class Message
 		for ( final Classification classification : Classification.values() )
 		{
 			final Map< String, Set< String > > map = messages.get( classification );
-			if ( MapUtils.isNotEmpty( map ) )
+			if ( MapUtils.isNotEmpty( map ) && CollectionUtils.isNotEmpty( map.get( key ) ) )
 			{
-				if ( CollectionUtils.isNotEmpty( map.get( key ) ) )
-				{
-					return true;
-				}
+				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -226,7 +224,7 @@ public class Message
 		final StringJoiner joiner = new StringJoiner( "; " );
 		for ( final String text : text( classification, key ) )
 		{
-			joiner.add( text.toString() );
+			joiner.add( text );
 		}
 		return joiner.toString();
 	}

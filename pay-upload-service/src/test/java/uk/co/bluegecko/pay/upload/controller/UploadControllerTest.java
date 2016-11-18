@@ -12,7 +12,6 @@ import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.FILE;
 import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.STATUS;
 import static uk.co.bluegecko.pay.v1.upload.rest.UploadMapping.UPLOAD;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,17 +33,13 @@ public class UploadControllerTest extends TestHarness
 {
 
 	@Autowired
-	MockMvc mvc;
+	private MockMvc mvc;
 
 	@MockBean
 	private UploadService uploadService;
 
 	@MockBean
 	private StreamingService streamingService;
-
-	@Before
-	public void setUp() throws Exception
-	{}
 
 	@Test
 	public final void testFileUpload() throws Exception

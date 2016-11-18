@@ -4,7 +4,6 @@ package uk.co.bluegecko.pay.upload.std18.wire;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode;
@@ -13,10 +12,6 @@ import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode.CreditCode;
 
 public class TransactionCodeTest
 {
-
-	@Before
-	public void setUp() throws Exception
-	{}
 
 	@Test
 	public final void testByCodePass()
