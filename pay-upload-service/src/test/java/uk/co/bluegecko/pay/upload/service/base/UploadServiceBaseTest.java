@@ -1,6 +1,8 @@
 package uk.co.bluegecko.pay.upload.service.base;
 
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -54,6 +56,12 @@ public class UploadServiceBaseTest
 		uploadService.processFile( file );
 
 		verify( streamingService, never() ).sendInstruction( any( Instruction.class ) );
+	}
+
+	@Test
+	public final void testJobStatus()
+	{
+		assertThat( uploadService.getJobStatus( 1 ), is( "COMPLETED: 1" ) );
 	}
 
 }

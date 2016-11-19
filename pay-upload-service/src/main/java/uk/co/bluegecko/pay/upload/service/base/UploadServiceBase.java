@@ -56,7 +56,7 @@ public class UploadServiceBase implements UploadService
 	@Override
 	public String getJobStatus( final long jobId )
 	{
-		return "COMPLETED:" + jobId;
+		return "COMPLETED: " + jobId;
 	}
 
 }
