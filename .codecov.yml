@@ -1,0 +1,8 @@
+codecov:
+  branch: develop
+
+notify:
+  slack:
+    default:
+      url: "https://hooks.slack.com/services/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"
+      threshold: 1%
