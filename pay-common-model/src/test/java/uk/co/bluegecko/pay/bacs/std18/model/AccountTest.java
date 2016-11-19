@@ -1,13 +1,14 @@
-package uk.co.bluegecko.pay.upload.std18.wire;
+package uk.co.bluegecko.pay.bacs.std18.model;
 
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluegecko.pay.bacs.std18.model.Account;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Account.AccountBuilder;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
@@ -44,6 +45,26 @@ public class AccountTest extends TestHarness
 	{
 		assertThat( isValid( accountBuilder.number( null )
 				.build() ), is( true ) );
+	}
+
+	@Test
+	public final void testToString()
+	{
+		assertThat( accountBuilder.build()
+				.toString(), startsWith( "Account(" ) );
+	}
+
+	@Test
+	public final void testEquals()
+	{
+		EqualsVerifier.forClass( Account.class )
+				.verify();
+	}
+
+	@Test
+	public final void testBuilderToString()
+	{
+		assertThat( accountBuilder.toString(), startsWith( "Account.AccountBuilder(" ) );
 	}
 
 }

@@ -4,16 +4,22 @@ package uk.co.bluegecko.pay.bacs.std18.mapper;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Collections;
+import java.util.Properties;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,9 +27,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import net.sf.flatpack.DataSet;
-import net.sf.flatpack.Parser;
-import net.sf.flatpack.brparse.BuffReaderParseFactory;
+import net.sf.flatpack.RowRecord;
+import net.sf.flatpack.xml.MetaData;
 import uk.co.bluegecko.pay.bacs.std18.model.Contra;
 import uk.co.bluegecko.pay.bacs.std18.model.Header1;
 import uk.co.bluegecko.pay.bacs.std18.model.Header2;
@@ -32,6 +37,8 @@ import uk.co.bluegecko.pay.bacs.std18.model.Row;
 import uk.co.bluegecko.pay.bacs.std18.model.UserHeader;
 import uk.co.bluegecko.pay.bacs.std18.model.UserTrailer;
 import uk.co.bluegecko.pay.bacs.std18.model.Volume;
+import uk.co.bluegecko.pay.common.service.ParsingService;
+import uk.co.bluegecko.pay.common.service.base.ParsingServiceBase;
 
 
 public class Standard18MapperTest
@@ -51,10 +58,14 @@ public class Standard18MapperTest
 	private Standard18Mapper standard18Mapper;
 	private BiConsumer< Row, Object > consumer;
 
+	private ParsingService parsingService;
+
 	@Before
 	public void setUp() throws Exception
 	{
 		standard18Mapper = new Standard18Mapper();
+
+		parsingService = new ParsingServiceBase();
 
 		consumer = mock( BiConsumer.class );
 	}
@@ -121,6 +132,7 @@ public class Standard18MapperTest
 		final Instruction value = parseAndVerify( Row.INSTR, Instruction.class );
 
 		assertThat( value.index(), is( 0 ) );
+		assertThat( value.lineNo(), is( 1 ) );
 		assertThat( value.origin()
 				.sortCode(), is( "402024" ) );
 		assertThat( value.origin()
@@ -145,6 +157,8 @@ public class Standard18MapperTest
 	{
 		final Contra value = parseAndVerify( Row.CONTRA, Contra.class );
 
+		assertThat( value.index(), is( 0 ) );
+		assertThat( value.lineNo(), is( 1 ) );
 		assertThat( value.destination()
 				.sortCode(), is( "402024" ) );
 		assertThat( value.destination()
@@ -208,35 +222,73 @@ public class Standard18MapperTest
 		assertThat( value.serviceUser(), is( nullValue() ) );
 	}
 
+	@Test
+	public final void testParseNoConsumer() throws IOException
+	{
+		standard18Mapper.add( Row.VOL1, consumer );
+
+		parse( reader( LINES[Row.INSTR.ordinal()] ), standard18Mapper.mappingFile() );
+
+		verify( consumer, never() ).accept( any(), any() );
+	}
+
+	@Test
+	public final void testParseAlternateDefinition() throws IOException
+	{
+		standard18Mapper.add( Row.VOL1, consumer );
+
+		parse( reader( LINES[Row.VOL1.ordinal()] ), new InputStreamReader(
+				getClass().getResourceAsStream( "/mapping/alternate-vol.pzmap.xml" ), StandardCharsets.UTF_8 ) );
+
+		final ArgumentCaptor< Volume > argument = ArgumentCaptor.forClass( Volume.class );
+		verify( consumer ).accept( eq( Row.VOL1 ), argument.capture() );
+		final Volume value = argument.getValue();
+
+		assertThat( value.serialNo(), is( "173922" ) );
+		assertThat( value.accessibility(), is( nullValue() ) );
+		assertThat( value.userNumber(), is( "100101" ) );
+		assertThat( value.label(), is( nullValue() ) );
+	}
+
+	@Test
+	public final void testGetStringMissing()
+	{
+		assertThat( standard18Mapper.getString( createDummyRecord(), "MISSING" ), is( nullValue() ) );
+	}
+
+	@Test
+	public final void testGetLongMissing()
+	{
+		assertThat( standard18Mapper.getLong( createDummyRecord(), "MISSING" ), is( 0L ) );
+	}
+
+	@Test
+	public final void testGetIntMissing()
+	{
+		assertThat( standard18Mapper.getInt( createDummyRecord(), "MISSING" ), is( 0 ) );
+	}
+
+	protected RowRecord createDummyRecord()
+	{
+		return new RowRecord( new net.sf.flatpack.structure.Row(),
+				new MetaData( Collections.emptyList(), Collections.emptyMap() ), false, new Properties(), false, false,
+				false, false );
+	}
+
 	protected < T > T parseAndVerify( final Row row, final Class< T > type ) throws IOException
 	{
 		standard18Mapper.add( row, consumer );
 
-		parse( reader( LINES[row.ordinal()] ) );
+		parse( reader( LINES[row.ordinal()] ), standard18Mapper.mappingFile() );
 
 		final ArgumentCaptor< T > argument = ArgumentCaptor.forClass( type );
 		verify( consumer ).accept( eq( row ), argument.capture() );
 		return argument.getValue();
 	}
 
-	protected void parse( final Reader dataFile ) throws IOException
+	protected void parse( final Reader dataFile, final Reader mappingFile ) throws IOException
 	{
-		try (final Reader definition = standard18Mapper.mappingFile())
-		{
-			final Parser parser = BuffReaderParseFactory.getInstance()
-					.newFixedLengthParser( definition, dataFile );
-
-			parser.setHandlingShortLines( true );
-			parser.setIgnoreExtraColumns( true );
-			parser.setNullEmptyStrings( true );
-			final DataSet dataSet = parser.parse();
-
-			while ( dataSet.next() )
-			{
-				standard18Mapper.map( dataSet.getRecord()
-						.get() );
-			}
-		}
+		parsingService.parse( dataFile, mappingFile, standard18Mapper );
 	}
 
 	protected Reader reader( final String... lines )

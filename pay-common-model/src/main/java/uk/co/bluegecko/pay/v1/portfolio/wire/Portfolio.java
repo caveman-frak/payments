@@ -9,12 +9,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.experimental.Accessors;
 
 
 @JsonDeserialize( builder = Portfolio.PortfolioBuilder.class )
-@Data
+@Value
 @Builder
 @Accessors( fluent = true )
 public final class Portfolio

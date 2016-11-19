@@ -15,14 +15,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.experimental.Accessors;
 import uk.co.bluegecko.pay.common.model.BuilderConstants;
 import uk.co.bluegecko.pay.view.View;
 
 
 @JsonDeserialize( builder = Instruction.InstructionBuilder.class )
-@Data
+@Value
 @Builder
 @Accessors( fluent = true )
 public class Instruction

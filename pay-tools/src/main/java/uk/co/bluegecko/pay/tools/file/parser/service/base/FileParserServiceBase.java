@@ -13,13 +13,12 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.sf.flatpack.DataSet;
-import net.sf.flatpack.Parser;
-import net.sf.flatpack.brparse.BuffReaderParseFactory;
 import uk.co.bluegecko.pay.bacs.std18.mapper.Standard18Mapper;
 import uk.co.bluegecko.pay.bacs.std18.model.Row;
+import uk.co.bluegecko.pay.common.service.ParsingService;
 import uk.co.bluegecko.pay.tools.file.parser.cli.ParserCmdLine;
 import uk.co.bluegecko.pay.tools.file.parser.cli.ParserSettings;
 import uk.co.bluegecko.pay.tools.file.parser.service.FileParserService;
@@ -30,6 +29,16 @@ public class FileParserServiceBase implements FileParserService
 {
 
 	private static final Logger logger = LoggerFactory.getLogger( FileParserService.class );
+
+	private final ParsingService parsingService;
+
+	@Autowired
+	public FileParserServiceBase( final ParsingService parsingService )
+	{
+		super();
+
+		this.parsingService = parsingService;
+	}
 
 	@Override
 	public void processFiles( final ParserCmdLine commandLine, final FileSystem fileSystem ) throws IOException
@@ -77,22 +86,7 @@ public class FileParserServiceBase implements FileParserService
 	{
 		final Standard18Mapper standard18Mapper = createMapper( parserSettings );
 
-		try (final Reader definition = standard18Mapper.mappingFile())
-		{
-			final Parser parser = BuffReaderParseFactory.getInstance()
-					.newFixedLengthParser( definition, dataFile );
-
-			parser.setHandlingShortLines( true );
-			parser.setIgnoreExtraColumns( true );
-			parser.setNullEmptyStrings( true );
-			final DataSet dataSet = parser.parse();
-
-			while ( dataSet.next() )
-			{
-				standard18Mapper.map( dataSet.getRecord()
-						.get() );
-			}
-		}
+		parsingService.parse( dataFile, standard18Mapper.mappingFile(), standard18Mapper );
 	}
 
 	protected Standard18Mapper createMapper( final ParserSettings parserSettings )

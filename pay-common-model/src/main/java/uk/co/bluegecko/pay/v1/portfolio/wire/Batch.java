@@ -12,15 +12,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Singular;
+import lombok.Value;
 import lombok.experimental.Accessors;
 import uk.co.bluegecko.pay.view.View;
 
 
 @JsonDeserialize( builder = Batch.BatchBuilder.class )
-@Data
-final @Builder @Accessors( fluent = true ) public class Batch
+@Value
+@Builder @Accessors( fluent = true )
+public class Batch
 {
 
 	@Min( 1 )
@@ -33,11 +34,13 @@ final @Builder @Accessors( fluent = true ) public class Batch
 	private final Long portfolio;
 	@Length( max = 50 )
 	private final String name;
-	private final String setId;
-	private final int fileSection;
-	private final int generationNo;
-	private final int generationVersion;
+	private final String set;
+	private final int section;
+	private final int sequence;
+	private final int generation;
+	private final int version;
 	@Singular
+	@JsonView( View.Detailed.class )
 	private final Set< Total > totals;
 
 	@JsonPOJOBuilder( withPrefix = "" )

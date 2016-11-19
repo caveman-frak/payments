@@ -3,6 +3,7 @@ package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder;
@@ -85,4 +87,23 @@ public class AccountTest extends TestHarness
 				.build() ), is( true ) );
 	}
 
+	@Test
+	public final void testToString()
+	{
+		assertThat( accountBuilder.build()
+				.toString(), startsWith( "Account(" ) );
+	}
+
+	@Test
+	public final void testEquals()
+	{
+		EqualsVerifier.forClass( Account.class )
+				.verify();
+	}
+
+	@Test
+	public final void testBuilderToString()
+	{
+		assertThat( accountBuilder.toString(), startsWith( "Account.AccountBuilder(" ) );
+	}
 }

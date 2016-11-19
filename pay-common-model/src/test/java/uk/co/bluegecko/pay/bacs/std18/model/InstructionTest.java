@@ -1,7 +1,8 @@
-package uk.co.bluegecko.pay.upload.std18.wire;
+package uk.co.bluegecko.pay.bacs.std18.model;
 
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
@@ -9,8 +10,7 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluegecko.pay.bacs.std18.model.Account;
-import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Instruction.InstructionBuilder;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
@@ -71,6 +71,26 @@ public class InstructionTest extends TestHarness
 	{
 		assertThat( isValid( instructionBuilder.reference( "A12345__12" )
 				.build() ), is( false ) );
+	}
+
+	@Test
+	public final void testToString()
+	{
+		assertThat( instructionBuilder.build()
+				.toString(), startsWith( "Instruction(" ) );
+	}
+
+	@Test
+	public final void testEquals()
+	{
+		EqualsVerifier.forClass( Instruction.class )
+				.verify();
+	}
+
+	@Test
+	public final void testBuilderToString()
+	{
+		assertThat( instructionBuilder.toString(), startsWith( "Instruction.InstructionBuilder(" ) );
 	}
 
 }

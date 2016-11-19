@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<!-- DTD can be pulled from the Jar or over the web -->
+<!DOCTYPE PZMAP SYSTEM "http://flatpack.sourceforge.net/flatpack.dtd" >
+<PZMAP>
+	<RECORD id="VOL1" startPosition="1" endPosition="4" indicator="VOL1">
+		<COLUMN name="INDICATOR" length="4" />
+		<COLUMN name="SERIAL_NO" length="6" />
+		<COLUMN name="ACCESSIBILITY" length="1" />
+		<COLUMN name="RESERVED#1" length="26" />
+		<COLUMN name="BLANK#1" length="4" />
+		<COLUMN name="USER_NUMBER" length="6" />
+	</RECORD>
+	<COLUMN name="DEST_SORT_CODE" length="6" />
+</PZMAP>

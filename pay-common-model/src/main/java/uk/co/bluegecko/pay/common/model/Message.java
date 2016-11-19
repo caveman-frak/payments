@@ -35,17 +35,13 @@ public class Message
 		messages = new EnumMap<>( Classification.class );
 	}
 
-	public boolean has( final Classification classification )
+	private boolean has( final Classification classification )
 	{
-		assert classification != null;
-
 		return MapUtils.isNotEmpty( messages.get( classification ) );
 	}
 
 	public boolean has( final Classification... classifications )
 	{
-		assert ArrayUtils.isNotEmpty( classifications );
-
 		for ( final Classification classification : classifications )
 		{
 			if ( has( classification ) )
@@ -58,8 +54,6 @@ public class Message
 
 	public boolean has( final Collection< Classification > classifications )
 	{
-		assert CollectionUtils.isNotEmpty( classifications );
-
 		for ( final Classification classification : classifications )
 		{
 			if ( has( classification ) )
@@ -72,23 +66,16 @@ public class Message
 
 	public boolean has( final Classification classification, final String key )
 	{
-		assert classification != null && key != null;
-
 		if ( has( classification ) )
 		{
 			final Map< String, Set< String > > map = messages.get( classification );
-			if ( MapUtils.isNotEmpty( map ) )
-			{
-				return CollectionUtils.isNotEmpty( map.get( key ) );
-			}
+			return CollectionUtils.isNotEmpty( map.get( key ) );
 		}
 		return false;
 	}
 
 	public boolean has( final String key )
 	{
-		assert key != null;
-
 		for ( final Classification classification : Classification.values() )
 		{
 			final Map< String, Set< String > > map = messages.get( classification );
@@ -106,10 +93,7 @@ public class Message
 		if ( has( classification ) )
 		{
 			final Map< String, Set< String > > map = messages.get( classification );
-			if ( map != null )
-			{
-				return Collections.unmodifiableSet( map.keySet() );
-			}
+			return Collections.unmodifiableSet( map.keySet() );
 		}
 		return Collections.emptySet();
 	}
@@ -120,17 +104,17 @@ public class Message
 		{
 			final Set< String > set = messages.get( classification )
 					.get( key );
-			if ( set != null )
-			{
-				return Collections.unmodifiableSet( set );
-			}
+			return Collections.unmodifiableSet( set );
 		}
 		return Collections.emptySet();
 	}
 
 	public Set< String > add( final Classification classification, final String key, final String... text )
 	{
-		assert classification != null && key != null && ArrayUtils.isNotEmpty( text );
+		if ( classification == null || key == null || ArrayUtils.isEmpty( text ) )
+		{
+			throw new AssertionError();
+		}
 
 		if ( !has( classification ) )
 		{
