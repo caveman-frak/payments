@@ -4,6 +4,11 @@ package uk.co.bluegecko.pay.bacs.std18.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
+
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -16,11 +21,16 @@ import uk.co.bluegecko.pay.common.model.BuilderConstants;
 public class Contra
 {
 
+	@Min( 1 )
+	private final int index;
+	private final int lineNo;
 	private final Account destination;
 	private final Account origin;
 	private final String transactionType;
 	private final String freeFormat;
 	private final BigDecimal amount;
+	@Pattern( regexp = Constants.BACS_CHARACTERS )
+	@Length( max = 18 )
 	private final String narrative;
 	private final LocalDate processingDate;
 

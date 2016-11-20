@@ -3,6 +3,7 @@ package uk.co.bluegecko.pay.bacs.std18.mapper;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -18,14 +19,15 @@ import uk.co.bluegecko.pay.bacs.std18.model.Row;
 import uk.co.bluegecko.pay.bacs.std18.model.UserHeader;
 import uk.co.bluegecko.pay.bacs.std18.model.UserTrailer;
 import uk.co.bluegecko.pay.bacs.std18.model.Volume;
+import uk.co.bluegecko.pay.common.service.Mapper;
 
 
-public class Standard18Mapper
+public class Standard18Mapper implements Mapper
 {
 
 	private final Map< Row, BiConsumer< Row, Object > > consumers;
 
-	private int instruction = 0;
+	private int index = 0;
 
 	public Standard18Mapper()
 	{
@@ -38,6 +40,7 @@ public class Standard18Mapper
 		return this;
 	}
 
+	@Override
 	public void map( final Record record )
 	{
 		if ( record.isRecordID( Row.VOL1.name() ) )
@@ -78,6 +81,12 @@ public class Standard18Mapper
 		}
 	}
 
+	public Reader mappingFile()
+	{
+		return new InputStreamReader( getClass().getResourceAsStream( "/mapping/standard18.pzmap.xml" ),
+				StandardCharsets.UTF_8 );
+	}
+
 	protected void consume( final Record record, final Row row, final Function< Record, Object > mapper )
 	{
 		if ( consumers.containsKey( row ) )
@@ -87,7 +96,7 @@ public class Standard18Mapper
 		}
 	}
 
-	public Volume volume( final Record record )
+	protected Volume volume( final Record record )
 	{
 		return Volume.builder()
 				.serialNo( getString( record, "SERIAL_NO" ) )
@@ -97,7 +106,7 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public Header1 header1( final Record record, final Row row )
+	protected Header1 header1( final Record record, final Row row )
 	{
 		return Header1.builder()
 				.indicator( row )
@@ -115,7 +124,7 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public Header2 header2( final Record record, final Row row )
+	protected Header2 header2( final Record record, final Row row )
 	{
 		return Header2.builder()
 				.indicator( row )
@@ -126,7 +135,7 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public UserHeader userHeader( final Record record )
+	protected UserHeader userHeader( final Record record )
 	{
 		return UserHeader.builder()
 				.processingDate( getLong( record, "PROCESSING" ) )
@@ -139,10 +148,10 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public Instruction instruction( final Record record )
+	protected Instruction instruction( final Record record )
 	{
 		return Instruction.builder()
-				.index( instruction++ )
+				.index( index++ )
 				.lineNo( record.getRowNo() )
 				.origin( Account.builder()
 						.sortCode( getString( record, "ORIG_SORT_CODE" ) )
@@ -163,9 +172,11 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public Contra contra( final Record record )
+	protected Contra contra( final Record record )
 	{
 		return Contra.builder()
+				.index( index++ )
+				.lineNo( record.getRowNo() )
 				.destination( Account.builder()
 						.sortCode( getString( record, "DEST_SORT_CODE" ) )
 						.number( getString( record, "DEST_AC_NUMBER" ) )
@@ -184,7 +195,7 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public UserTrailer userTrailer( final Record record )
+	protected UserTrailer userTrailer( final Record record )
 	{
 		return UserTrailer.builder()
 				.debitValue( getString( record, "DEBIT_VALUE" ) )
@@ -196,24 +207,19 @@ public class Standard18Mapper
 				.build();
 	}
 
-	public Reader mappingFile()
-	{
-		return new InputStreamReader( getClass().getResourceAsStream( "/mapping/standard18.pzmap.xml" ) );
-	}
-
-	private String getString( final Record record, final String key )
+	protected String getString( final Record record, final String key )
 	{
 		return record.contains( key ) ? record.getString( key ) : null;
 	}
 
-	private int getInt( final Record record, final String key )
+	protected int getInt( final Record record, final String key )
 	{
-		return record.contains( key ) ? record.getInt( key ) : null;
+		return record.contains( key ) ? record.getInt( key ) : 0;
 	}
 
-	private Long getLong( final Record record, final String key )
+	protected Long getLong( final Record record, final String key )
 	{
-		return record.contains( key ) ? record.getLong( key ) : null;
+		return record.contains( key ) ? record.getLong( key ) : 0;
 	}
 
 }

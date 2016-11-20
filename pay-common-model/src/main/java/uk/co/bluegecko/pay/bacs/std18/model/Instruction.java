@@ -13,19 +13,17 @@ import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.experimental.Accessors;
 import uk.co.bluegecko.pay.common.model.BuilderConstants;
 import uk.co.bluegecko.pay.view.View;
 
 
-@Data
+@Value
 @Builder
 @Accessors( fluent = true )
 public class Instruction
 {
-
-	private static final String BACS_CHARACTERS = "[A-Z0-9\\.\\-/& ]*";
 
 	@Min( 1 )
 	private final int index;
@@ -36,12 +34,12 @@ public class Instruction
 	private final Account destination;
 	@Pattern( regexp = "[A-Z0-9]{2}" )
 	private final String transactionType;
-	@Pattern( regexp = BACS_CHARACTERS )
+	@Pattern( regexp = Constants.BACS_CHARACTERS )
 	@Length( max = 4 )
 	private final String rti;
 	@Digits( fraction = 2, integer = 11 )
 	private final BigDecimal amount;
-	@Pattern( regexp = BACS_CHARACTERS )
+	@Pattern( regexp = Constants.BACS_CHARACTERS )
 	@Length( max = 18 )
 	private final String reference;
 	private final LocalDate processingDate;

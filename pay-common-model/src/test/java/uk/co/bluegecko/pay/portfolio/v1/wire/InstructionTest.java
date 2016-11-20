@@ -2,6 +2,7 @@ package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Instruction;
@@ -37,6 +39,7 @@ public class InstructionTest extends TestHarness
 				.build();
 
 		instructionBuilder = Instruction.builder()
+				.id( 10L )
 				.index( 1 )
 				.lineNo( 3 )
 				.origin( origin )
@@ -63,7 +66,7 @@ public class InstructionTest extends TestHarness
 		final String str = write( instruction );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"index\":1,\"lineNo\":3,"
+				is( "{\"id\":10,\"index\":1,\"lineNo\":3,"
 						+ "\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"B.BAGGINS\"},"
 						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\",\"type\":\"8\"},"
 						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
@@ -124,4 +127,23 @@ public class InstructionTest extends TestHarness
 				.build() ), is( false ) );
 	}
 
+	@Test
+	public final void testToString()
+	{
+		assertThat( instructionBuilder.build()
+				.toString(), startsWith( "Instruction(" ) );
+	}
+
+	@Test
+	public final void testEquals()
+	{
+		EqualsVerifier.forClass( Instruction.class )
+				.verify();
+	}
+
+	@Test
+	public final void testBuilderToString()
+	{
+		assertThat( instructionBuilder.toString(), startsWith( "Instruction.InstructionBuilder(" ) );
+	}
 }

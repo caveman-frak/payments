@@ -15,11 +15,6 @@ import uk.co.bluegecko.pay.portfolio.service.BatchService;
 public class BatchServiceBase implements BatchService
 {
 
-	public BatchServiceBase()
-	{
-		super();
-	}
-
 	@Override
 	public Long createBatch( final Batch batch )
 	{

@@ -18,6 +18,7 @@ import com.lexicalscope.jewel.cli.Cli;
 import com.lexicalscope.jewel.cli.CliFactory;
 import com.lexicalscope.jewel.cli.HelpRequestedException;
 
+import uk.co.bluegecko.pay.common.service.base.ParsingServiceBase;
 import uk.co.bluegecko.pay.tools.file.parser.cli.ParserCmdLine;
 import uk.co.bluegecko.pay.tools.file.parser.service.FileParserService;
 
@@ -30,7 +31,7 @@ public class FileParserApplication
 
 	public static void main( final String... args )
 	{
-		new SpringApplicationBuilder().sources( FileParserApplication.class )
+		new SpringApplicationBuilder().sources( FileParserApplication.class, ParsingServiceBase.class )
 				.profiles( "dev" )
 				.properties( "spring.application.name:file-parser" )
 				.web( false )

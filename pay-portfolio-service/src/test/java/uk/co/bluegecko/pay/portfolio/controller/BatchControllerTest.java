@@ -30,7 +30,7 @@ public class BatchControllerTest extends TestHarness
 {
 
 	@Autowired
-	MockMvc mvc;
+	private MockMvc mvc;
 
 	private Batch batch;
 
