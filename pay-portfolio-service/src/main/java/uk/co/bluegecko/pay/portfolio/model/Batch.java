@@ -15,4 +15,16 @@ public interface Batch
 
 	public String userNumber();
 
+	public String name();
+
+	public String set();
+
+	public int section();
+
+	public int sequence();
+
+	public int generation();
+
+	public int version();
+
 }

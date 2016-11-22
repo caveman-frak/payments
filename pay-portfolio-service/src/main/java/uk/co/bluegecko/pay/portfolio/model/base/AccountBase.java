@@ -12,7 +12,7 @@ import uk.co.bluegecko.pay.portfolio.model.Account;
 
 @Data
 @Accessors( fluent = true )
-public class AccountBase implements Account
+public final class AccountBase implements Account
 {
 
 	private final Long id;

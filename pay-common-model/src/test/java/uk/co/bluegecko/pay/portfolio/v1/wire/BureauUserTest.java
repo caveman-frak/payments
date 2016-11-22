@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +31,8 @@ public class BureauUserTest extends TestHarness
 	{
 		bureauUserBuilder = BureauUser.builder()
 				.userNumber( "B12345" )
-				.serviceUser( "123456" )
-				.serviceUser( "456789" );
+				.serviceUsers( Stream.of( "123456", "456789" )
+						.collect( Collectors.toSet() ) );
 	}
 
 	@Test
@@ -41,7 +43,7 @@ public class BureauUserTest extends TestHarness
 		final String str = write( bureauUser );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"userNumber\":\"B12345\",\"serviceUsers\":[\"123456\",\"456789\"]}" ) );
+				is( "{\"userNumber\":\"B12345\",\"serviceUsers\":[\"456789\",\"123456\"]}" ) );
 
 		final BureauUser result = read( str, BureauUser.class );
 

@@ -16,14 +16,14 @@ public class InstructionWirePortfolioToV1
 		implements WireService< Instruction, uk.co.bluegecko.pay.v1.portfolio.wire.Instruction >
 {
 
-	private final AccountWirePortfolioToV1 wireServiceAccount;
+	private final AccountWirePortfolioToV1 accountWireService;
 
 	@Autowired
-	public InstructionWirePortfolioToV1( final AccountWirePortfolioToV1 wireServiceAccount )
+	public InstructionWirePortfolioToV1( final AccountWirePortfolioToV1 accountWireService )
 	{
 		super();
 
-		this.wireServiceAccount = wireServiceAccount;
+		this.accountWireService = accountWireService;
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class InstructionWirePortfolioToV1
 		final Batch batch = new BatchBase( instruction.batch() );
 
 		return new InstructionBase( instruction.id(), batch, instruction.lineNo() )
-				.origin( wireServiceAccount.fromWire( instruction.origin() ) )
-				.destination( wireServiceAccount.fromWire( instruction.destination() ) )
+				.origin( accountWireService.fromWire( instruction.origin() ) )
+				.destination( accountWireService.fromWire( instruction.destination() ) )
 				.index( instruction.index() )
 				.amount( instruction.amount() )
 				.processingDate( instruction.processingDate() )
@@ -52,8 +52,8 @@ public class InstructionWirePortfolioToV1
 				.batch( instruction.batch()
 						.id() )
 				.lineNo( instruction.lineNo() )
-				.origin( wireServiceAccount.toWire( instruction.origin() ) )
-				.destination( wireServiceAccount.toWire( instruction.destination() ) )
+				.origin( accountWireService.toWire( instruction.origin() ) )
+				.destination( accountWireService.toWire( instruction.destination() ) )
 				.index( instruction.index() )
 				.amount( instruction.amount() )
 				.processingDate( instruction.processingDate() )

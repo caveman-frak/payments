@@ -10,11 +10,13 @@ import uk.co.bluegecko.pay.portfolio.model.Portfolio;
 
 @Data
 @Accessors( fluent = true )
-public class PortfolioBase implements Portfolio
+public final class PortfolioBase implements Portfolio
 {
 
 	private final Long id;
 	@Length( max = 50 )
 	private String name;
+	private String serialNo;
+	private String userNumber;
 
 }

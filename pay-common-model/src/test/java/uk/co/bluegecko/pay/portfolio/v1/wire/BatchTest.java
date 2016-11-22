@@ -10,6 +10,8 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +47,8 @@ public class BatchTest extends TestHarness
 				.sequence( 3 )
 				.generation( 4 )
 				.version( 5 )
-				.total( creditTotal );
+				.totals( Stream.of( creditTotal )
+						.collect( Collectors.toSet() ) );
 	}
 
 	@Test

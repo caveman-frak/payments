@@ -19,7 +19,7 @@ import uk.co.bluegecko.pay.portfolio.model.Instruction;
 
 @Data
 @Accessors( fluent = true )
-public class InstructionBase implements Instruction
+public final class InstructionBase implements Instruction
 {
 
 	private static final String BACS_CHARACTERS = "[A-Z0-9\\.\\-/& ]*";
