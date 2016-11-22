@@ -99,7 +99,7 @@ public class FunctionMatcher< M, V > extends TypeSafeMatcher< M >
 	 *            the function to extract the actual field value
 	 * @return the new Matcher
 	 */
-	public static < M, V > Matcher< M > matches( final String objectName, final String fieldName, final V value,
+	public static < M, V > Matcher< M > matcher( final String objectName, final String fieldName, final V value,
 			final Function< M, V > function )
 	{
 		return new FunctionMatcher<>( objectName, fieldName, value, function );

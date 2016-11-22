@@ -37,6 +37,14 @@ public class PredicateMatcherTest
 	}
 
 	@Test
+	public final void testNoDescription()
+	{
+		matcher = PredicateMatcher.matcher( s -> s.startsWith( "Hello" ) );
+		final String string = "Hello World!";
+		assertThat( matcher.matches( string ), is( true ) );
+	}
+
+	@Test
 	public final void testFailure()
 	{
 		final String string = "Good Bye World!";
@@ -44,6 +52,10 @@ public class PredicateMatcherTest
 
 		matcher.describeMismatch( string, description );
 		assertThat( description.toString(), is( "was \"Good Bye World!\" expected string starting with \"Hello\"" ) );
+
+		final StringDescription description = new StringDescription();
+		matcher.describeTo( description );
+		assertThat( description.toString(), is( "string starting with \"Hello\"" ) );
 	}
 
 }

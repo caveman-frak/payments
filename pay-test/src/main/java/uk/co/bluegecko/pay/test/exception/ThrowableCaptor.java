@@ -1,13 +1,10 @@
 package uk.co.bluegecko.pay.test.exception;
 
 
-import static org.junit.Assert.fail;
-
-
 /**
  * Class to trap and return an expected method for test evaluation
  */
-public class ThrowableCaptor
+public interface ThrowableCaptor
 {
 
 	/**
@@ -30,8 +27,7 @@ public class ThrowableCaptor
 			return caught;
 		}
 		// fail if no exception was thrown
-		fail( message );
-		return null;
+		throw new AssertionError( message );
 	}
 
 	/**
