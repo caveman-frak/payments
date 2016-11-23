@@ -6,7 +6,6 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
@@ -19,13 +18,14 @@ import org.springframework.stereotype.Service;
 import uk.co.bluegecko.pay.bacs.std18.mapper.Standard18Mapper;
 import uk.co.bluegecko.pay.bacs.std18.model.Row;
 import uk.co.bluegecko.pay.common.service.ParsingService;
+import uk.co.bluegecko.pay.tools.file.common.service.AbstractFileService;
 import uk.co.bluegecko.pay.tools.file.parser.cli.ParserCmdLine;
 import uk.co.bluegecko.pay.tools.file.parser.cli.ParserSettings;
 import uk.co.bluegecko.pay.tools.file.parser.service.FileParserService;
 
 
 @Service
-public class FileParserServiceBase implements FileParserService
+public class FileParserServiceBase extends AbstractFileService implements FileParserService
 {
 
 	private static final Logger logger = LoggerFactory.getLogger( FileParserService.class );
@@ -53,20 +53,6 @@ public class FileParserServiceBase implements FileParserService
 		stream.map( arg -> fileSystem.getPath( baseDir, arg ) )
 				.filter( file -> isFileValid( file ) )
 				.forEach( file -> parseFile( file, parserSettings ) );
-	}
-
-	protected boolean isFileValid( final Path file )
-	{
-		if ( !Files.exists( file, LinkOption.NOFOLLOW_LINKS ) || !Files.isRegularFile( file, LinkOption.NOFOLLOW_LINKS )
-				|| !Files.isReadable( file ) )
-		{
-			logger.error( "Unable to locate or read file '{}'", file.toString() );
-			return false;
-		}
-		else
-		{
-			return true;
-		}
 	}
 
 	protected void parseFile( final Path file, final ParserSettings parserSettings )

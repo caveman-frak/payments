@@ -31,9 +31,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+import com.lexicalscope.jewel.cli.Cli;
+import com.lexicalscope.jewel.cli.CliFactory;
+
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.test.rule.FileSystemRule;
-import uk.co.bluegecko.pay.tools.file.upload.service.base.FileUploadServiceBase;
+import uk.co.bluegecko.pay.tools.file.upload.cli.UploadCmdLine;
 
 
 public class FileUploadServiceBaseTest extends TestHarness
@@ -76,35 +79,6 @@ public class FileUploadServiceBaseTest extends TestHarness
 	}
 
 	@Test
-	public final void testFileIsValidPass() throws IOException
-	{
-		final Path file = fileSystemRule.getFileSystem()
-				.getPath( "/test.txt" );
-		Files.write( file, Arrays.asList( "Line 1", "Line 2" ), StandardCharsets.UTF_8, StandardOpenOption.CREATE );
-
-		assertThat( fileUploadService.isFileValid( file ), is( true ) );
-	}
-
-	@Test
-	public final void testFileIsValidFailNoFile()
-	{
-		final Path file = fileSystemRule.getFileSystem()
-				.getPath( "/test.txt" );
-
-		assertThat( fileUploadService.isFileValid( file ), is( false ) );
-	}
-
-	@Test
-	public final void testFileIsValidFailIsDirectory() throws IOException
-	{
-		final Path file = fileSystemRule.getFileSystem()
-				.getPath( "/test" );
-		Files.createDirectory( file );
-
-		assertThat( fileUploadService.isFileValid( file ), is( false ) );
-	}
-
-	@Test
 	public final void testFileUpload() throws IOException, URISyntaxException
 	{
 		server.expect( once(), requestTo( createURI( false ).resolve( "upload/" ) ) )
@@ -138,6 +112,27 @@ public class FileUploadServiceBaseTest extends TestHarness
 
 			fileUploadService.processFiles( Arrays.asList( fileNames )
 					.stream(), "", fileSystem, createURI( false ) );
+		}
+		server.verify();
+	}
+
+	@Test
+	public final void testProcessFilesCmdLine() throws IOException, URISyntaxException
+	{
+		final URI host = createURI( true );
+		server.expect( once(), requestTo( host.resolve( "upload/" ) ) )
+				.andExpect( method( HttpMethod.POST ) )
+				.andRespond( withCreatedEntity( host.resolve( "status/1" ) ) );
+
+		final Cli< UploadCmdLine > cli = CliFactory.createCli( UploadCmdLine.class );
+		final String fileName = "/test1.txt";
+		final UploadCmdLine cmdLine = cli.parseArguments( "--host", host.toASCIIString(), fileName );
+		try (final FileSystem fileSystem = fileSystemRule.getFileSystem())
+		{
+			Files.write( fileSystem.getPath( fileName ), Arrays.asList( "Line 1.1", "Line 1.2" ),
+					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+
+			fileUploadService.processFiles( cmdLine, fileSystem );
 		}
 		server.verify();
 	}

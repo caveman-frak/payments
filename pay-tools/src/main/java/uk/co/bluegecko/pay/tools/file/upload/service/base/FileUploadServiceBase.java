@@ -9,8 +9,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.nio.file.FileSystem;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -28,12 +26,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import uk.co.bluegecko.pay.tools.file.common.service.AbstractFileService;
 import uk.co.bluegecko.pay.tools.file.upload.cli.UploadCmdLine;
 import uk.co.bluegecko.pay.tools.file.upload.service.FileUploadService;
 
 
 @Service
-public class FileUploadServiceBase implements FileUploadService
+public class FileUploadServiceBase extends AbstractFileService implements FileUploadService
 {
 
 	private static final Logger logger = LoggerFactory.getLogger( FileUploadService.class );
@@ -72,20 +71,6 @@ public class FileUploadServiceBase implements FileUploadService
 		try (final Socket testSocket = new Socket())
 		{
 			testSocket.connect( new InetSocketAddress( host.getHost(), host.getPort() ), 500 );
-		}
-	}
-
-	protected boolean isFileValid( final Path file )
-	{
-		if ( !Files.exists( file, LinkOption.NOFOLLOW_LINKS ) || !Files.isRegularFile( file, LinkOption.NOFOLLOW_LINKS )
-				|| !Files.isReadable( file ) )
-		{
-			logger.error( "Unable to locate or read file '{}'", file.toString() );
-			return false;
-		}
-		else
-		{
-			return true;
 		}
 	}
 

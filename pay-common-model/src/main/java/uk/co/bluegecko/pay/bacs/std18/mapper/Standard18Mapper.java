@@ -40,6 +40,11 @@ public class Standard18Mapper implements Mapper
 		return this;
 	}
 
+	public boolean isSet( final Row row )
+	{
+		return consumers.containsKey( row );
+	}
+
 	@Override
 	public void map( final Record record )
 	{
