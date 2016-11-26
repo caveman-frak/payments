@@ -349,6 +349,8 @@
 							<!-- store ports for use in tests -->
 							<test.http.port>${http.port}</test.http.port>
 							<test.jmx.port>${jmx.port}</test.jmx.port>
+							<!-- activate cucumber profile -->
+							<spring.profiles.active>test,cucumber</spring.profiles.active>
 						</systemPropertyVariables>
 					</configuration>
 				</plugin>

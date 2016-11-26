@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
 import uk.co.bluegecko.pay.bacs.std18.service.v1.InstructionWireStd18ToV1;
+import uk.co.bluegecko.pay.common.annotation.NotTestProfile;
 import uk.co.bluegecko.pay.upload.service.StreamingService;
 
 
 @Service
+@NotTestProfile
 @EnableBinding( Source.class )
 public class StreamingServiceBase implements StreamingService
 {

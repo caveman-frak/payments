@@ -48,7 +48,7 @@ public class UploadControllerTest extends TestHarness
 				"Spring Framework".getBytes() );
 		mvc.perform( fileUpload( UPLOAD ).file( multipartFile ) )
 				.andExpect( status().isAccepted() )
-				.andExpect( header().string( "Location", "/status/0" ) );
+				.andExpect( header().string( "Location", "http://localhost/status/0" ) );
 
 		verify( uploadService ).processFile( multipartFile );
 	}

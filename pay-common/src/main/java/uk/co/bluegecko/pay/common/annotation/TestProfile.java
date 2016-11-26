@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.test.cucumber;
+package uk.co.bluegecko.pay.common.annotation;
 
 
 import java.lang.annotation.ElementType;
@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Target( ElementType.TYPE )
 @Retention( RetentionPolicy.RUNTIME )
-@Profile( "cucumber" )
+@Profile( "test" )
 @Component
-public @interface Cucumber
+public @interface TestProfile
 {
-
 }
