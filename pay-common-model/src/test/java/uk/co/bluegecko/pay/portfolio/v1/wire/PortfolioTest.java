@@ -40,7 +40,7 @@ public class PortfolioTest extends TestHarness implements TestConstants
 		final String str = write( portfolio );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"id\":102,\"name\":\"PORTFOLIO#1\",\"serialNo\":\"321\",\"userNumber\":\"123456\"}" ) );
+				is( "{\"id\":102,\"name\":\"PORTFOLIO#1\",\"serialNo\":\"321\",\"userNumber\":\"012345\"}" ) );
 
 		final Portfolio result = read( str, Portfolio.class );
 

@@ -44,7 +44,7 @@ public class BureauUserTest extends TestHarness implements TestConstants
 		final String str = write( bureauUser );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"userNumber\":\"B12345\",\"serviceUsers\":[\"456789\",\"123456\"]}" ) );
+				is( "{\"userNumber\":\"B12345\",\"serviceUsers\":[\"012345\",\"567890\"]}" ) );
 
 		final BureauUser result = read( str, BureauUser.class );
 

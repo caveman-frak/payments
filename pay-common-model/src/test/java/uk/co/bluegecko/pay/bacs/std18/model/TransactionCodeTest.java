@@ -68,4 +68,22 @@ public class TransactionCodeTest
 		TransactionCode.byCode( "XX" );
 	}
 
+	@Test
+	public final void testCreditType()
+	{
+		assertThat( CreditCode.CREDIT.transactionType(), is( TransactionType.CREDIT ) );
+	}
+
+	@Test
+	public final void testDebitType()
+	{
+		assertThat( DebitCode.REGULAR.transactionType(), is( TransactionType.DEBIT ) );
+	}
+
+	@Test
+	public final void testAuddisType()
+	{
+		assertThat( AuddisCode.NEW.transactionType(), is( TransactionType.AUDDIS ) );
+	}
+
 }

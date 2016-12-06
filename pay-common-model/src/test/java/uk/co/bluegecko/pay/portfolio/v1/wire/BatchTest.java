@@ -61,7 +61,7 @@ public class BatchTest extends TestHarness implements TestConstants
 		final String str = write( batch );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"id\":104,\"index\":1,\"portfolio\":102,\"name\":\"Batch#1\",\"userNumber\":\"123456\","
+				is( "{\"id\":104,\"index\":1,\"portfolio\":102,\"name\":\"BATCH#1\",\"userNumber\":\"012345\","
 						+ "\"set\":\"001\",\"section\":2,\"sequence\":3,\"generation\":1,\"version\":4,"
 						+ "\"totals\":[{\"type\":\"CREDIT\",\"count\":1,\"amount\":10.01}]}" ) );
 
@@ -86,7 +86,7 @@ public class BatchTest extends TestHarness implements TestConstants
 		final String str = write( View.Standard.class, batch );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"index\":1,\"name\":\"Batch#1\",\"userNumber\":\"123456\",\"set\":\"001\",\"section\":2,"
+				is( "{\"index\":1,\"name\":\"BATCH#1\",\"userNumber\":\"012345\",\"set\":\"001\",\"section\":2,"
 						+ "\"sequence\":3,\"generation\":1,\"version\":4}" ) );
 
 		final Batch result = read( str, Batch.class );

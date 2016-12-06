@@ -47,7 +47,7 @@ public class ServiceUserTest extends TestHarness implements TestConstants
 
 		final String str = write( serviceUser );
 
-		assertThat( stripWhitespace( str ), is( "{\"userNumber\":\"123456\",\"indirect\":false,"
+		assertThat( stripWhitespace( str ), is( "{\"userNumber\":\"012345\",\"indirect\":false,"
 				+ "\"creditCodes\":[\"CREDIT\",\"INTEREST\",\"DIVIDEND\"],\"debitCodes\":[\"REGULAR\"]}" ) );
 
 		final ServiceUser result = read( str, ServiceUser.class );

@@ -3,8 +3,10 @@ package uk.co.bluegecko.pay.test.data;
 
 import java.math.BigDecimal;
 
+import uk.co.bluegecko.pay.test.FixedDates;
 
-public interface TestConstants
+
+public interface TestConstants extends FixedDates
 {
 
 	public static final long ACCT_ID = 101L;
@@ -19,15 +21,15 @@ public interface TestConstants
 	public static final String DEST_ACCT_NAME = "TEST AC2";
 	public static final String DEST_ACCT_TYPE = "1";
 
-	public static final String SUN = "123456";
-	public static final String SUN_2 = "456789";
+	public static final String SUN = "012345";
+	public static final String SUN_2 = "567890";
 	public static final String BUN = "B12345";
 	public static final String SERIAL_NO = "321";
 	public static final long PORTFOLIO_ID = 102L;
 	public static final String PORTFOLIO_NAME = "PORTFOLIO #1";
 
 	public static final long BATCH_ID = 104L;
-	public static final String BATCH_NAME = "Batch #1";
+	public static final String BATCH_NAME = "BATCH #1";
 	public static final int BATCH_IDX = 1;
 	public static final String SET = "001";
 	public static final int GENERATION = 1;
@@ -50,14 +52,14 @@ public interface TestConstants
 	public static final String BLOCK = "0001";
 	public static final String FORMAT = "F";
 	public static final String SYSTEM_CODE = "CODE";
-	public static final String BLOCK_COUNT = "00106";
+	public static final String BLOCK_COUNT = "00512";
 	public static final String ACCESSIBILITY = "Y";
 
 	public static final String DEST = "DEST";
 	public static final String CCY = "GBP";
 	public static final String COUNTRY = "GB";
 	public static final String WORK_CODE = "1 DAILY";
-	public static final String AUDIT = "01";
+	public static final String AUDIT = "AUD0000";
 
 	public static final String LABEL = "L";
 

@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.function.Function;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -27,8 +26,7 @@ public class FunctionMatcherTest implements FixedDates
 	@Before
 	public final void setUp()
 	{
-		Function< Long, Integer > function = i -> i.intValue();
-		matcher = FunctionMatcher.matcher( "number", "intValue", 10, function );
+		matcher = FunctionMatcher.matcher( "number", "intValue", 10, i -> i.intValue() );
 
 		description = new StringDescription();
 	}
@@ -41,6 +39,13 @@ public class FunctionMatcherTest implements FixedDates
 
 		matcher.describeMismatch( value, description );
 		assertThat( description.toString(), is( "was a number with intValue <10> expected <10>" ) );
+	}
+
+	@Test
+	public final void testDescribe()
+	{
+		matcher.describeTo( description );
+		assertThat( description.toString(), is( "a number with intValue <10>" ) );
 	}
 
 	@Test
@@ -60,10 +65,6 @@ public class FunctionMatcherTest implements FixedDates
 
 		matcher.describeMismatch( value, description );
 		assertThat( description.toString(), is( "was a number with intValue <11> expected <10>" ) );
-
-		final StringDescription description = new StringDescription();
-		matcher.describeTo( description );
-		assertThat( description.toString(), is( "a number with intValue <10>" ) );
 	}
 
 }

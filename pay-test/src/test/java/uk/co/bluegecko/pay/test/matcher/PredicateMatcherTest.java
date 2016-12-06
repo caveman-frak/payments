@@ -16,17 +16,17 @@ import org.junit.Test;
 public class PredicateMatcherTest
 {
 
-	private Matcher< String > matcher;
+	private static final String DESCRIPTION = "string starting with \"Hello\"";
 
 	private Description description;
-
+	private Matcher< String > matcher;
 	private Predicate< String > predicate;
 
 	@Before
 	public final void setUp()
 	{
 		predicate = s -> s.startsWith( "Hello" );
-		matcher = PredicateMatcher.matcher( predicate, "string starting with \"Hello\"" );
+		matcher = PredicateMatcher.matcher( predicate, DESCRIPTION );
 
 		description = new StringDescription();
 	}
@@ -42,11 +42,21 @@ public class PredicateMatcherTest
 	}
 
 	@Test
+	public final void testDescribeTo()
+	{
+		matcher.describeTo( description );
+		assertThat( description.toString(), is( DESCRIPTION ) );
+	}
+
+	@Test
 	public final void testNoDescription()
 	{
 		matcher = PredicateMatcher.matcher( predicate );
 		final String string = "Hello Everyone!";
 		assertThat( matcher.matches( string ), is( true ) );
+
+		matcher.describeTo( description );
+		assertThat( description.toString(), is( "test expression" ) );
 	}
 
 	@Test
@@ -57,10 +67,6 @@ public class PredicateMatcherTest
 
 		matcher.describeMismatch( string, description );
 		assertThat( description.toString(), is( "was \"Good Bye World!\" expected string starting with \"Hello\"" ) );
-
-		final StringDescription description = new StringDescription();
-		matcher.describeTo( description );
-		assertThat( description.toString(), is( "string starting with \"Hello\"" ) );
 	}
 
 }

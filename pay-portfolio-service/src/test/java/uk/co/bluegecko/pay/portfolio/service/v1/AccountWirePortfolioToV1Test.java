@@ -8,37 +8,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.bluegecko.pay.portfolio.model.Account;
-import uk.co.bluegecko.pay.portfolio.model.base.AccountBase;
-import uk.co.bluegecko.pay.test.data.TestConstants;
-import uk.co.bluegecko.pay.test.harness.TestHarness;
+import uk.co.bluegecko.pay.portfolio.service.v1.test.FakeDataFactory;
 
 
-public class AccountWirePortfolioToV1Test extends TestHarness implements TestConstants
+public class AccountWirePortfolioToV1Test extends FakeDataFactory
 {
-
-	private uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder wireBuilder;
-	private uk.co.bluegecko.pay.v1.portfolio.wire.Account wireAccount;
-	private Account account;
 
 	private AccountWirePortfolioToV1 wireService;
 
 	@Before
 	public final void setUp()
 	{
-		wireBuilder = uk.co.bluegecko.pay.v1.portfolio.wire.Account.builder();
-
 		wireService = new AccountWirePortfolioToV1();
 	}
 
 	@Test
 	public final void testToWire()
 	{
-		account = new AccountBase( ACCT_ID ).sortCode( SORT_CODE )
-				.number( ACCT_NO )
-				.name( ACCT_NAME )
-				.type( ACCT_TYPE );
+		final Account account = createAccountOrigin();
 
-		wireAccount = wireService.toWire( account );
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Account wireAccount = wireService.toWire( account );
 
 		assertThat( wireAccount.sortCode(), is( account.sortCode() ) );
 		assertThat( wireAccount.number(), is( account.number() ) );
@@ -49,13 +38,9 @@ public class AccountWirePortfolioToV1Test extends TestHarness implements TestCon
 	@Test
 	public final void testFromWire()
 	{
-		wireAccount = wireBuilder.sortCode( SORT_CODE )
-				.number( ACCT_NO )
-				.name( ACCT_NAME )
-				.type( ACCT_TYPE )
-				.build();
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Account wireAccount = createWireAccountOrigin();
 
-		account = wireService.fromWire( wireAccount );
+		final Account account = wireService.fromWire( wireAccount );
 
 		assertThat( account.sortCode(), is( wireAccount.sortCode() ) );
 		assertThat( account.number(), is( wireAccount.number() ) );
