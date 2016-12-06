@@ -86,6 +86,7 @@
 		<surefire-plugin.version>2.19.1</surefire-plugin.version>
 		<failsafe-plugin.version>2.19.1</failsafe-plugin.version>
 		<git-commit-plugin.version>2.2.1</git-commit-plugin.version>
+		<jacoco-plugin.version>0.7.8-SNAPSHOT</jacoco-plugin.version>
 		<!-- dependency versions -->
 		<spring-cloud-sleuth.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-sleuth.version>
 		<spring-platform.version>Cairo-BUILD-SNAPSHOT</spring-platform.version>
@@ -376,7 +377,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.7.7.201606060606</version>
+					<version>${jacoco-plugin.version}</version>
 					<executions>
 						<execution>
 							<goals>
@@ -391,6 +392,11 @@
 							</goals>
 						</execution>
 					</executions>
+					<configuration>
+						<excludes>
+							<exclude>**/*Application.*</exclude>
+						</excludes>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
