@@ -12,10 +12,11 @@ import uk.co.bluegecko.pay.portfolio.model.Batch;
 import uk.co.bluegecko.pay.portfolio.model.Portfolio;
 import uk.co.bluegecko.pay.portfolio.model.base.BatchBase;
 import uk.co.bluegecko.pay.portfolio.model.base.PortfolioBase;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class BatchWirePortfolioToV1Test extends TestHarness
+public class BatchWirePortfolioToV1Test extends TestHarness implements TestConstants
 {
 
 	private uk.co.bluegecko.pay.v1.portfolio.wire.Batch.BatchBuilder wireBuilder;
@@ -34,19 +35,19 @@ public class BatchWirePortfolioToV1Test extends TestHarness
 	@Test
 	public final void testToWire()
 	{
-		final Portfolio portfolio = new PortfolioBase( 103L ).name( "Portfolio #1" )
-				.serialNo( "321" )
-				.userNumber( "123456" );
+		final Portfolio portfolio = new PortfolioBase( PORTFOLIO_ID ).name( PORTFOLIO_NAME )
+				.serialNo( SERIAL_NO )
+				.userNumber( SUN );
 
-		final Batch batch = new BatchBase( 104L ).portfolio( portfolio )
-				.index( 1 )
-				.name( "Batch #1" )
-				.userNumber( "123456" )
-				.set( "00" )
-				.generation( 1 )
-				.section( 2 )
-				.sequence( 3 )
-				.version( 4 );
+		final Batch batch = new BatchBase( BATCH_ID ).portfolio( portfolio )
+				.index( BATCH_IDX )
+				.name( BATCH_NAME )
+				.userNumber( SUN )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION );
 
 		wireBatch = wireService.toWire( batch );
 
@@ -67,14 +68,14 @@ public class BatchWirePortfolioToV1Test extends TestHarness
 	@Test
 	public final void testToWireNoPortfolio()
 	{
-		final Batch batch = new BatchBase( 104L ).index( 1 )
-				.name( "Batch #1" )
-				.userNumber( "123456" )
-				.set( "00" )
-				.generation( 1 )
-				.section( 2 )
-				.sequence( 3 )
-				.version( 4 );
+		final Batch batch = new BatchBase( BATCH_ID ).index( BATCH_IDX )
+				.name( BATCH_NAME )
+				.userNumber( SUN )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION );
 
 		wireBatch = wireService.toWire( batch );
 
@@ -93,15 +94,15 @@ public class BatchWirePortfolioToV1Test extends TestHarness
 	@Test
 	public final void testFromWire()
 	{
-		wireBatch = wireBuilder.id( 101L )
-				.portfolio( 102L )
-				.index( 1 )
-				.name( "Batch #1" )
-				.set( "00" )
-				.generation( 1 )
-				.section( 2 )
-				.sequence( 3 )
-				.version( 4 )
+		wireBatch = wireBuilder.id( BATCH_ID )
+				.portfolio( PORTFOLIO_ID )
+				.index( BATCH_IDX )
+				.name( BATCH_NAME )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION )
 				.build();
 
 		final Batch batch = wireService.fromWire( wireBatch );
@@ -123,14 +124,14 @@ public class BatchWirePortfolioToV1Test extends TestHarness
 	@Test
 	public final void testFromWireNoPortfolio()
 	{
-		wireBatch = wireBuilder.id( 101L )
-				.index( 1 )
-				.name( "Batch #1" )
-				.set( "00" )
-				.generation( 1 )
-				.section( 2 )
-				.sequence( 3 )
-				.version( 4 )
+		wireBatch = wireBuilder.id( BATCH_ID )
+				.index( BATCH_IDX )
+				.name( BATCH_NAME )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION )
 				.build();
 
 		final Batch batch = wireService.fromWire( wireBatch );

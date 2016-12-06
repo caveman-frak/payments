@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import uk.co.bluegecko.pay.bacs.std18.model.Account;
 import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class InstructionWireStd18ToV1Test extends TestHarness
+public class InstructionWireStd18ToV1Test extends TestHarness implements TestConstants
 {
 
 	private Account.AccountBuilder std18ActBuilder;
@@ -39,25 +40,26 @@ public class InstructionWireStd18ToV1Test extends TestHarness
 	@Test
 	public final void testToWire()
 	{
-		final Account origin = std18ActBuilder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "ACCOUNT #1" )
-				.type( "1" )
+		final Account origin = std18ActBuilder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
-		final Account destination = std18ActBuilder.sortCode( "654321" )
-				.number( "87654321" )
-				.name( "ACCOUNT #2" )
-				.type( "2" )
+		final Account destination = std18ActBuilder.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.name( DEST_ACCT_NAME )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
-		std18Instruction = std18Builder.index( 1 )
-				.lineNo( 3 )
+		std18Instruction = std18Builder.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.reference( "A-REFERENCE" )
+				.reference( REFERENCE )
+				.rti( RTI )
 				.build();
 
 		wireInstruction = wireService.toWire( std18Instruction );
@@ -100,31 +102,32 @@ public class InstructionWireStd18ToV1Test extends TestHarness
 	@Test
 	public final void testToWireWithId()
 	{
-		final Account origin = std18ActBuilder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "ACCOUNT #1" )
-				.type( "1" )
+		final Account origin = std18ActBuilder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
-		final Account destination = std18ActBuilder.sortCode( "654321" )
-				.number( "87654321" )
-				.name( "ACCOUNT #2" )
-				.type( "2" )
+		final Account destination = std18ActBuilder.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.name( DEST_ACCT_NAME )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
-		std18Instruction = std18Builder.index( 1 )
-				.lineNo( 3 )
+		std18Instruction = std18Builder.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.reference( "A-REFERENCE" )
+				.reference( REFERENCE )
+				.rti( RTI )
 				.build();
 
-		wireInstruction = wireService.toWire( std18Instruction, 101L );
+		wireInstruction = wireService.toWire( std18Instruction, BATCH_ID );
 
 		assertThat( wireInstruction.id(), is( nullValue() ) );
-		assertThat( wireInstruction.batch(), is( 101L ) );
+		assertThat( wireInstruction.batch(), is( BATCH_ID ) );
 		assertThat( wireInstruction.index(), is( std18Instruction.index() ) );
 		assertThat( wireInstruction.lineNo(), is( std18Instruction.lineNo() ) );
 		assertThat( wireInstruction.origin()
@@ -161,25 +164,26 @@ public class InstructionWireStd18ToV1Test extends TestHarness
 	@Test
 	public final void testFromWire()
 	{
-		final uk.co.bluegecko.pay.v1.portfolio.wire.Account origin = wireActBuilder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "ACCOUNT #1" )
-				.type( "1" )
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Account origin = wireActBuilder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
-		final uk.co.bluegecko.pay.v1.portfolio.wire.Account destination = wireActBuilder.sortCode( "654321" )
-				.number( "87654321" )
-				.name( "ACCOUNT #2" )
-				.type( "2" )
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Account destination = wireActBuilder.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.name( DEST_ACCT_NAME )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
-		wireInstruction = wireBuilder.index( 1 )
-				.lineNo( 3 )
+		wireInstruction = wireBuilder.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.reference( "A-REFERENCE" )
+				.reference( REFERENCE )
+				.rti( RTI )
 				.build();
 
 		std18Instruction = wireService.fromWire( wireInstruction );

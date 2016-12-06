@@ -18,14 +18,11 @@ import uk.co.bluegecko.pay.v1.portfolio.wire.Batch;
 public class PortfolioStepDefinitions
 {
 
-	@Autowired
-	private PortfolioWebClient webClient;
-
 	private Long batchId;
 	private Batch batch;
 
-	public PortfolioStepDefinitions()
-	{}
+	@Autowired
+	private PortfolioWebClient webClient;
 
 	@Given( "^that batch \"(\\d+?)\" has been prepared$" )
 	public void thatBatchIdHasBeenPrepared( final Long batchId ) throws Throwable
@@ -34,7 +31,7 @@ public class PortfolioStepDefinitions
 	}
 
 	@When( "^the batch is retrieved$" )
-	public void TheBatchIsRetrieved() throws Throwable
+	public void theBatchIsRetrieved() throws Throwable
 	{
 		batch = webClient.requestBatchById( batchId );
 	}

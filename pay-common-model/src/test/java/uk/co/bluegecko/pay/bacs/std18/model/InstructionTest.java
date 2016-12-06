@@ -12,10 +12,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Instruction.InstructionBuilder;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class InstructionTest extends TestHarness
+public class InstructionTest extends TestHarness implements TestConstants
 {
 
 	private InstructionBuilder instructionBuilder;
@@ -24,25 +25,27 @@ public class InstructionTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		final Account origin = Account.builder()
-				.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "B.BAGGINS" )
+				.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
 		final Account destination = Account.builder()
-				.sortCode( "654321" )
-				.number( "87654321" )
-				.type( "8" )
+				.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
 		instructionBuilder = Instruction.builder()
-				.index( 1 )
-				.lineNo( 3 )
+				.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.reference( "A-REFERENCE" );
+				.reference( REFERENCE )
+				.rti( RTI );
 	}
 
 	@Test

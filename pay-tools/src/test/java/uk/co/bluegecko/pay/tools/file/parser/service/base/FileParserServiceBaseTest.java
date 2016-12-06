@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 import org.junit.Before;
@@ -43,6 +44,12 @@ import uk.co.bluegecko.pay.tools.file.parser.cli.ParserSettings;
 public class FileParserServiceBaseTest extends TestHarness
 {
 
+	private static final String FILE_1 = "/test1.txt";
+	private static final String FILE_2 = "/test2,txt";
+
+	private static final List< String > LINES_1 = Arrays.asList( "Line 1.1", "Line 1.2" );
+	private static final List< String > LINES_2 = Arrays.asList( "Line 2.1", "Line 2.2" );
+
 	@Rule
 	public final FileSystemRule fileSystemRule = new FileSystemRule();
 
@@ -60,13 +67,13 @@ public class FileParserServiceBaseTest extends TestHarness
 	{
 		fileParserService = new FileParserServiceBase( parsingService );
 		cli = CliFactory.createCli( ParserCmdLine.class );
-		parserSettings = cli.parseArguments( "/test1.txt" );
+		parserSettings = cli.parseArguments( FILE_1 );
 	}
 
 	@Test
 	public final void testCreateMapperWithEnabled()
 	{
-		final ParserSettings parserSettings = cli.parseArguments( "-i", "-c", "-h", "-t", "/test1.txt" );
+		final ParserSettings parserSettings = cli.parseArguments( "-i", "-c", "-h", "-t", FILE_1 );
 
 		final Standard18Mapper mapper = fileParserService.createMapper( parserSettings );
 
@@ -91,13 +98,13 @@ public class FileParserServiceBaseTest extends TestHarness
 	public final void testProcessFiles() throws IOException
 	{
 		final String[] fileNames =
-			{ "/test1.txt", "/test2,txt" };
+			{ FILE_1, FILE_2 };
 		try (final FileSystem fileSystem = fileSystemRule.getFileSystem())
 		{
-			Files.write( fileSystem.getPath( fileNames[0] ), Arrays.asList( "Line 1.1", "Line 1.2" ),
-					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
-			Files.write( fileSystem.getPath( fileNames[1] ), Arrays.asList( "Line 2.1", "Line 2.2" ),
-					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+			Files.write( fileSystem.getPath( fileNames[0] ), LINES_1, StandardCharsets.UTF_8,
+					StandardOpenOption.CREATE );
+			Files.write( fileSystem.getPath( fileNames[1] ), LINES_2, StandardCharsets.UTF_8,
+					StandardOpenOption.CREATE );
 
 			fileParserService.processFiles( Arrays.asList( fileNames )
 					.stream(), "", fileSystem, parserSettings );
@@ -108,7 +115,7 @@ public class FileParserServiceBaseTest extends TestHarness
 	@Test
 	public final void testParseFile() throws IOException
 	{
-		final String fileName = "/test1.txt";
+		final String fileName = FILE_1;
 		try (final FileSystem fileSystem = fileSystemRule.getFileSystem())
 		{
 			final Path file = fileSystem.getPath( fileName );
@@ -121,11 +128,10 @@ public class FileParserServiceBaseTest extends TestHarness
 	@Test
 	public final void testProcessFilesCmdLine() throws IOException
 	{
-		final String fileName = "/test1.txt";
+		final String fileName = FILE_1;
 		try (final FileSystem fileSystem = fileSystemRule.getFileSystem())
 		{
-			Files.write( fileSystem.getPath( fileName ), Arrays.asList( "Line 1.1", "Line 1.2" ),
-					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+			Files.write( fileSystem.getPath( fileName ), LINES_1, StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
 			fileParserService.processFiles( parserSettings, fileSystem );
 		}

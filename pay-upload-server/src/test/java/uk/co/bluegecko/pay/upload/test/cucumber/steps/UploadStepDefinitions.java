@@ -21,14 +21,11 @@ import uk.co.bluegecko.pay.upload.test.cucumber.hooks.UploadWebClient;
 public class UploadStepDefinitions
 {
 
-	@Autowired
-	private UploadWebClient webClient;
-
 	private Path file;
 	private URI jobId;
 
-	public UploadStepDefinitions()
-	{}
+	@Autowired
+	private UploadWebClient webClient;
 
 	@Given( "^the file \"(.*?)\" was prepared for upload$" )
 	public void theFileWasPreparedForUpload( final String file ) throws Throwable
@@ -39,7 +36,7 @@ public class UploadStepDefinitions
 	}
 
 	@When( "^the upload job has been submitted$" )
-	public void TheUploadJobHasBeenSubmitted() throws Throwable
+	public void theUploadJobHasBeenSubmitted() throws Throwable
 	{
 		jobId = webClient.submitFileForUpload( file );
 	}

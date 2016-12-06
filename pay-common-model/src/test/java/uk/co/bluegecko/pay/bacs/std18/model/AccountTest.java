@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Account.AccountBuilder;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class AccountTest extends TestHarness
+public class AccountTest extends TestHarness implements TestConstants
 {
 
 	private AccountBuilder accountBuilder;
@@ -22,9 +23,9 @@ public class AccountTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		accountBuilder = Account.builder()
-				.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "JOE BLOGGS" );
+				.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME );
 	}
 
 	@Test

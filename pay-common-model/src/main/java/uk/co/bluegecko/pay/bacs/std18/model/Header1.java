@@ -17,10 +17,10 @@ public class Header1
 	private final Row indicator;
 	private final String file;
 	private final String set;
-	private final String section;
-	private final String sequence;
-	private final String generation;
-	private final String version;
+	private final int section;
+	private final int sequence;
+	private final int generation;
+	private final int version;
 	private final LocalDate created;
 	private final LocalDate expires;
 	private final String accessibility;

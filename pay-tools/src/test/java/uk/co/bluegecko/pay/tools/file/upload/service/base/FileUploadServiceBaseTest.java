@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,6 +42,15 @@ import uk.co.bluegecko.pay.tools.file.upload.cli.UploadCmdLine;
 
 public class FileUploadServiceBaseTest extends TestHarness
 {
+
+	private static final String UPLOAD = "upload/";
+	private static final String STATUS = "status/1";
+
+	private static final String FILE_1 = "/test1.txt";
+	private static final String FILE_2 = "/test2,txt";
+
+	private static final List< String > LINES_1 = Arrays.asList( "Line 1.1", "Line 1.2" );
+	private static final List< String > LINES_2 = Arrays.asList( "Line 2.1", "Line 2.2" );
 
 	@Rule
 	public final FileSystemRule fileSystemRule = new FileSystemRule();
@@ -81,13 +91,13 @@ public class FileUploadServiceBaseTest extends TestHarness
 	@Test
 	public final void testFileUpload() throws IOException, URISyntaxException
 	{
-		server.expect( once(), requestTo( createURI( false ).resolve( "upload/" ) ) )
+		server.expect( once(), requestTo( createURI( false ).resolve( UPLOAD ) ) )
 				.andExpect( method( HttpMethod.POST ) )
-				.andRespond( withCreatedEntity( createURI( false ).resolve( "status/1" ) ) );
+				.andRespond( withCreatedEntity( createURI( false ).resolve( STATUS ) ) );
 
 		final Path file = fileSystemRule.getFileSystem()
-				.getPath( "/test.txt" );
-		Files.write( file, Arrays.asList( "Line 1", "Line 2" ), StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+				.getPath( FILE_1 );
+		Files.write( file, LINES_1, StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
 		fileUploadService.uploadFile( createURI( false ), file );
 
@@ -97,18 +107,18 @@ public class FileUploadServiceBaseTest extends TestHarness
 	@Test
 	public final void testProcessFiles() throws IOException, URISyntaxException
 	{
-		server.expect( times( 2 ), requestTo( createURI( false ).resolve( "upload/" ) ) )
+		server.expect( times( 2 ), requestTo( createURI( false ).resolve( UPLOAD ) ) )
 				.andExpect( method( HttpMethod.POST ) )
-				.andRespond( withCreatedEntity( createURI( false ).resolve( "status/1" ) ) );
+				.andRespond( withCreatedEntity( createURI( false ).resolve( STATUS ) ) );
 
 		final String[] fileNames =
-			{ "/test1.txt", "/test2,txt" };
+			{ FILE_1, FILE_2 };
 		try (final FileSystem fileSystem = fileSystemRule.getFileSystem())
 		{
-			Files.write( fileSystem.getPath( fileNames[0] ), Arrays.asList( "Line 1.1", "Line 1.2" ),
-					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
-			Files.write( fileSystem.getPath( fileNames[1] ), Arrays.asList( "Line 2.1", "Line 2.2" ),
-					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+			Files.write( fileSystem.getPath( fileNames[0] ), LINES_1, StandardCharsets.UTF_8,
+					StandardOpenOption.CREATE );
+			Files.write( fileSystem.getPath( fileNames[1] ), LINES_2, StandardCharsets.UTF_8,
+					StandardOpenOption.CREATE );
 
 			fileUploadService.processFiles( Arrays.asList( fileNames )
 					.stream(), "", fileSystem, createURI( false ) );
@@ -120,17 +130,16 @@ public class FileUploadServiceBaseTest extends TestHarness
 	public final void testProcessFilesCmdLine() throws IOException, URISyntaxException
 	{
 		final URI host = createURI( true );
-		server.expect( once(), requestTo( host.resolve( "upload/" ) ) )
+		server.expect( once(), requestTo( host.resolve( UPLOAD ) ) )
 				.andExpect( method( HttpMethod.POST ) )
-				.andRespond( withCreatedEntity( host.resolve( "status/1" ) ) );
+				.andRespond( withCreatedEntity( host.resolve( STATUS ) ) );
 
 		final Cli< UploadCmdLine > cli = CliFactory.createCli( UploadCmdLine.class );
-		final String fileName = "/test1.txt";
+		final String fileName = FILE_1;
 		final UploadCmdLine cmdLine = cli.parseArguments( "--host", host.toASCIIString(), fileName );
 		try (final FileSystem fileSystem = fileSystemRule.getFileSystem())
 		{
-			Files.write( fileSystem.getPath( fileName ), Arrays.asList( "Line 1.1", "Line 1.2" ),
-					StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+			Files.write( fileSystem.getPath( fileName ), LINES_1, StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
 			fileUploadService.processFiles( cmdLine, fileSystem );
 		}

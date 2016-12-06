@@ -32,6 +32,8 @@ import uk.co.bluegecko.pay.upload.service.UploadService;
 public class UploadControllerTest extends TestHarness
 {
 
+	private static final String COMLETED = "COMLETED: 1";
+
 	@Autowired
 	private MockMvc mvc;
 
@@ -56,11 +58,11 @@ public class UploadControllerTest extends TestHarness
 	@Test
 	public final void testFileStatus() throws Exception
 	{
-		when( uploadService.getJobStatus( 1L ) ).thenReturn( "COMLETED: 1" );
+		when( uploadService.getJobStatus( 1L ) ).thenReturn( COMLETED );
 
 		mvc.perform( get( STATUS, 1L ) )
 				.andExpect( status().isOk() )
-				.andExpect( content().string( "COMLETED: 1" ) );
+				.andExpect( content().string( COMLETED ) );
 
 		verify( uploadService ).getJobStatus( 1L );
 	}

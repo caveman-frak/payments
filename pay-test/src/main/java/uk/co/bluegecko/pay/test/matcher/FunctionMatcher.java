@@ -19,6 +19,7 @@ import org.hamcrest.TypeSafeMatcher;
 public class FunctionMatcher< M, V > extends TypeSafeMatcher< M >
 {
 
+	private static final String SPACE = " ";
 	private final V value;
 	private final String objectName;
 	private final String fieldName;
@@ -51,7 +52,7 @@ public class FunctionMatcher< M, V > extends TypeSafeMatcher< M >
 	public void describeTo( final Description description )
 	{
 		description.appendText( getDescription() )
-				.appendText( " " )
+				.appendText( SPACE )
 				.appendValue( value );
 	}
 
@@ -76,7 +77,7 @@ public class FunctionMatcher< M, V > extends TypeSafeMatcher< M >
 	{
 		mismatchDescription.appendText( "was " )
 				.appendText( getDescription() )
-				.appendText( " " )
+				.appendText( SPACE )
 				.appendValue( getValue( model ) )
 				.appendText( " expected " )
 				.appendValue( value );

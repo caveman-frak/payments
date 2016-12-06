@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.sf.flatpack.Record;
 import uk.co.bluegecko.pay.bacs.std18.model.Account;
 import uk.co.bluegecko.pay.bacs.std18.model.Contra;
@@ -117,10 +119,10 @@ public class Standard18Mapper implements Mapper
 				.indicator( row )
 				.file( getString( record, "FILE" ) )
 				.set( getString( record, "SET" ) )
-				.section( getString( record, "SECTION" ) )
-				.sequence( getString( record, "SEQUENCE" ) )
-				.generation( getString( record, "GENERATION" ) )
-				.version( getString( record, "VERSION" ) )
+				.section( getInt( record, "SECTION" ) )
+				.sequence( getInt( record, "SEQUENCE" ) )
+				.generation( getInt( record, "GENERATION" ) )
+				.version( getInt( record, "VERSION" ) )
 				.created( getLong( record, "CREATED" ) )
 				.expires( getLong( record, "EXPIRES" ) )
 				.accessibility( getString( record, "ACCESSIBILITY" ) )
@@ -217,14 +219,19 @@ public class Standard18Mapper implements Mapper
 		return record.contains( key ) ? record.getString( key ) : null;
 	}
 
-	protected int getInt( final Record record, final String key )
+	protected Integer getInt( final Record record, final String key )
 	{
-		return record.contains( key ) ? record.getInt( key ) : 0;
+		return isNotBlank( record, key ) ? record.getInt( key ) : 0;
 	}
 
 	protected Long getLong( final Record record, final String key )
 	{
-		return record.contains( key ) ? record.getLong( key ) : 0;
+		return isNotBlank( record, key ) ? record.getLong( key ) : null;
+	}
+
+	protected boolean isNotBlank( final Record record, final String key )
+	{
+		return record.contains( key ) && StringUtils.isNotBlank( record.getString( key ) );
 	}
 
 }

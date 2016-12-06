@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Batch;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Batch.BatchBuilder;
@@ -25,7 +25,7 @@ import uk.co.bluegecko.pay.v1.portfolio.wire.Total.Type;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class BatchTest extends TestHarness
+public class BatchTest extends TestHarness implements TestConstants
 {
 
 	private BatchBuilder batchBuilder;
@@ -36,17 +36,19 @@ public class BatchTest extends TestHarness
 		final Total creditTotal = Total.builder()
 				.type( Type.CREDIT )
 				.count( 1 )
-				.amount( new BigDecimal( "01.01" ) )
+				.amount( AMOUNT )
 				.build();
 		batchBuilder = Batch.builder()
-				.id( 10L )
-				.index( 1 )
-				.portfolio( 20L )
-				.set( "001" )
-				.section( 2 )
-				.sequence( 3 )
-				.generation( 4 )
-				.version( 5 )
+				.id( BATCH_ID )
+				.index( BATCH_IDX )
+				.portfolio( PORTFOLIO_ID )
+				.name( BATCH_NAME )
+				.userNumber( SUN )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION )
 				.totals( Stream.of( creditTotal )
 						.collect( Collectors.toSet() ) );
 	}
@@ -59,20 +61,20 @@ public class BatchTest extends TestHarness
 		final String str = write( batch );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"id\":10,\"index\":1,\"portfolio\":20,\"set\":\"001\","
-						+ "\"section\":2,\"sequence\":3,\"generation\":4,\"version\":5,"
-						+ "\"totals\":[{\"type\":\"CREDIT\",\"count\":1,\"amount\":1.01}]}" ) );
+				is( "{\"id\":104,\"index\":1,\"portfolio\":102,\"name\":\"Batch#1\",\"userNumber\":\"123456\","
+						+ "\"set\":\"001\",\"section\":2,\"sequence\":3,\"generation\":1,\"version\":4,"
+						+ "\"totals\":[{\"type\":\"CREDIT\",\"count\":1,\"amount\":10.01}]}" ) );
 
 		final Batch result = read( str, Batch.class );
 
-		assertThat( result.id(), is( 10L ) );
-		assertThat( result.index(), is( 1 ) );
-		assertThat( result.portfolio(), is( 20L ) );
-		assertThat( result.set(), is( "001" ) );
-		assertThat( result.section(), is( 2 ) );
-		assertThat( result.sequence(), is( 3 ) );
-		assertThat( result.generation(), is( 4 ) );
-		assertThat( result.version(), is( 5 ) );
+		assertThat( result.id(), is( BATCH_ID ) );
+		assertThat( result.index(), is( BATCH_IDX ) );
+		assertThat( result.portfolio(), is( PORTFOLIO_ID ) );
+		assertThat( result.set(), is( SET ) );
+		assertThat( result.section(), is( SECTION ) );
+		assertThat( result.sequence(), is( SEQUENCE ) );
+		assertThat( result.generation(), is( GENERATION ) );
+		assertThat( result.version(), is( VERSION ) );
 		assertThat( result.totals(), hasSize( 1 ) );
 	}
 
@@ -84,18 +86,19 @@ public class BatchTest extends TestHarness
 		final String str = write( View.Standard.class, batch );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"index\":1,\"set\":\"001\",\"section\":2,\"sequence\":3,\"generation\":4,\"version\":5}" ) );
+				is( "{\"index\":1,\"name\":\"Batch#1\",\"userNumber\":\"123456\",\"set\":\"001\",\"section\":2,"
+						+ "\"sequence\":3,\"generation\":1,\"version\":4}" ) );
 
 		final Batch result = read( str, Batch.class );
 
 		assertThat( result.id(), is( nullValue() ) );
-		assertThat( result.index(), is( 1 ) );
+		assertThat( result.index(), is( BATCH_IDX ) );
 		assertThat( result.portfolio(), is( nullValue() ) );
-		assertThat( result.set(), is( "001" ) );
-		assertThat( result.section(), is( 2 ) );
-		assertThat( result.sequence(), is( 3 ) );
-		assertThat( result.generation(), is( 4 ) );
-		assertThat( result.version(), is( 5 ) );
+		assertThat( result.set(), is( SET ) );
+		assertThat( result.section(), is( SECTION ) );
+		assertThat( result.sequence(), is( SEQUENCE ) );
+		assertThat( result.generation(), is( GENERATION ) );
+		assertThat( result.version(), is( VERSION ) );
 		assertThat( result.totals(), is( empty() ) );
 	}
 

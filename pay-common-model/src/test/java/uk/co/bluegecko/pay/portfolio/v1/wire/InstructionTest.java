@@ -6,12 +6,12 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Instruction;
@@ -19,7 +19,7 @@ import uk.co.bluegecko.pay.v1.portfolio.wire.Instruction.InstructionBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class InstructionTest extends TestHarness
+public class InstructionTest extends TestHarness implements TestConstants
 {
 
 	private InstructionBuilder instructionBuilder;
@@ -28,33 +28,34 @@ public class InstructionTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		final Account origin = Account.builder()
-				.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "B.BAGGINS" )
+				.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
 				.build();
 		final Account destination = Account.builder()
-				.sortCode( "654321" )
-				.number( "87654321" )
-				.type( "8" )
+				.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
 		instructionBuilder = Instruction.builder()
-				.id( 10L )
-				.index( 1 )
-				.lineNo( 3 )
+				.id( INSTRUCTION_ID )
+				.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.reference( "A-REFERENCE" );
+				.reference( REFERENCE )
+				.rti( RTI );
 	}
 
 	@Test
 	public final void testBuilder()
 	{
 		final Instruction instruction = instructionBuilder.build();
-		assertThat( instruction.amount(), is( new BigDecimal( "10.01" ) ) );
+		assertThat( instruction.amount(), is( AMOUNT ) );
 		assertThat( instruction.processingDate(), is( DATE ) );
 	}
 
@@ -66,22 +67,21 @@ public class InstructionTest extends TestHarness
 		final String str = write( instruction );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"id\":10,\"index\":1,\"lineNo\":3,"
-						+ "\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"B.BAGGINS\"},"
-						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\",\"type\":\"8\"},"
-						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
-						+ "\"processingDate\":\"2015-06-01\"}" ) );
+				is( "{\"id\":105,\"index\":1,\"lineNo\":2,\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\","
+						+ "\"name\":\"TESTAC1\"},\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\","
+						+ "\"type\":\"1\"},\"transactionType\":\"99\",\"rti\":\"/001\",\"amount\":10.01,"
+						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
 
 		final Instruction result = read( str, Instruction.class );
 
 		assertThat( result.origin()
-				.sortCode(), is( "123456" ) );
+				.sortCode(), is( SORT_CODE ) );
 		assertThat( result.destination()
-				.number(), is( "87654321" ) );
-		assertThat( result.index(), is( 1 ) );
-		assertThat( result.lineNo(), is( 3 ) );
-		assertThat( result.reference(), is( "A-REFERENCE" ) );
-		assertThat( result.transactionType(), is( "99" ) );
+				.number(), is( DEST_ACCT_NO ) );
+		assertThat( result.index(), is( INSTRUCTION_IDX ) );
+		assertThat( result.lineNo(), is( LINE_NO ) );
+		assertThat( result.reference(), is( REFERENCE ) );
+		assertThat( result.transactionType(), is( TRANSACTION_TYPE ) );
 	}
 
 	@Test
@@ -94,17 +94,17 @@ public class InstructionTest extends TestHarness
 		assertThat( stripWhitespace( str ),
 				is( "{\"index\":1,\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\"},"
 						+ "\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\"},"
-						+ "\"transactionType\":\"99\",\"amount\":10.01,\"reference\":\"A-REFERENCE\","
-						+ "\"processingDate\":\"2015-06-01\"}" ) );
+						+ "\"transactionType\":\"99\",\"rti\":\"/001\",\"amount\":10.01,"
+						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
 
 		final Instruction result = read( str, Instruction.class );
 
 		assertThat( result.origin()
-				.sortCode(), is( "123456" ) );
+				.sortCode(), is( SORT_CODE ) );
 		assertThat( result.destination()
-				.number(), is( "87654321" ) );
-		assertThat( result.reference(), is( "A-REFERENCE" ) );
-		assertThat( result.transactionType(), is( "99" ) );
+				.number(), is( DEST_ACCT_NO ) );
+		assertThat( result.reference(), is( REFERENCE ) );
+		assertThat( result.transactionType(), is( TRANSACTION_TYPE ) );
 	}
 
 	@Test

@@ -9,9 +9,11 @@ import org.junit.Test;
 
 import uk.co.bluegecko.pay.portfolio.model.Account;
 import uk.co.bluegecko.pay.portfolio.model.base.AccountBase;
+import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class AccountWirePortfolioToV1Test
+public class AccountWirePortfolioToV1Test extends TestHarness implements TestConstants
 {
 
 	private uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder wireBuilder;
@@ -31,10 +33,10 @@ public class AccountWirePortfolioToV1Test
 	@Test
 	public final void testToWire()
 	{
-		account = new AccountBase( 101L ).sortCode( "123456" )
-				.number( "12345678" )
-				.name( "TEST AC" )
-				.type( "A" );
+		account = new AccountBase( ACCT_ID ).sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE );
 
 		wireAccount = wireService.toWire( account );
 
@@ -47,10 +49,10 @@ public class AccountWirePortfolioToV1Test
 	@Test
 	public final void testFromWire()
 	{
-		wireAccount = wireBuilder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "TEST AC" )
-				.type( "A" )
+		wireAccount = wireBuilder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
 
 		account = wireService.fromWire( wireAccount );

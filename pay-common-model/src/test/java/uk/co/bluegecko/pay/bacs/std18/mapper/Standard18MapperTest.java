@@ -89,10 +89,10 @@ public class Standard18MapperTest
 		assertThat( value.indicator(), is( Row.HDR1 ) );
 		assertThat( value.file(), is( "A100101S  1100101" ) );
 		assertThat( value.set(), is( "173922" ) );
-		assertThat( value.section(), is( "0001" ) );
-		assertThat( value.sequence(), is( "0001" ) );
-		assertThat( value.generation(), is( nullValue() ) );
-		assertThat( value.version(), is( nullValue() ) );
+		assertThat( value.section(), is( 1 ) );
+		assertThat( value.sequence(), is( 1 ) );
+		assertThat( value.generation(), is( 0 ) );
+		assertThat( value.version(), is( 0 ) );
 		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 8 ) ) );
 		assertThat( value.expires(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
 		assertThat( value.accessibility(), is( nullValue() ) );
@@ -186,10 +186,10 @@ public class Standard18MapperTest
 		assertThat( value.indicator(), is( Row.EOF1 ) );
 		assertThat( value.file(), is( "A100101S  1100101" ) );
 		assertThat( value.set(), is( "173922" ) );
-		assertThat( value.section(), is( "0001" ) );
-		assertThat( value.sequence(), is( "0001" ) );
-		assertThat( value.generation(), is( "0819" ) );
-		assertThat( value.version(), is( "4" ) );
+		assertThat( value.section(), is( 1 ) );
+		assertThat( value.sequence(), is( 1 ) );
+		assertThat( value.generation(), is( 819 ) );
+		assertThat( value.version(), is( 4 ) );
 		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
 		assertThat( value.expires(), is( LocalDate.of( 1970, Month.JANUARY, 1 ) ) );
 		assertThat( value.accessibility(), is( nullValue() ) );
@@ -259,7 +259,7 @@ public class Standard18MapperTest
 	@Test
 	public final void testGetLongMissing()
 	{
-		assertThat( standard18Mapper.getLong( createDummyRecord(), "MISSING" ), is( 0L ) );
+		assertThat( standard18Mapper.getLong( createDummyRecord(), "MISSING" ), is( nullValue() ) );
 	}
 
 	@Test

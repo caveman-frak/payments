@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Volume.VolumeBuilder;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class VolumeTest extends TestHarness
+public class VolumeTest extends TestHarness implements TestConstants
 {
 
 	private VolumeBuilder volumeBuilder;
@@ -22,10 +23,10 @@ public class VolumeTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		volumeBuilder = Volume.builder()
-				.serialNo( "12345" )
-				.accessibility( "Y" )
-				.userNumber( "123456" )
-				.label( "L" );
+				.serialNo( SERIAL_NO )
+				.accessibility( ACCESSIBILITY )
+				.userNumber( SUN )
+				.label( LABEL );
 	}
 
 	@Test
@@ -33,10 +34,10 @@ public class VolumeTest extends TestHarness
 	{
 		final Volume volume = volumeBuilder.build();
 
-		assertThat( volume.serialNo(), is( "12345" ) );
-		assertThat( volume.accessibility(), is( "Y" ) );
-		assertThat( volume.userNumber(), is( "123456" ) );
-		assertThat( volume.label(), is( "L" ) );
+		assertThat( volume.serialNo(), is( SERIAL_NO ) );
+		assertThat( volume.accessibility(), is( ACCESSIBILITY ) );
+		assertThat( volume.userNumber(), is( SUN ) );
+		assertThat( volume.label(), is( LABEL ) );
 	}
 
 	@Test

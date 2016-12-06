@@ -8,9 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.bluegecko.pay.bacs.std18.model.Account;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 
 
-public class AccountWireStd18ToV1Test
+public class AccountWireStd18ToV1Test implements TestConstants
 {
 
 	private Account.AccountBuilder std18Builder;
@@ -32,10 +33,10 @@ public class AccountWireStd18ToV1Test
 	@Test
 	public final void testToWire()
 	{
-		std18Account = std18Builder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "TEST AC" )
-				.type( "A" )
+		std18Account = std18Builder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
 
 		wireAccount = wireService.toWire( std18Account );
@@ -49,10 +50,10 @@ public class AccountWireStd18ToV1Test
 	@Test
 	public final void testFromWire()
 	{
-		wireAccount = wireBuilder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "TEST AC" )
-				.type( "A" )
+		wireAccount = wireBuilder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
 
 		std18Account = wireService.fromWire( wireAccount );

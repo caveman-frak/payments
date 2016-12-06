@@ -15,12 +15,16 @@ import org.junit.Test;
 public class TestHarnessTest extends TestHarness
 {
 
+	private static final int NUMBER = 1;
+	private static final String LETTER = "A";
+
+	private static final String JSON = "{\"integer\":1,\"string\":\"A\"}";
 	private FakeModel model;
 
 	@Before
 	public final void setUp()
 	{
-		model = new FakeModel( 1, "A" );
+		model = new FakeModel( NUMBER, LETTER );
 	}
 
 	@Test
@@ -34,24 +38,24 @@ public class TestHarnessTest extends TestHarness
 	{
 		final String s = write( model );
 
-		assertThat( stripWhitespace( s ), is( "{\"integer\":1,\"string\":\"A\"}" ) );
+		assertThat( stripWhitespace( s ), is( JSON ) );
 
 		final FakeModel m = read( s, FakeModel.class );
 
-		assertThat( m.integer, is( 1 ) );
-		assertThat( m.string, is( "A" ) );
+		assertThat( m.integer, is( NUMBER ) );
+		assertThat( m.string, is( LETTER ) );
 	}
 
 	@Test
 	public final void testMarshallingWithView() throws IOException
 	{
-		assertThat( stripWhitespace( write( FakeModel.class, model ) ), is( "{\"integer\":1,\"string\":\"A\"}" ) );
+		assertThat( stripWhitespace( write( FakeModel.class, model ) ), is( JSON ) );
 	}
 
 	@Test
 	public final void testMapper() throws IOException
 	{
-		assertThat( stripWhitespace( mapper().writeValueAsString( model ) ), is( "{\"integer\":1,\"string\":\"A\"}" ) );
+		assertThat( stripWhitespace( mapper().writeValueAsString( model ) ), is( JSON ) );
 	}
 
 	@Test
@@ -65,8 +69,8 @@ public class TestHarnessTest extends TestHarness
 	protected static final class FakeModel
 	{
 
-		public int integer;
-		public String string;
+		protected int integer;
+		protected String string;
 
 		public FakeModel()
 		{}

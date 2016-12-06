@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Header1.Header1Builder;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class Header1Test extends TestHarness
+public class Header1Test extends TestHarness implements TestConstants
 {
 
 	private Header1Builder headerBuilder;
@@ -23,18 +24,18 @@ public class Header1Test extends TestHarness
 	{
 		headerBuilder = Header1.builder()
 				.indicator( Row.HDR1 )
-				.file( "12345" )
-				.set( "001" )
-				.section( "002" )
-				.sequence( "003" )
-				.generation( "4" )
-				.version( "5" )
+				.file( FILE )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION )
 				.created( DATE.toEpochDay() )
 				.expires( DATE.plusWeeks( 1 )
 						.toEpochDay() )
-				.accessibility( "Y" )
-				.blockCount( "00106" )
-				.systemCode( "CODE" );
+				.accessibility( ACCESSIBILITY )
+				.blockCount( BLOCK_COUNT )
+				.systemCode( SYSTEM_CODE );
 	}
 
 	@Test
@@ -43,17 +44,17 @@ public class Header1Test extends TestHarness
 		final Header1 header = headerBuilder.build();
 
 		assertThat( header.indicator(), is( Row.HDR1 ) );
-		assertThat( header.file(), is( "12345" ) );
-		assertThat( header.set(), is( "001" ) );
-		assertThat( header.section(), is( "002" ) );
-		assertThat( header.sequence(), is( "003" ) );
-		assertThat( header.generation(), is( "4" ) );
-		assertThat( header.version(), is( "5" ) );
+		assertThat( header.file(), is( FILE ) );
+		assertThat( header.set(), is( SET ) );
+		assertThat( header.section(), is( SECTION ) );
+		assertThat( header.sequence(), is( SEQUENCE ) );
+		assertThat( header.generation(), is( GENERATION ) );
+		assertThat( header.version(), is( VERSION ) );
 		assertThat( header.created(), is( DATE ) );
 		assertThat( header.expires(), is( DATE.plusWeeks( 1 ) ) );
-		assertThat( header.accessibility(), is( "Y" ) );
-		assertThat( header.blockCount(), is( "00106" ) );
-		assertThat( header.systemCode(), is( "CODE" ) );
+		assertThat( header.accessibility(), is( ACCESSIBILITY ) );
+		assertThat( header.blockCount(), is( BLOCK_COUNT ) );
+		assertThat( header.systemCode(), is( SYSTEM_CODE ) );
 	}
 
 	@Test

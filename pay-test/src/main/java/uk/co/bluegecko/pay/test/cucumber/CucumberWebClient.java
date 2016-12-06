@@ -23,6 +23,8 @@ import org.springframework.web.client.RestTemplate;
 public abstract class CucumberWebClient
 {
 
+	private static final String SCHEME = "http";
+
 	@Configuration
 	public static class CucumberConfig
 	{
@@ -72,12 +74,12 @@ public abstract class CucumberWebClient
 
 	protected URI host( final String path ) throws URISyntaxException
 	{
-		return new URI( "http", null, host, port, path, null, null );
+		return new URI( SCHEME, null, host, port, path, null, null );
 	}
 
 	protected String host() throws URISyntaxException
 	{
-		return new URI( "http", null, host, port, null, null, null ).toString();
+		return new URI( SCHEME, null, host, port, null, null, null ).toString();
 	}
 
 	protected HttpEntity< MultiValueMap< String, Object > > multiPartEntity( final String name, final Path file )

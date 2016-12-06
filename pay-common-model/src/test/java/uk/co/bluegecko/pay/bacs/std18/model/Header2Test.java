@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Header2.Header2Builder;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class Header2Test extends TestHarness
+public class Header2Test extends TestHarness implements TestConstants
 {
 
 	private Header2Builder headerBuilder;
@@ -23,10 +24,10 @@ public class Header2Test extends TestHarness
 	{
 		headerBuilder = Header2.builder()
 				.indicator( Row.HDR2 )
-				.format( "F" )
-				.block( "0001" )
-				.record( "00106" )
-				.offset( "0" );
+				.format( FORMAT )
+				.block( BLOCK )
+				.record( RECORD )
+				.offset( OFFSET );
 	}
 
 	@Test
@@ -35,10 +36,10 @@ public class Header2Test extends TestHarness
 		final Header2 header = headerBuilder.build();
 
 		assertThat( header.indicator(), is( Row.HDR2 ) );
-		assertThat( header.format(), is( "F" ) );
-		assertThat( header.block(), is( "0001" ) );
-		assertThat( header.record(), is( "00106" ) );
-		assertThat( header.offset(), is( "0" ) );
+		assertThat( header.format(), is( FORMAT ) );
+		assertThat( header.block(), is( BLOCK ) );
+		assertThat( header.record(), is( RECORD ) );
+		assertThat( header.offset(), is( OFFSET ) );
 	}
 
 	@Test

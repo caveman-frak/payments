@@ -4,8 +4,6 @@ package uk.co.bluegecko.pay.portfolio.service.v1;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,10 +15,11 @@ import uk.co.bluegecko.pay.portfolio.model.base.AccountBase;
 import uk.co.bluegecko.pay.portfolio.model.base.BatchBase;
 import uk.co.bluegecko.pay.portfolio.model.base.InstructionBase;
 import uk.co.bluegecko.pay.portfolio.model.base.PortfolioBase;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class InstructionWirePortfolioToV1Test extends TestHarness
+public class InstructionWirePortfolioToV1Test extends TestHarness implements TestConstants
 {
 
 	private uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder wireActBuilder;
@@ -41,36 +40,37 @@ public class InstructionWirePortfolioToV1Test extends TestHarness
 	@Test
 	public final void testToWire()
 	{
-		final Account origin = new AccountBase( 101L ).sortCode( "123456" )
-				.number( "12345678" )
-				.name( "ACCOUNT #1" )
-				.type( "1" );
-		final Account destination = new AccountBase( 102L ).sortCode( "654321" )
-				.number( "87654321" )
-				.name( "ACCOUNT #2" )
-				.type( "2" );
+		final Account origin = new AccountBase( ACCT_ID ).sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE );
+		final Account destination = new AccountBase( DEST_ACCT_ID ).sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.name( DEST_ACCT_NAME )
+				.type( DEST_ACCT_TYPE );
 
-		final Portfolio portfolio = new PortfolioBase( 103L ).name( "Portfolio #1" )
-				.serialNo( "321" )
-				.userNumber( "123456" );
+		final Portfolio portfolio = new PortfolioBase( PORTFOLIO_ID ).name( PORTFOLIO_NAME )
+				.serialNo( SERIAL_NO )
+				.userNumber( SUN );
 
-		final Batch batch = new BatchBase( 104L ).portfolio( portfolio )
-				.index( 1 )
-				.name( "Batch #1" )
-				.userNumber( "123456" )
-				.set( "00" )
-				.generation( 1 )
-				.section( 2 )
-				.sequence( 3 )
-				.version( 4 );
+		final Batch batch = new BatchBase( BATCH_ID ).portfolio( portfolio )
+				.index( BATCH_IDX )
+				.name( BATCH_NAME )
+				.userNumber( SUN )
+				.set( SET )
+				.generation( GENERATION )
+				.section( SECTION )
+				.sequence( SEQUENCE )
+				.version( VERSION );
 
-		final Instruction instruction = new InstructionBase( 105L, batch, 2 ).index( 1 )
+		final Instruction instruction = new InstructionBase( INSTRUCTION_ID, batch, LINE_NO ).index( INSTRUCTION_IDX )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( new BigDecimal( "00.02" ) )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( AMOUNT )
 				.processingDate( DATE )
-				.reference( "A-REFERENCE" );
+				.reference( REFERENCE )
+				.rti( RTI );
 
 		wireInstruction = wireService.toWire( instruction );
 
@@ -113,25 +113,26 @@ public class InstructionWirePortfolioToV1Test extends TestHarness
 	@Test
 	public final void testFromWire()
 	{
-		final uk.co.bluegecko.pay.v1.portfolio.wire.Account origin = wireActBuilder.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "ACCOUNT #1" )
-				.type( "1" )
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Account origin = wireActBuilder.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
-		final uk.co.bluegecko.pay.v1.portfolio.wire.Account destination = wireActBuilder.sortCode( "654321" )
-				.number( "87654321" )
-				.name( "ACCOUNT #2" )
-				.type( "2" )
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Account destination = wireActBuilder.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.name( DEST_ACCT_NAME )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
-		wireInstruction = wireBuilder.index( 1 )
-				.lineNo( 3 )
+		wireInstruction = wireBuilder.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.reference( "A-REFERENCE" )
+				.reference( REFERENCE )
+				.rti( RTI )
 				.build();
 
 		final Instruction instruction = wireService.fromWire( wireInstruction );

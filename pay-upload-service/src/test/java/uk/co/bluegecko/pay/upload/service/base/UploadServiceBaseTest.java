@@ -25,6 +25,7 @@ import uk.co.bluegecko.pay.upload.service.UploadService;
 public class UploadServiceBaseTest
 {
 
+	private static final String FILE_NAME = "test.txt";
 	private static final String VOL_LINE = "VOL1173922                               100101                                1                          ";
 	private static final String INST_LINE = "0100390105996309940202421315692000000000000006BSDSAF 00000000006REF&LT 00000000006NAME   00000000006 14308     ";
 
@@ -41,7 +42,7 @@ public class UploadServiceBaseTest
 	@Test
 	public final void testUploadWithInstruction() throws IOException
 	{
-		final MultipartFile file = new MockMultipartFile( "test.txt", INST_LINE.getBytes() );
+		final MultipartFile file = new MockMultipartFile( FILE_NAME, INST_LINE.getBytes() );
 
 		uploadService.processFile( file );
 
@@ -51,7 +52,7 @@ public class UploadServiceBaseTest
 	@Test
 	public final void testUploadWithoutInstruction() throws IOException
 	{
-		final MultipartFile file = new MockMultipartFile( "test.txt", VOL_LINE.getBytes() );
+		final MultipartFile file = new MockMultipartFile( FILE_NAME, VOL_LINE.getBytes() );
 
 		uploadService.processFile( file );
 

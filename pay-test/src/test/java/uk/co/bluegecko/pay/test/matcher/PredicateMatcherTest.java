@@ -4,6 +4,8 @@ package uk.co.bluegecko.pay.test.matcher;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.function.Predicate;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
@@ -18,10 +20,13 @@ public class PredicateMatcherTest
 
 	private Description description;
 
+	private Predicate< String > predicate;
+
 	@Before
 	public final void setUp()
 	{
-		matcher = PredicateMatcher.matcher( s -> s.startsWith( "Hello" ), "string starting with \"Hello\"" );
+		predicate = s -> s.startsWith( "Hello" );
+		matcher = PredicateMatcher.matcher( predicate, "string starting with \"Hello\"" );
 
 		description = new StringDescription();
 	}
@@ -39,8 +44,8 @@ public class PredicateMatcherTest
 	@Test
 	public final void testNoDescription()
 	{
-		matcher = PredicateMatcher.matcher( s -> s.startsWith( "Hello" ) );
-		final String string = "Hello World!";
+		matcher = PredicateMatcher.matcher( predicate );
+		final String string = "Hello Everyone!";
 		assertThat( matcher.matches( string ), is( true ) );
 	}
 

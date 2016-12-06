@@ -53,13 +53,13 @@ public class TransactionCodeTest
 	@Test( expected = IllegalArgumentException.class )
 	public final void testByCodeFail()
 	{
-		TransactionCode.byCode( CreditCode.class, "17" );
+		TransactionCode.byCode( CreditCode.class, "18" );
 	}
 
 	@Test
 	public final void testAllByCodePass()
 	{
-		assertThat( TransactionCode.byCode( "Z4" ), is( CreditCode.INTEREST ) );
+		assertThat( TransactionCode.byCode( "Z5" ), is( CreditCode.DIVIDEND ) );
 	}
 
 	@Test( expected = IllegalArgumentException.class )

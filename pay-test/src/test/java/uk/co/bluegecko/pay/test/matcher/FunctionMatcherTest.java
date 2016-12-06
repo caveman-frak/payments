@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -26,7 +27,8 @@ public class FunctionMatcherTest implements FixedDates
 	@Before
 	public final void setUp()
 	{
-		matcher = FunctionMatcher.matcher( "number", "intValue", 10, i -> i.intValue() );
+		Function< Long, Integer > function = i -> i.intValue();
+		matcher = FunctionMatcher.matcher( "number", "intValue", 10, function );
 
 		description = new StringDescription();
 	}

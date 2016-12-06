@@ -18,12 +18,13 @@ import org.junit.Test;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode.CreditCode;
 import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode.DebitCode;
+import uk.co.bluegecko.pay.test.data.TestConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.ServiceUser;
 import uk.co.bluegecko.pay.v1.portfolio.wire.ServiceUser.ServiceUserBuilder;
 
 
-public class ServiceUserTest extends TestHarness
+public class ServiceUserTest extends TestHarness implements TestConstants
 {
 
 	private ServiceUserBuilder serviceUserBuilder;
@@ -32,7 +33,7 @@ public class ServiceUserTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		serviceUserBuilder = ServiceUser.builder()
-				.userNumber( "123456" )
+				.userNumber( SUN )
 				.indirect( false );
 	}
 
@@ -51,7 +52,7 @@ public class ServiceUserTest extends TestHarness
 
 		final ServiceUser result = read( str, ServiceUser.class );
 
-		assertThat( result.userNumber(), is( "123456" ) );
+		assertThat( result.userNumber(), is( SUN ) );
 		assertThat( result.indirect(), is( false ) );
 		assertThat( result.creditCodes(), hasItems( CreditCode.CREDIT, CreditCode.DIVIDEND, CreditCode.INTEREST ) );
 		assertThat( result.debitCodes(), hasItems( DebitCode.REGULAR ) );

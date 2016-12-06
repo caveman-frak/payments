@@ -31,6 +31,8 @@ public class ThrowableCaptorTest
 	}
 
 	private final void noException()
-	{}
+	{
+		// do nothing
+	}
 
 }

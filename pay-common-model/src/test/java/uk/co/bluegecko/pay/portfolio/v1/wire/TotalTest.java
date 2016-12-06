@@ -21,6 +21,9 @@ import uk.co.bluegecko.pay.v1.portfolio.wire.Total.Type;
 public class TotalTest extends TestHarness
 {
 
+	private static final int COUNT = 23;
+	private static final BigDecimal AMOUNT = new BigDecimal( "56.78" );
+
 	private TotalBuilder totalBuilder;
 
 	@Before
@@ -28,8 +31,8 @@ public class TotalTest extends TestHarness
 	{
 		totalBuilder = Total.builder()
 				.type( Type.CREDIT )
-				.count( 23 )
-				.amount( new BigDecimal( "56.78" ) );
+				.count( COUNT )
+				.amount( AMOUNT );
 	}
 
 	@Test
@@ -51,7 +54,7 @@ public class TotalTest extends TestHarness
 
 		assertThat( result.type(), is( Type.CREDIT ) );
 		assertThat( result.count(), is( 23 ) );
-		assertThat( result.amount(), is( new BigDecimal( "56.78" ) ) );
+		assertThat( result.amount(), is( AMOUNT ) );
 	}
 
 	@Test

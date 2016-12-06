@@ -24,7 +24,7 @@ public class Account
 	@Pattern( regexp = "\\d{8}" )
 	private final String number;
 	@Length( max = 18 )
-	@Pattern( regexp = "[A-Z \\-\\,]*" )
+	@Pattern( regexp = "[A-Z0-9 \\-\\,]*" )
 	@JsonView( View.Detailed.class )
 	private final String name;
 	@Pattern( regexp = "[0-9]?" )
