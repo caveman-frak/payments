@@ -12,14 +12,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class AccountTest extends TestHarness implements TestConstants
+public class AccountTest extends TestHarness implements FakeDataConstants
 {
 
 	private AccountBuilder accountBuilder;

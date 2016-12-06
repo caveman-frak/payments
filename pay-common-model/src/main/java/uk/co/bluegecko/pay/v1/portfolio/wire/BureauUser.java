@@ -28,6 +28,7 @@ public class BureauUser implements UserNumber
 	@Pattern( regexp = "B\\d{5}" )
 	private final String userNumber;
 	@JsonView( View.Detailed.class )
+	@NotNull
 	private Set< String > serviceUsers;
 
 	@JsonPOJOBuilder( withPrefix = "" )

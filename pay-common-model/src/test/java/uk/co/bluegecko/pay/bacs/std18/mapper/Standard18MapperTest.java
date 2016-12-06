@@ -53,8 +53,8 @@ public class Standard18MapperTest
 	private static final String DEST = "999999";
 	private static final String RECORD = "00106";
 	private static final String OFFSET = "00";
-	private static final String CCY = "00";
-	private static final String COUNTRY = "000000";
+	private static final String CCY = "AA";
+	private static final String COUNTRY = "0000BB";
 	private static final String BLOCK = "00512";
 	private static final String LABEL = "1";
 	private static final String BLOCK_COUNT = "000000";
@@ -73,6 +73,7 @@ public class Standard18MapperTest
 	private static final String ACCT_TYPE = "0";
 	private static final String DEST_SORT_CODE = "010039";
 	private static final String DEST_ACCT_NO = "01059963";
+	private static final String DEST_ACCT_NAME = "OA NAME 09";
 	private static final String CREDIT_CODE = "99";
 	private static final String DEBIT_CODE = "17";
 	private static final String NARRATIVE = "OSTEXT 09";
@@ -87,7 +88,7 @@ public class Standard18MapperTest
 		{ "VOL1173922                               100101                                1                          ",
 				"HDR1A100101S  110010117392200010001       08194 08192 000000                                              ",
 				"HDR2F0051200106                                   00                                                      ",
-				"UHL1 14308999999    000000004 MULTI  001       AUD0000                                                    ",
+				"UHL1 14308999999    AA0000BB4 MULTI  001       AUD0000                                                    ",
 				"0100390105996309940202421315692/00000000000055BSDSAF 00000000055REF&LT 00000000055NAME   00000000055 14308     ",
 				"4020242131569201740202421315692/00000000000055OSTEXT 09         CONTRA            OA NAME 09         16116",
 				"EOF1A100101S  11001011739220001000108194 08192 000000                                              ",
@@ -187,7 +188,7 @@ public class Standard18MapperTest
 		assertThat( value.reference(), is( REFERENCE ) );
 		assertThat( value.transactionType(), is( CREDIT_CODE ) );
 		assertThat( value.rti(), is( RTI ) );
-		assertThat( value.amount(), is( new BigDecimal( "0.55" ) ) );
+		assertThat( value.amount(), is( VALUE ) );
 		assertThat( value.processingDate(), is( LocalDate.of( 2009, Month.MARCH, 5 ) ) );
 	}
 
@@ -210,8 +211,8 @@ public class Standard18MapperTest
 		assertThat( value.origin()
 				.number(), is( ACCT_NO ) );
 		assertThat( value.origin()
-				.name(), is( "OA NAME 09" ) );
-		assertThat( value.amount(), is( new BigDecimal( "0.55" ) ) );
+				.name(), is( DEST_ACCT_NAME ) );
+		assertThat( value.amount(), is( VALUE ) );
 		assertThat( value.freeFormat(), is( RTI ) );
 		assertThat( value.narrative(), is( NARRATIVE ) );
 		assertThat( value.processingDate(), is( LocalDate.of( 2014, Month.FEBRUARY, 15 ) ) );

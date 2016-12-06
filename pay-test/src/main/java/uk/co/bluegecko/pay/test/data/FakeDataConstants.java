@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import uk.co.bluegecko.pay.test.FixedDates;
 
 
-public interface TestConstants extends FixedDates
+public interface FakeDataConstants extends FixedDates
 {
 
 	public static final long ACCT_ID = 101L;

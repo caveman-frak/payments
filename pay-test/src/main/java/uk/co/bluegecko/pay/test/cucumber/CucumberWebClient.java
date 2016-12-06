@@ -25,6 +25,39 @@ public abstract class CucumberWebClient
 
 	private static final String SCHEME = "http";
 
+	@Autowired
+	private int port;
+
+	@Autowired
+	private String host;
+
+	protected URI host( final String path ) throws URISyntaxException
+	{
+		return new URI( SCHEME, null, host, port, path, null, null );
+	}
+
+	protected String host() throws URISyntaxException
+	{
+		return new URI( SCHEME, null, host, port, null, null, null ).toString();
+	}
+
+	protected HttpEntity< MultiValueMap< String, Object > > multiPartEntity( final String name, final Path file )
+	{
+		final MultiValueMap< String, Object > map = new LinkedMultiValueMap<>();
+		map.add( name, new PathResource( file ) );
+
+		return multiPartEntity( map );
+	}
+
+	protected HttpEntity< MultiValueMap< String, Object > > multiPartEntity( final MultiValueMap< String, Object > map )
+	{
+		final HttpHeaders headers = new HttpHeaders();
+		headers.setContentType( MediaType.MULTIPART_FORM_DATA );
+
+		final HttpEntity< MultiValueMap< String, Object > > requestEntity = new HttpEntity<>( map, headers );
+		return requestEntity;
+	}
+
 	@Configuration
 	public static class CucumberConfig
 	{
@@ -64,39 +97,6 @@ public abstract class CucumberWebClient
 			return testRestTemplate.getRestTemplate();
 		}
 
-	}
-
-	@Autowired
-	private int port;
-
-	@Autowired
-	private String host;
-
-	protected URI host( final String path ) throws URISyntaxException
-	{
-		return new URI( SCHEME, null, host, port, path, null, null );
-	}
-
-	protected String host() throws URISyntaxException
-	{
-		return new URI( SCHEME, null, host, port, null, null, null ).toString();
-	}
-
-	protected HttpEntity< MultiValueMap< String, Object > > multiPartEntity( final String name, final Path file )
-	{
-		final MultiValueMap< String, Object > map = new LinkedMultiValueMap<>();
-		map.add( name, new PathResource( file ) );
-
-		return multiPartEntity( map );
-	}
-
-	protected HttpEntity< MultiValueMap< String, Object > > multiPartEntity( final MultiValueMap< String, Object > map )
-	{
-		final HttpHeaders headers = new HttpHeaders();
-		headers.setContentType( MediaType.MULTIPART_FORM_DATA );
-
-		final HttpEntity< MultiValueMap< String, Object > > requestEntity = new HttpEntity<>( map, headers );
-		return requestEntity;
 	}
 
 }

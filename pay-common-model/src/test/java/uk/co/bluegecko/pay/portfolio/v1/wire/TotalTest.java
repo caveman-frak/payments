@@ -53,7 +53,7 @@ public class TotalTest extends TestHarness
 		final Total result = read( str, Total.class );
 
 		assertThat( result.type(), is( Type.CREDIT ) );
-		assertThat( result.count(), is( 23 ) );
+		assertThat( result.count(), is( COUNT ) );
 		assertThat( result.amount(), is( AMOUNT ) );
 	}
 
@@ -67,6 +67,20 @@ public class TotalTest extends TestHarness
 	public final void testValidationFailSortCode()
 	{
 		assertThat( isValid( totalBuilder.count( -4 )
+				.build() ), is( false ) );
+	}
+
+	@Test
+	public final void testValidationFailMissingType()
+	{
+		assertThat( isValid( totalBuilder.type( null )
+				.build() ), is( false ) );
+	}
+
+	@Test
+	public final void testValidationFailMissingAmount()
+	{
+		assertThat( isValid( totalBuilder.amount( null )
 				.build() ), is( false ) );
 	}
 

@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Header1.Header1Builder;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class Header1Test extends TestHarness implements TestConstants
+public class Header1Test extends TestHarness implements FakeDataConstants
 {
 
 	private Header1Builder headerBuilder;

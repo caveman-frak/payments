@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.bluegecko.pay.portfolio.model.Batch;
-import uk.co.bluegecko.pay.portfolio.service.v1.test.FakeDataFactory;
+import uk.co.bluegecko.pay.portfolio.service.test.FakeDataFactory;
 
 
 public class BatchWirePortfolioToV1Test extends FakeDataFactory

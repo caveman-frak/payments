@@ -27,6 +27,54 @@ import uk.co.bluegecko.pay.common.service.Mapper;
 public class Standard18Mapper implements Mapper
 {
 
+	private static final String MAPPING_FILE = "/mapping/standard18.pzmap.xml";
+
+	private static final String SERIAL_NO = "SERIAL_NO";
+	private static final String USER_NUMBER = "USER_NUMBER";
+	private static final String LABEL = "LABEL";
+	private static final String SET = "SET";
+	private static final String SECTION = "SECTION";
+	private static final String SEQUENCE = "SEQUENCE";
+	private static final String GENERATION = "GENERATION";
+	private static final String VERSION = "VERSION";
+	private static final String CREATED = "CREATED";
+	private static final String EXPIRES = "EXPIRES";
+	private static final String ACCESSIBILITY = "ACCESSIBILITY";
+	private static final String BLOCK_COUNT = "BLOCK_COUNT";
+	private static final String SYSTEM_CODE = "SYSTEM_CODE";
+	private static final String FORMAT = "FORMAT";
+	private static final String BLOCK = "BLOCK";
+	private static final String RECORD = "RECORD";
+	private static final String OFFSET = "OFFSET";
+	private static final String DEST = "DEST";
+	private static final String CURRENCY = "CURRENCY";
+	private static final String COUNTRY = "COUNTRY";
+	private static final String WORK_CODE = "WORK_CODE";
+	private static final String FILE = "FILE";
+	private static final String AUDIT = "AUDIT";
+	private static final String USER_NAME = "USER_NAME";
+	private static final String DEST_NAME = "DEST_NAME";
+	private static final String DEST_REF = "DEST_REF";
+	private static final String RTI = "RTI";
+	private static final String PROCESS_DATE = "PROCESS_DATE";
+	private static final String DEST_SORT_CODE = "DEST_SORT_CODE";
+	private static final String DEST_AC_NUMBER = "DEST_AC_NUMBER";
+	private static final String DEST_AC_TYPE = "DEST_AC_TYPE";
+	private static final String TRANS_CODE = "TRANS_CODE";
+	private static final String ORIG_SORT_CODE = "ORIG_SORT_CODE";
+	private static final String ORIG_AC_NUMBER = "ORIG_AC_NUMBER";
+	private static final String ORIG_AC_NAME = "ORIG_AC_NAME";
+	private static final String FREE = "FREE";
+	private static final String AMOUNT = "AMOUNT";
+	private static final String NARRATIVE = "NARRATIVE";
+	private static final String PROCESSING = "PROCESSING";
+	private static final String DEBIT_VALUE = "DEBIT_VALUE";
+	private static final String CREDIT_VALUE = "CREDIT_VALUE";
+	private static final String DEBIT_COUNT = "DEBIT_COUNT";
+	private static final String CREDIT_COUNT = "CREDIT_COUNT";
+	private static final String DDI_COUNT = "DDI_COUNT";
+	private static final String SERVICE_USER = "SERVICE_USER";
+
 	private final Map< Row, BiConsumer< Row, Object > > consumers;
 
 	private int index = 0;
@@ -90,8 +138,7 @@ public class Standard18Mapper implements Mapper
 
 	public Reader mappingFile()
 	{
-		return new InputStreamReader( getClass().getResourceAsStream( "/mapping/standard18.pzmap.xml" ),
-				StandardCharsets.UTF_8 );
+		return new InputStreamReader( getClass().getResourceAsStream( MAPPING_FILE ), StandardCharsets.UTF_8 );
 	}
 
 	protected void consume( final Record record, final Row row, final Function< Record, Object > mapper )
@@ -106,10 +153,10 @@ public class Standard18Mapper implements Mapper
 	protected Volume volume( final Record record )
 	{
 		return Volume.builder()
-				.serialNo( getString( record, "SERIAL_NO" ) )
-				.accessibility( getString( record, "ACCESSIBILITY" ) )
-				.userNumber( getString( record, "USER_NUMBER" ) )
-				.label( getString( record, "LABEL" ) )
+				.serialNo( getString( record, SERIAL_NO ) )
+				.accessibility( getString( record, ACCESSIBILITY ) )
+				.userNumber( getString( record, USER_NUMBER ) )
+				.label( getString( record, LABEL ) )
 				.build();
 	}
 
@@ -117,17 +164,17 @@ public class Standard18Mapper implements Mapper
 	{
 		return Header1.builder()
 				.indicator( row )
-				.file( getString( record, "FILE" ) )
-				.set( getString( record, "SET" ) )
-				.section( getInt( record, "SECTION" ) )
-				.sequence( getInt( record, "SEQUENCE" ) )
-				.generation( getInt( record, "GENERATION" ) )
-				.version( getInt( record, "VERSION" ) )
-				.created( getLong( record, "CREATED" ) )
-				.expires( getLong( record, "EXPIRES" ) )
-				.accessibility( getString( record, "ACCESSIBILITY" ) )
-				.blockCount( getString( record, "BLOCK_COUNT" ) )
-				.systemCode( getString( record, "SYSTEM_CODE" ) )
+				.file( getString( record, FILE ) )
+				.set( getString( record, SET ) )
+				.section( getInt( record, SECTION ) )
+				.sequence( getInt( record, SEQUENCE ) )
+				.generation( getInt( record, GENERATION ) )
+				.version( getInt( record, VERSION ) )
+				.created( getLong( record, CREATED ) )
+				.expires( getLong( record, EXPIRES ) )
+				.accessibility( getString( record, ACCESSIBILITY ) )
+				.blockCount( getString( record, BLOCK_COUNT ) )
+				.systemCode( getString( record, SYSTEM_CODE ) )
 				.build();
 	}
 
@@ -135,23 +182,23 @@ public class Standard18Mapper implements Mapper
 	{
 		return Header2.builder()
 				.indicator( row )
-				.format( getString( record, "FORMAT" ) )
-				.block( getString( record, "BLOCK" ) )
-				.record( getString( record, "RECORD" ) )
-				.offset( getString( record, "OFFSET" ) )
+				.format( getString( record, FORMAT ) )
+				.block( getString( record, BLOCK ) )
+				.record( getString( record, RECORD ) )
+				.offset( getString( record, OFFSET ) )
 				.build();
 	}
 
 	protected UserHeader userHeader( final Record record )
 	{
 		return UserHeader.builder()
-				.processingDate( getLong( record, "PROCESSING" ) )
-				.dest( getString( record, "DEST" ) )
-				.currency( getString( record, "CURRENCY" ) )
-				.country( getString( record, "COUNTRY" ) )
-				.workCode( getString( record, "WORK_CODE" ) )
-				.file( getString( record, "FILE" ) )
-				.audit( getString( record, "AUDIT" ) )
+				.processingDate( getLong( record, PROCESSING ) )
+				.dest( getString( record, DEST ) )
+				.currency( getString( record, CURRENCY ) )
+				.country( getString( record, COUNTRY ) )
+				.workCode( getString( record, WORK_CODE ) )
+				.file( getString( record, FILE ) )
+				.audit( getString( record, AUDIT ) )
 				.build();
 	}
 
@@ -161,21 +208,21 @@ public class Standard18Mapper implements Mapper
 				.index( index++ )
 				.lineNo( record.getRowNo() )
 				.origin( Account.builder()
-						.sortCode( getString( record, "ORIG_SORT_CODE" ) )
-						.number( getString( record, "ORIG_AC_NUMBER" ) )
-						.name( getString( record, "USER_NAME" ) )
+						.sortCode( getString( record, ORIG_SORT_CODE ) )
+						.number( getString( record, ORIG_AC_NUMBER ) )
+						.name( getString( record, USER_NAME ) )
 						.build() )
 				.destination( Account.builder()
-						.sortCode( getString( record, "DEST_SORT_CODE" ) )
-						.number( getString( record, "DEST_AC_NUMBER" ) )
-						.type( getString( record, "DEST_AC_TYPE" ) )
-						.name( getString( record, "DEST_NAME" ) )
+						.sortCode( getString( record, DEST_SORT_CODE ) )
+						.number( getString( record, DEST_AC_NUMBER ) )
+						.type( getString( record, DEST_AC_TYPE ) )
+						.name( getString( record, DEST_NAME ) )
 						.build() )
-				.reference( getString( record, "DEST_REF" ) )
-				.transactionType( getString( record, "TRANS_CODE" ) )
-				.rti( getString( record, "RTI" ) )
-				.amount( getString( record, "AMOUNT" ) )
-				.processingDate( getLong( record, "PROCESS_DATE" ) )
+				.reference( getString( record, DEST_REF ) )
+				.transactionType( getString( record, TRANS_CODE ) )
+				.rti( getString( record, RTI ) )
+				.amount( getString( record, AMOUNT ) )
+				.processingDate( getLong( record, PROCESS_DATE ) )
 				.build();
 	}
 
@@ -185,32 +232,32 @@ public class Standard18Mapper implements Mapper
 				.index( index++ )
 				.lineNo( record.getRowNo() )
 				.destination( Account.builder()
-						.sortCode( getString( record, "DEST_SORT_CODE" ) )
-						.number( getString( record, "DEST_AC_NUMBER" ) )
-						.type( getString( record, "DEST_AC_TYPE" ) )
+						.sortCode( getString( record, DEST_SORT_CODE ) )
+						.number( getString( record, DEST_AC_NUMBER ) )
+						.type( getString( record, DEST_AC_TYPE ) )
 						.build() )
-				.transactionType( getString( record, "TRANS_CODE" ) )
+				.transactionType( getString( record, TRANS_CODE ) )
 				.origin( Account.builder()
-						.sortCode( getString( record, "ORIG_SORT_CODE" ) )
-						.number( getString( record, "ORIG_AC_NUMBER" ) )
-						.name( getString( record, "ORIG_AC_NAME" ) )
+						.sortCode( getString( record, ORIG_SORT_CODE ) )
+						.number( getString( record, ORIG_AC_NUMBER ) )
+						.name( getString( record, ORIG_AC_NAME ) )
 						.build() )
-				.freeFormat( getString( record, "FREE" ) )
-				.amount( getString( record, "AMOUNT" ) )
-				.narrative( getString( record, "NARRATIVE" ) )
-				.processingDate( getLong( record, "PROCESSING" ) )
+				.freeFormat( getString( record, FREE ) )
+				.amount( getString( record, AMOUNT ) )
+				.narrative( getString( record, NARRATIVE ) )
+				.processingDate( getLong( record, PROCESSING ) )
 				.build();
 	}
 
 	protected UserTrailer userTrailer( final Record record )
 	{
 		return UserTrailer.builder()
-				.debitValue( getString( record, "DEBIT_VALUE" ) )
-				.creditValue( getString( record, "CREDIT_VALUE" ) )
-				.debitCount( getInt( record, "DEBIT_COUNT" ) )
-				.creditCount( getInt( record, "CREDIT_COUNT" ) )
-				.ddiCount( getInt( record, "DDI_COUNT" ) )
-				.serviceUser( getString( record, "SERVICE_USER" ) )
+				.debitValue( getString( record, DEBIT_VALUE ) )
+				.creditValue( getString( record, CREDIT_VALUE ) )
+				.debitCount( getInt( record, DEBIT_COUNT ) )
+				.creditCount( getInt( record, CREDIT_COUNT ) )
+				.ddiCount( getInt( record, DDI_COUNT ) )
+				.serviceUser( getString( record, SERVICE_USER ) )
 				.build();
 	}
 

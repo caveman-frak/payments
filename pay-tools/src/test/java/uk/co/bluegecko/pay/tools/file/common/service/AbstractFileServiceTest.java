@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +21,9 @@ import uk.co.bluegecko.pay.test.rule.FileSystemRule;
 
 public class AbstractFileServiceTest
 {
+
+	private static final String FILE = "/test.txt";
+	private static final List< String > LINE = Arrays.asList( "Line 1", "Line 2" );
 
 	@Rule
 	public final FileSystemRule fileSystemRule = new FileSystemRule();
@@ -37,8 +41,8 @@ public class AbstractFileServiceTest
 	public final void testFileIsValidPass() throws IOException
 	{
 		final Path file = fileSystemRule.getFileSystem()
-				.getPath( "/test.txt" );
-		Files.write( file, Arrays.asList( "Line 1", "Line 2" ), StandardCharsets.UTF_8, StandardOpenOption.CREATE );
+				.getPath( FILE );
+		Files.write( file, LINE, StandardCharsets.UTF_8, StandardOpenOption.CREATE );
 
 		assertThat( fileService.isFileValid( file ), is( true ) );
 	}
@@ -47,7 +51,7 @@ public class AbstractFileServiceTest
 	public final void testFileIsValidFailNoFile()
 	{
 		final Path file = fileSystemRule.getFileSystem()
-				.getPath( "/test.txt" );
+				.getPath( FILE );
 
 		assertThat( fileService.isFileValid( file ), is( false ) );
 	}

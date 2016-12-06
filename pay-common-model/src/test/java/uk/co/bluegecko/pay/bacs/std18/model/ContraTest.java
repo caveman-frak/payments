@@ -5,18 +5,16 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Contra.ContraBuilder;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class ContraTest extends TestHarness implements TestConstants
+public class ContraTest extends TestHarness implements FakeDataConstants
 {
 
 	private ContraBuilder contraBuilder;
@@ -51,17 +49,17 @@ public class ContraTest extends TestHarness implements TestConstants
 	public final void testBuilder()
 	{
 		final Contra contra = contraBuilder.build();
-		assertThat( contra.amount(), is( new BigDecimal( "10.01" ) ) );
+		assertThat( contra.amount(), is( AMOUNT ) );
 		assertThat( contra.processingDate(), is( DATE ) );
 	}
 
 	@Test
 	public final void testBuilderAlternatives()
 	{
-		final Contra contra = contraBuilder.amount( new BigDecimal( "10.02" ) )
+		final Contra contra = contraBuilder.amount( AMOUNT )
 				.processingDate( DATE.plusDays( 1 ) )
 				.build();
-		assertThat( contra.amount(), is( new BigDecimal( "10.02" ) ) );
+		assertThat( contra.amount(), is( AMOUNT ) );
 		assertThat( contra.processingDate(), is( DATE.plusDays( 1 ) ) );
 	}
 

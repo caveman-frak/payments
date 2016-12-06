@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,14 +16,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.BureauUser;
 import uk.co.bluegecko.pay.v1.portfolio.wire.BureauUser.BureauUserBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class BureauUserTest extends TestHarness implements TestConstants
+public class BureauUserTest extends TestHarness implements FakeDataConstants
 {
 
 	private BureauUserBuilder bureauUserBuilder;
@@ -71,6 +72,20 @@ public class BureauUserTest extends TestHarness implements TestConstants
 	public final void testValidationPass()
 	{
 		assertThat( isValid( bureauUserBuilder.build() ), is( true ) );
+	}
+
+	@Test
+	public final void testValidationPassEmptySuns()
+	{
+		assertThat( isValid( bureauUserBuilder.serviceUsers( Collections.emptySet() )
+				.build() ), is( true ) );
+	}
+
+	@Test
+	public final void testValidationPassMissingSuns()
+	{
+		assertThat( isValid( bureauUserBuilder.serviceUsers( null )
+				.build() ), is( false ) );
 	}
 
 	@Test

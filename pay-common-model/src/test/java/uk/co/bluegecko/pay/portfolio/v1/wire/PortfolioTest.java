@@ -11,13 +11,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio.PortfolioBuilder;
 
 
-public class PortfolioTest extends TestHarness implements TestConstants
+public class PortfolioTest extends TestHarness implements FakeDataConstants
 {
 
 	private PortfolioBuilder portfolioBuilder;

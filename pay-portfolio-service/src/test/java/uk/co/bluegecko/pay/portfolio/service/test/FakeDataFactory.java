@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.portfolio.service.v1.test;
+package uk.co.bluegecko.pay.portfolio.service.test;
 
 
 import uk.co.bluegecko.pay.portfolio.model.Account;
@@ -8,10 +8,10 @@ import uk.co.bluegecko.pay.portfolio.model.base.AccountBase;
 import uk.co.bluegecko.pay.portfolio.model.base.BatchBase;
 import uk.co.bluegecko.pay.portfolio.model.base.InstructionBase;
 import uk.co.bluegecko.pay.portfolio.model.base.PortfolioBase;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 
 
-public abstract class FakeDataFactory implements TestConstants
+public abstract class FakeDataFactory implements FakeDataConstants
 {
 
 	protected final PortfolioBase createPortfolio()

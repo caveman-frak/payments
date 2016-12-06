@@ -395,6 +395,8 @@
 					<configuration>
 						<excludes>
 							<exclude>**/*Application.*</exclude>
+							<exclude>**/Cucumber*.*</exclude>
+							<exclude>**/Fake*.*</exclude>
 						</excludes>
 					</configuration>
 				</plugin>

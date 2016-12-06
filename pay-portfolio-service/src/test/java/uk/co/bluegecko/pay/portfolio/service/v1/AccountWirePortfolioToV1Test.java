@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.bluegecko.pay.portfolio.model.Account;
-import uk.co.bluegecko.pay.portfolio.service.v1.test.FakeDataFactory;
+import uk.co.bluegecko.pay.portfolio.service.test.FakeDataFactory;
 
 
 public class AccountWirePortfolioToV1Test extends FakeDataFactory

@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Instruction.InstructionBuilder;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class InstructionTest extends TestHarness implements TestConstants
+public class InstructionTest extends TestHarness implements FakeDataConstants
 {
 
 	private InstructionBuilder instructionBuilder;

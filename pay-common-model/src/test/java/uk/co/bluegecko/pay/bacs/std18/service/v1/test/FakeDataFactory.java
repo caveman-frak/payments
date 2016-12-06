@@ -3,13 +3,15 @@ package uk.co.bluegecko.pay.bacs.std18.service.v1.test;
 
 import uk.co.bluegecko.pay.bacs.std18.model.Account;
 import uk.co.bluegecko.pay.bacs.std18.model.Instruction;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 
 
-public abstract class FakeDataFactory implements TestConstants
+public abstract class FakeDataFactory implements FakeDataConstants
 {
 
-	protected final uk.co.bluegecko.pay.v1.portfolio.wire.Instruction createWireInstruction(uk.co.bluegecko.pay.v1.portfolio.wire.Account accountOrigin, uk.co.bluegecko.pay.v1.portfolio.wire.Account accountDestination)
+	protected final uk.co.bluegecko.pay.v1.portfolio.wire.Instruction createWireInstruction(
+			final uk.co.bluegecko.pay.v1.portfolio.wire.Account accountOrigin,
+			final uk.co.bluegecko.pay.v1.portfolio.wire.Account accountDestination )
 	{
 		return uk.co.bluegecko.pay.v1.portfolio.wire.Instruction.builder()
 				.index( INSTRUCTION_IDX )
@@ -44,7 +46,7 @@ public abstract class FakeDataFactory implements TestConstants
 				.build();
 	}
 
-	protected final Instruction createInstruction(Account accountOrigin, Account accountDestination)
+	protected final Instruction createInstruction( final Account accountOrigin, final Account accountDestination )
 	{
 		return Instruction.builder()
 				.index( INSTRUCTION_IDX )

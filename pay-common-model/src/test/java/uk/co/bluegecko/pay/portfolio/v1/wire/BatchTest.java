@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Batch;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Batch.BatchBuilder;
@@ -25,7 +25,7 @@ import uk.co.bluegecko.pay.v1.portfolio.wire.Total.Type;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class BatchTest extends TestHarness implements TestConstants
+public class BatchTest extends TestHarness implements FakeDataConstants
 {
 
 	private BatchBuilder batchBuilder;

@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.UserTrailer.UserTrailerBuilder;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class UserTrailerTest extends TestHarness implements TestConstants
+public class UserTrailerTest extends TestHarness implements FakeDataConstants
 {
 
 	private static final String DEBIT_PENCE = "0003";

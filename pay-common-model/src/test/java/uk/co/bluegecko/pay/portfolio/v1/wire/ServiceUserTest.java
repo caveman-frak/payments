@@ -3,6 +3,7 @@ package uk.co.bluegecko.pay.portfolio.v1.wire;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -16,15 +17,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode.AuddisCode;
 import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode.CreditCode;
 import uk.co.bluegecko.pay.bacs.std18.model.TransactionCode.DebitCode;
-import uk.co.bluegecko.pay.test.data.TestConstants;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.ServiceUser;
 import uk.co.bluegecko.pay.v1.portfolio.wire.ServiceUser.ServiceUserBuilder;
 
 
-public class ServiceUserTest extends TestHarness implements TestConstants
+public class ServiceUserTest extends TestHarness implements FakeDataConstants
 {
 
 	private ServiceUserBuilder serviceUserBuilder;
@@ -65,6 +67,22 @@ public class ServiceUserTest extends TestHarness implements TestConstants
 	{
 		assertThat( serviceUserBuilder.build()
 				.toString(), startsWith( "ServiceUser(" ) );
+	}
+
+	@Test
+	public final void testWithAuddis()
+	{
+		assertThat( serviceUserBuilder.auddisCodes( EnumSet.allOf( AuddisCode.class ) )
+				.build()
+				.auddisCodes(), hasSize( 3 ) );
+	}
+
+	@Test
+	public final void testWithFps()
+	{
+		assertThat( serviceUserBuilder.fpsCodes( EnumSet.of( CreditCode.DIVIDEND ) )
+				.build()
+				.fpsCodes(), hasSize( 1 ) );
 	}
 
 	@Test
