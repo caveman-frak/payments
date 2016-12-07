@@ -67,10 +67,10 @@ public class InstructionTest extends TestHarness implements FakeDataConstants
 		final String str = write( instruction );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"id\":105,\"index\":1,\"lineNo\":2,\"origin\":{\"sortCode\":\"123456\",\"number\":\"12345678\","
-						+ "\"name\":\"TESTAC1\"},\"destination\":{\"sortCode\":\"654321\",\"number\":\"87654321\","
-						+ "\"type\":\"1\"},\"transactionType\":\"99\",\"rti\":\"/001\",\"amount\":10.01,"
-						+ "\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
+				is( "{\"id\":105,\"index\":1,\"lineNo\":2,\"origin\":{\"sortCode\":\"123456\","
+						+ "\"number\":\"12345678\",\"name\":\"TESTAC1\"},\"destination\":{\"sortCode\":\"654321\","
+						+ "\"number\":\"87654321\",\"type\":\"1\"},\"transactionType\":\"99\",\"rti\":\"/001\","
+						+ "\"amount\":10.01,\"reference\":\"A-REFERENCE\",\"processingDate\":\"2015-06-01\"}" ) );
 
 		final Instruction result = read( str, Instruction.class );
 
