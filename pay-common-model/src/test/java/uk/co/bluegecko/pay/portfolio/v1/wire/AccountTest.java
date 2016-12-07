@@ -12,13 +12,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Account.AccountBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class AccountTest extends TestHarness
+public class AccountTest extends TestHarness implements FakeDataConstants
 {
 
 	private AccountBuilder accountBuilder;
@@ -27,9 +28,9 @@ public class AccountTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		accountBuilder = Account.builder()
-				.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "JOE BLOGGS" );
+				.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME );
 	}
 
 	@Test
@@ -40,13 +41,13 @@ public class AccountTest extends TestHarness
 		final String str = write( account );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"JOEBLOGGS\"}" ) );
+				is( "{\"sortCode\":\"123456\",\"number\":\"12345678\",\"name\":\"TESTAC1\"}" ) );
 
 		final Account result = read( str, Account.class );
 
-		assertThat( result.sortCode(), is( "123456" ) );
-		assertThat( result.number(), is( "12345678" ) );
-		assertThat( result.name(), is( "JOE BLOGGS" ) );
+		assertThat( result.sortCode(), is( SORT_CODE ) );
+		assertThat( result.number(), is( ACCT_NO ) );
+		assertThat( result.name(), is( ACCT_NAME ) );
 		assertThat( result.type(), is( nullValue() ) );
 	}
 
@@ -61,8 +62,8 @@ public class AccountTest extends TestHarness
 
 		final Account result = read( str, Account.class );
 
-		assertThat( result.sortCode(), is( "123456" ) );
-		assertThat( result.number(), is( "12345678" ) );
+		assertThat( result.sortCode(), is( SORT_CODE ) );
+		assertThat( result.number(), is( ACCT_NO ) );
 		assertThat( result.name(), is( nullValue() ) );
 		assertThat( result.type(), is( nullValue() ) );
 	}

@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.UserHeader.UserHeaderBuilder;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class UserHeaderTest extends TestHarness
+public class UserHeaderTest extends TestHarness implements FakeDataConstants
 {
 
 	private UserHeaderBuilder headerBuilder;
@@ -23,12 +24,12 @@ public class UserHeaderTest extends TestHarness
 	{
 		headerBuilder = UserHeader.builder()
 				.processingDate( DATE.toEpochDay() )
-				.dest( "DEST" )
-				.currency( "GBP" )
-				.country( "GB" )
-				.workCode( "1 DAILY" )
-				.file( "12345" )
-				.audit( "01" );
+				.dest( DEST )
+				.currency( CCY )
+				.country( COUNTRY )
+				.workCode( WORK_CODE )
+				.file( FILE )
+				.audit( AUDIT );
 
 	}
 
@@ -37,13 +38,13 @@ public class UserHeaderTest extends TestHarness
 	{
 		final UserHeader header = headerBuilder.build();
 
-		assertThat( header.file(), is( "12345" ) );
+		assertThat( header.file(), is( FILE ) );
 		assertThat( header.processingDate(), is( DATE ) );
-		assertThat( header.dest(), is( "DEST" ) );
-		assertThat( header.currency(), is( "GBP" ) );
-		assertThat( header.country(), is( "GB" ) );
-		assertThat( header.workCode(), is( "1 DAILY" ) );
-		assertThat( header.audit(), is( "01" ) );
+		assertThat( header.dest(), is( DEST ) );
+		assertThat( header.currency(), is( CCY ) );
+		assertThat( header.country(), is( COUNTRY ) );
+		assertThat( header.workCode(), is( WORK_CODE ) );
+		assertThat( header.audit(), is( AUDIT ) );
 	}
 
 	@Test

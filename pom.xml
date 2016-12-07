@@ -76,6 +76,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<payments.version>0.0.1-SNAPSHOT</payments.version>
 		<!-- plugin versions -->
 		<compiler-plugin.version>3.1</compiler-plugin.version>
@@ -83,7 +84,9 @@
 		<spring-boot-plugin.version>2.0.0.BUILD-SNAPSHOT</spring-boot-plugin.version>
 		<build-helper-plugin.version>1.9.1</build-helper-plugin.version>
 		<surefire-plugin.version>2.19.1</surefire-plugin.version>
+		<failsafe-plugin.version>2.19.1</failsafe-plugin.version>
 		<git-commit-plugin.version>2.2.1</git-commit-plugin.version>
+		<jacoco-plugin.version>0.7.8-SNAPSHOT</jacoco-plugin.version>
 		<!-- dependency versions -->
 		<spring-cloud-sleuth.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-sleuth.version>
 		<spring-platform.version>Cairo-BUILD-SNAPSHOT</spring-platform.version>
@@ -91,6 +94,8 @@
 		<spring-cloud.version>Camden.BUILD-SNAPSHOT</spring-cloud.version>
 		<spring-cloud-stream.version>1.0.4.BUILD-SNAPSHOT</spring-cloud-stream.version>
 		<reactor-core.version>3.0.2.RELEASE</reactor-core.version>
+		<!-- build and run properties -->
+		<integration.skip>${maven.test.skip}</integration.skip>
 	</properties>
 
 	<dependencies>
@@ -229,6 +234,33 @@
 								<goal>build-info</goal>
 							</goals>
 						</execution>
+						<execution>
+							<id>pre-integration-test</id>
+							<goals>
+								<goal>start</goal>
+							</goals>
+							<configuration>
+								<skip>${integration.skip}</skip>
+								<profiles>
+									<profile>test</profile>
+									<profile>cucumber</profile>
+								</profiles>
+								<useTestClasspath>false</useTestClasspath>
+								<arguments>
+									<argument>--server.port=${http.port}</argument>
+									<argument>--management.port=${jmx.port}</argument>
+								</arguments>
+							</configuration>
+						</execution>
+						<execution>
+							<id>post-integration-test</id>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+							<configuration>
+								<skip>${integration.skip}</skip>
+							</configuration>
+						</execution>
 					</executions>
 				</plugin>
 				<plugin>
@@ -287,6 +319,43 @@
 					</configuration>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${failsafe-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>default-integration-test</id>
+							<phase>integration-test</phase>
+							<goals>
+								<goal>integration-test</goal>
+							</goals>
+							<configuration>
+								<failIfNoTests>false</failIfNoTests>
+							</configuration>
+						</execution>
+						<execution>
+							<id>default-verify</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>verify</goal>
+							</goals>
+							<configuration>
+								<failIfNoTests>false</failIfNoTests>
+							</configuration>
+						</execution>
+					</executions>
+					<configuration>
+						<skip>${integration.skip}</skip>
+						<systemPropertyVariables>
+							<!-- store ports for use in tests -->
+							<test.http.port>${http.port}</test.http.port>
+							<test.jmx.port>${jmx.port}</test.jmx.port>
+							<!-- activate cucumber profile -->
+							<spring.profiles.active>test,cucumber</spring.profiles.active>
+						</systemPropertyVariables>
+					</configuration>
+				</plugin>
+				<plugin>
 					<groupId>pl.project13.maven</groupId>
 					<artifactId>git-commit-id-plugin</artifactId>
 					<version>${git-commit-plugin.version}</version>
@@ -306,54 +375,9 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.assertj</groupId>
-					<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
-					<version>2.0.0</version>
-					<executions>
-						<execution>
-							<id>default-generate-assertions</id>
-							<goals>
-								<goal>generate-assertions</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<packages>
-							<param>uk.co.bluegecko.pay.common.model</param>
-							<param>uk.co.bluegecko.pay.portfolio.v1.wire</param>
-						</packages>
-						<hierarchical>true</hierarchical>
-						<targetDir>${project.build.directory}/generated-test-sources/java</targetDir>
-						<entryPointClassPackage>uk.co.bluegecko.pay.test.asserts</entryPointClassPackage>
-						<generateAssertions>true</generateAssertions>
-						<generateBddAssertions>false</generateBddAssertions>
-						<generateSoftAssertions>true</generateSoftAssertions>
-						<generateJUnitSoftAssertions>true</generateJUnitSoftAssertions>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.9</version>
-					<executions>
-						<execution>
-							<id>add-source</id>
-							<phase>generate-test-sources</phase>
-							<goals>
-								<goal>add-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<source>${project.build.directory}/generated-test-sources/java</source>
-								</sources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.7.7.201606060606</version>
+					<version>${jacoco-plugin.version}</version>
 					<executions>
 						<execution>
 							<goals>
@@ -368,12 +392,33 @@
 							</goals>
 						</execution>
 					</executions>
+					<configuration>
+						<excludes>
+							<exclude>**/*Application.*</exclude>
+							<exclude>**/Cucumber*.*</exclude>
+							<exclude>**/Fake*.*</exclude>
+						</excludes>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
 
 	<repositories>
+		<repository>
+			<id>jfrog-artifactory-public</id>
+			<name>JFrog Artifactory Public</name>
+			<url>https://repo.jfrog.org/artifactory/libs-snapshots</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>oss-jfrog-artifactory-public</id>
 			<name>OSS JFrog Artifactory Public</name>
@@ -407,6 +452,34 @@
 	</repositories>
 
 	<pluginRepositories>
+		<pluginRepository>
+			<id>jfrog-artifactory-public</id>
+			<name>JFrog Artifactory Public</name>
+			<url>https://repo.jfrog.org/artifactory/plugins-snapshots</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>oss-jfrog-artifactory-public</id>
+			<name>OSS JFrog Artifactory Public</name>
+			<url>https://oss.jfrog.org/artifactory/plugins-snapshot</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</pluginRepository>
 		<pluginRepository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>

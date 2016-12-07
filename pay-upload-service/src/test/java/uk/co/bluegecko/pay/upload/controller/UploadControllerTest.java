@@ -32,6 +32,8 @@ import uk.co.bluegecko.pay.upload.service.UploadService;
 public class UploadControllerTest extends TestHarness
 {
 
+	private static final String COMLETED = "COMLETED: 1";
+
 	@Autowired
 	private MockMvc mvc;
 
@@ -48,7 +50,7 @@ public class UploadControllerTest extends TestHarness
 				"Spring Framework".getBytes() );
 		mvc.perform( fileUpload( UPLOAD ).file( multipartFile ) )
 				.andExpect( status().isAccepted() )
-				.andExpect( header().string( "Location", "/status/0" ) );
+				.andExpect( header().string( "Location", "http://localhost/status/0" ) );
 
 		verify( uploadService ).processFile( multipartFile );
 	}
@@ -56,11 +58,11 @@ public class UploadControllerTest extends TestHarness
 	@Test
 	public final void testFileStatus() throws Exception
 	{
-		when( uploadService.getJobStatus( 1L ) ).thenReturn( "COMLETED: 1" );
+		when( uploadService.getJobStatus( 1L ) ).thenReturn( COMLETED );
 
 		mvc.perform( get( STATUS, 1L ) )
 				.andExpect( status().isOk() )
-				.andExpect( content().string( "COMLETED: 1" ) );
+				.andExpect( content().string( COMLETED ) );
 
 		verify( uploadService ).getJobStatus( 1L );
 	}

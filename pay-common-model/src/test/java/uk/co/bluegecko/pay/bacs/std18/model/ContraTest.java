@@ -5,17 +5,16 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
-import java.math.BigDecimal;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import uk.co.bluegecko.pay.bacs.std18.model.Contra.ContraBuilder;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 
 
-public class ContraTest extends TestHarness
+public class ContraTest extends TestHarness implements FakeDataConstants
 {
 
 	private ContraBuilder contraBuilder;
@@ -24,42 +23,43 @@ public class ContraTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		final Account origin = Account.builder()
-				.sortCode( "123456" )
-				.number( "12345678" )
-				.name( "B.BAGGINS" )
+				.sortCode( SORT_CODE )
+				.number( ACCT_NO )
+				.name( ACCT_NAME )
+				.type( ACCT_TYPE )
 				.build();
 		final Account destination = Account.builder()
-				.sortCode( "654321" )
-				.number( "87654321" )
-				.type( "8" )
+				.sortCode( DEST_SORT_CODE )
+				.number( DEST_ACCT_NO )
+				.type( DEST_ACCT_TYPE )
 				.build();
 
 		contraBuilder = Contra.builder()
-				.index( 1 )
-				.lineNo( 3 )
+				.index( INSTRUCTION_IDX )
+				.lineNo( LINE_NO )
 				.origin( origin )
 				.destination( destination )
-				.transactionType( "99" )
-				.amount( "1001" )
+				.transactionType( TRANSACTION_TYPE )
+				.amount( PENCE )
 				.processingDate( DATE.toEpochDay() )
-				.narrative( "A-NARRATIVE" );
+				.narrative( REFERENCE );
 	}
 
 	@Test
 	public final void testBuilder()
 	{
 		final Contra contra = contraBuilder.build();
-		assertThat( contra.amount(), is( new BigDecimal( "10.01" ) ) );
+		assertThat( contra.amount(), is( AMOUNT ) );
 		assertThat( contra.processingDate(), is( DATE ) );
 	}
 
 	@Test
 	public final void testBuilderAlternatives()
 	{
-		final Contra contra = contraBuilder.amount( new BigDecimal( "10.02" ) )
+		final Contra contra = contraBuilder.amount( AMOUNT )
 				.processingDate( DATE.plusDays( 1 ) )
 				.build();
-		assertThat( contra.amount(), is( new BigDecimal( "10.02" ) ) );
+		assertThat( contra.amount(), is( AMOUNT ) );
 		assertThat( contra.processingDate(), is( DATE.plusDays( 1 ) ) );
 	}
 

@@ -13,6 +13,8 @@ public interface TransactionCode
 
 	public String code();
 
+	public TransactionType transactionType();
+
 	public enum CreditCode implements TransactionCode
 	{
 		CREDIT( "99" ), INTEREST( "Z4" ), DIVIDEND( "Z5" );
@@ -29,6 +31,13 @@ public interface TransactionCode
 		{
 			return code;
 		}
+
+		@Override
+		public TransactionType transactionType()
+		{
+			return TransactionType.CREDIT;
+		}
+
 	}
 
 	public enum DebitCode implements TransactionCode
@@ -47,6 +56,13 @@ public interface TransactionCode
 		{
 			return code;
 		}
+
+		@Override
+		public TransactionType transactionType()
+		{
+			return TransactionType.DEBIT;
+		}
+
 	}
 
 	public enum AuddisCode implements TransactionCode
@@ -65,6 +81,13 @@ public interface TransactionCode
 		{
 			return code;
 		}
+
+		@Override
+		public TransactionType transactionType()
+		{
+			return TransactionType.AUDDIS;
+		}
+
 	}
 
 	public static < T extends Enum< ? extends TransactionCode > & TransactionCode > T byCode( final Class< T > klass,

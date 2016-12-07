@@ -9,20 +9,26 @@ import uk.co.bluegecko.pay.portfolio.model.base.PortfolioBase;
 
 
 @Service
-public class PortfolioWirePortfolioToV1 implements WireService< Portfolio, uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio >
+public class PortfolioWirePortfolioToV1
+		implements WireService< Portfolio, uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio >
 {
 
 	@Override
 	public Portfolio fromWire( final uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio portfolio, final Object... params )
 	{
-		return new PortfolioBase( portfolio.id() );
+		return new PortfolioBase( portfolio.id() ).name( portfolio.name() )
+				.userNumber( portfolio.userNumber() )
+				.serialNo( portfolio.serialNo() );
 	}
 
 	@Override
-	public uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio toWire( final Portfolio batch, final Object... params )
+	public uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio toWire( final Portfolio portfolio, final Object... params )
 	{
 		return uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio.builder()
-				.id( batch.id() )
+				.id( portfolio.id() )
+				.name( portfolio.name() )
+				.userNumber( portfolio.userNumber() )
+				.serialNo( portfolio.serialNo() )
 				.build();
 	}
 

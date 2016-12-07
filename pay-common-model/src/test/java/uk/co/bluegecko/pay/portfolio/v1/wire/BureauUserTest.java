@@ -8,18 +8,22 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.BureauUser;
 import uk.co.bluegecko.pay.v1.portfolio.wire.BureauUser.BureauUserBuilder;
 import uk.co.bluegecko.pay.view.View;
 
 
-public class BureauUserTest extends TestHarness
+public class BureauUserTest extends TestHarness implements FakeDataConstants
 {
 
 	private BureauUserBuilder bureauUserBuilder;
@@ -28,9 +32,9 @@ public class BureauUserTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		bureauUserBuilder = BureauUser.builder()
-				.userNumber( "B12345" )
-				.serviceUser( "123456" )
-				.serviceUser( "456789" );
+				.userNumber( BUN )
+				.serviceUsers( Stream.of( SUN, SUN_2 )
+						.collect( Collectors.toSet() ) );
 	}
 
 	@Test
@@ -41,12 +45,12 @@ public class BureauUserTest extends TestHarness
 		final String str = write( bureauUser );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"userNumber\":\"B12345\",\"serviceUsers\":[\"123456\",\"456789\"]}" ) );
+				is( "{\"userNumber\":\"B12345\",\"serviceUsers\":[\"012345\",\"567890\"]}" ) );
 
 		final BureauUser result = read( str, BureauUser.class );
 
-		assertThat( result.userNumber(), is( "B12345" ) );
-		assertThat( result.serviceUsers(), hasItems( "123456", "456789" ) );
+		assertThat( result.userNumber(), is( BUN ) );
+		assertThat( result.serviceUsers(), hasItems( SUN, SUN_2 ) );
 	}
 
 	@Test
@@ -60,7 +64,7 @@ public class BureauUserTest extends TestHarness
 
 		final BureauUser result = read( str, BureauUser.class );
 
-		assertThat( result.userNumber(), is( "B12345" ) );
+		assertThat( result.userNumber(), is( BUN ) );
 		assertThat( result.serviceUsers(), is( empty() ) );
 	}
 
@@ -71,9 +75,23 @@ public class BureauUserTest extends TestHarness
 	}
 
 	@Test
+	public final void testValidationPassEmptySuns()
+	{
+		assertThat( isValid( bureauUserBuilder.serviceUsers( Collections.emptySet() )
+				.build() ), is( true ) );
+	}
+
+	@Test
+	public final void testValidationPassMissingSuns()
+	{
+		assertThat( isValid( bureauUserBuilder.serviceUsers( null )
+				.build() ), is( false ) );
+	}
+
+	@Test
 	public final void testValidationFailUserNumber()
 	{
-		assertThat( isValid( bureauUserBuilder.userNumber( "123456" )
+		assertThat( isValid( bureauUserBuilder.userNumber( SUN )
 				.build() ), is( false ) );
 	}
 

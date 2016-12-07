@@ -44,16 +44,56 @@ import uk.co.bluegecko.pay.common.service.base.ParsingServiceBase;
 public class Standard18MapperTest
 {
 
+	private static final String MISSING = "MISSING";
+
+	private static final String FORMAT = "F";
+	private static final String AUDIT = "AUD0000";
+	private static final String FILE_ID = "001";
+	private static final String WORK_CODE = "4 MULTI";
+	private static final String DEST = "999999";
+	private static final String RECORD = "00106";
+	private static final String OFFSET = "00";
+	private static final String CCY = "AA";
+	private static final String COUNTRY = "0000BB";
+	private static final String BLOCK = "00512";
+	private static final String LABEL = "1";
+	private static final String BLOCK_COUNT = "000000";
+	private static final int SECTION = 1;
+	private static final int SEQUENCE = 1;
+	private static final int GENERATION = 0;
+	private static final int VERSION = 0;
+	private static final int VERSION_2 = 4;
+	private static final int GENERATION_2 = 819;
+	private static final String FILE = "A100101S  1100101";
+	private static final String SUN = "100101";
+	private static final String SERIAL_NO = "173922";
+	private static final String SORT_CODE = "402024";
+	private static final String ACCT_NO = "21315692";
+	private static final String ACCT_NAME = "BSDSAF 00000000055";
+	private static final String ACCT_TYPE = "0";
+	private static final String DEST_SORT_CODE = "010039";
+	private static final String DEST_ACCT_NO = "01059963";
+	private static final String DEST_ACCT_NAME = "OA NAME 09";
+	private static final String CREDIT_CODE = "99";
+	private static final String DEBIT_CODE = "17";
+	private static final String NARRATIVE = "OSTEXT 09";
+	private static final String RTI = "/000";
+	private static final String REFERENCE = "REF&LT 00000000055";
+	private static final int CREDIT_COUNT = 1;
+	private static final int DEBIT_COUNT = 1;
+	private static final int DDI_COUNT = 0;
+	private static final BigDecimal VALUE = new BigDecimal( "0.55" );
+
 	private static final String[] LINES =
 		{ "VOL1173922                               100101                                1                          ",
 				"HDR1A100101S  110010117392200010001       08194 08192 000000                                              ",
 				"HDR2F0051200106                                   00                                                      ",
-				"UHL1 14308999999    000000004 MULTI  001       AUD0000                                                    ",
-				"0100390105996309940202421315692000000000000006BSDSAF 00000000006REF&LT 00000000006NAME   00000000006 14308     ",
-				"4020242131569201740202421315692/00000000000001OSTEXT 09         CONTRA            OA NAME 09         16116",
+				"UHL1 14308999999    AA0000BB4 MULTI  001       AUD0000                                                    ",
+				"0100390105996309940202421315692/00000000000055BSDSAF 00000000055REF&LT 00000000055NAME   00000000055 14308     ",
+				"4020242131569201740202421315692/00000000000055OSTEXT 09         CONTRA            OA NAME 09         16116",
 				"EOF1A100101S  11001011739220001000108194 08192 000000                                              ",
 				"EOF2F0051200106                                   00                                                      ",
-				"UTL10000000000055000000000005500000010000010        0000000                                              " };
+				"UTL10000000000055000000000005500000010000001        0000000                                              " };
 
 	private Standard18Mapper standard18Mapper;
 	private BiConsumer< Row, Object > consumer;
@@ -75,10 +115,10 @@ public class Standard18MapperTest
 	{
 		final Volume value = parseAndVerify( Row.VOL1, Volume.class );
 
-		assertThat( value.serialNo(), is( "173922" ) );
+		assertThat( value.serialNo(), is( SERIAL_NO ) );
 		assertThat( value.accessibility(), is( nullValue() ) );
-		assertThat( value.userNumber(), is( "100101" ) );
-		assertThat( value.label(), is( "1" ) );
+		assertThat( value.userNumber(), is( SUN ) );
+		assertThat( value.label(), is( LABEL ) );
 	}
 
 	@Test
@@ -87,16 +127,16 @@ public class Standard18MapperTest
 		final Header1 value = parseAndVerify( Row.HDR1, Header1.class );
 
 		assertThat( value.indicator(), is( Row.HDR1 ) );
-		assertThat( value.file(), is( "A100101S  1100101" ) );
-		assertThat( value.set(), is( "173922" ) );
-		assertThat( value.section(), is( "0001" ) );
-		assertThat( value.sequence(), is( "0001" ) );
-		assertThat( value.generation(), is( nullValue() ) );
-		assertThat( value.version(), is( nullValue() ) );
+		assertThat( value.file(), is( FILE ) );
+		assertThat( value.set(), is( SERIAL_NO ) );
+		assertThat( value.section(), is( SECTION ) );
+		assertThat( value.sequence(), is( SEQUENCE ) );
+		assertThat( value.generation(), is( GENERATION ) );
+		assertThat( value.version(), is( VERSION ) );
 		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 8 ) ) );
 		assertThat( value.expires(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
 		assertThat( value.accessibility(), is( nullValue() ) );
-		assertThat( value.blockCount(), is( "000000" ) );
+		assertThat( value.blockCount(), is( BLOCK_COUNT ) );
 		assertThat( value.systemCode(), is( nullValue() ) );
 	}
 
@@ -106,10 +146,10 @@ public class Standard18MapperTest
 		final Header2 value = parseAndVerify( Row.HDR2, Header2.class );
 
 		assertThat( value.indicator(), is( Row.HDR2 ) );
-		assertThat( value.format(), is( "F" ) );
-		assertThat( value.block(), is( "00512" ) );
-		assertThat( value.offset(), is( "00" ) );
-		assertThat( value.record(), is( "00106" ) );
+		assertThat( value.format(), is( FORMAT ) );
+		assertThat( value.block(), is( BLOCK ) );
+		assertThat( value.offset(), is( OFFSET ) );
+		assertThat( value.record(), is( RECORD ) );
 	}
 
 	@Test
@@ -118,12 +158,12 @@ public class Standard18MapperTest
 		final UserHeader value = parseAndVerify( Row.UHL1, UserHeader.class );
 
 		assertThat( value.processingDate(), is( LocalDate.of( 2009, Month.MARCH, 5 ) ) );
-		assertThat( value.dest(), is( "999999" ) );
-		assertThat( value.currency(), is( "00" ) );
-		assertThat( value.country(), is( "000000" ) );
-		assertThat( value.workCode(), is( "4 MULTI" ) );
-		assertThat( value.file(), is( "001" ) );
-		assertThat( value.audit(), is( "AUD0000" ) );
+		assertThat( value.dest(), is( DEST ) );
+		assertThat( value.currency(), is( CCY ) );
+		assertThat( value.country(), is( COUNTRY ) );
+		assertThat( value.workCode(), is( WORK_CODE ) );
+		assertThat( value.file(), is( FILE_ID ) );
+		assertThat( value.audit(), is( AUDIT ) );
 	}
 
 	@Test
@@ -134,21 +174,21 @@ public class Standard18MapperTest
 		assertThat( value.index(), is( 0 ) );
 		assertThat( value.lineNo(), is( 1 ) );
 		assertThat( value.origin()
-				.sortCode(), is( "402024" ) );
+				.sortCode(), is( SORT_CODE ) );
 		assertThat( value.origin()
-				.number(), is( "21315692" ) );
+				.number(), is( ACCT_NO ) );
 		assertThat( value.origin()
-				.name(), is( "BSDSAF 00000000006" ) );
+				.name(), is( ACCT_NAME ) );
 		assertThat( value.destination()
-				.sortCode(), is( "010039" ) );
+				.sortCode(), is( DEST_SORT_CODE ) );
 		assertThat( value.destination()
-				.number(), is( "01059963" ) );
+				.number(), is( DEST_ACCT_NO ) );
 		assertThat( value.destination()
-				.type(), is( "0" ) );
-		assertThat( value.reference(), is( "REF&LT 00000000006" ) );
-		assertThat( value.transactionType(), is( "99" ) );
-		assertThat( value.rti(), is( "0000" ) );
-		assertThat( value.amount(), is( new BigDecimal( "0.06" ) ) );
+				.type(), is( ACCT_TYPE ) );
+		assertThat( value.reference(), is( REFERENCE ) );
+		assertThat( value.transactionType(), is( CREDIT_CODE ) );
+		assertThat( value.rti(), is( RTI ) );
+		assertThat( value.amount(), is( VALUE ) );
 		assertThat( value.processingDate(), is( LocalDate.of( 2009, Month.MARCH, 5 ) ) );
 	}
 
@@ -160,21 +200,21 @@ public class Standard18MapperTest
 		assertThat( value.index(), is( 0 ) );
 		assertThat( value.lineNo(), is( 1 ) );
 		assertThat( value.destination()
-				.sortCode(), is( "402024" ) );
+				.sortCode(), is( SORT_CODE ) );
 		assertThat( value.destination()
-				.number(), is( "21315692" ) );
+				.number(), is( ACCT_NO ) );
 		assertThat( value.destination()
-				.type(), is( "0" ) );
-		assertThat( value.transactionType(), is( "17" ) );
+				.type(), is( ACCT_TYPE ) );
+		assertThat( value.transactionType(), is( DEBIT_CODE ) );
 		assertThat( value.origin()
-				.sortCode(), is( "402024" ) );
+				.sortCode(), is( SORT_CODE ) );
 		assertThat( value.origin()
-				.number(), is( "21315692" ) );
+				.number(), is( ACCT_NO ) );
 		assertThat( value.origin()
-				.name(), is( "OA NAME 09" ) );
-		assertThat( value.amount(), is( new BigDecimal( "0.01" ) ) );
-		assertThat( value.freeFormat(), is( "/000" ) );
-		assertThat( value.narrative(), is( "OSTEXT 09" ) );
+				.name(), is( DEST_ACCT_NAME ) );
+		assertThat( value.amount(), is( VALUE ) );
+		assertThat( value.freeFormat(), is( RTI ) );
+		assertThat( value.narrative(), is( NARRATIVE ) );
 		assertThat( value.processingDate(), is( LocalDate.of( 2014, Month.FEBRUARY, 15 ) ) );
 	}
 
@@ -184,12 +224,12 @@ public class Standard18MapperTest
 		final Header1 value = parseAndVerify( Row.EOF1, Header1.class );
 
 		assertThat( value.indicator(), is( Row.EOF1 ) );
-		assertThat( value.file(), is( "A100101S  1100101" ) );
-		assertThat( value.set(), is( "173922" ) );
-		assertThat( value.section(), is( "0001" ) );
-		assertThat( value.sequence(), is( "0001" ) );
-		assertThat( value.generation(), is( "0819" ) );
-		assertThat( value.version(), is( "4" ) );
+		assertThat( value.file(), is( FILE ) );
+		assertThat( value.set(), is( SERIAL_NO ) );
+		assertThat( value.section(), is( SECTION ) );
+		assertThat( value.sequence(), is( SEQUENCE ) );
+		assertThat( value.generation(), is( GENERATION_2 ) );
+		assertThat( value.version(), is( VERSION_2 ) );
 		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
 		assertThat( value.expires(), is( LocalDate.of( 1970, Month.JANUARY, 1 ) ) );
 		assertThat( value.accessibility(), is( nullValue() ) );
@@ -203,10 +243,10 @@ public class Standard18MapperTest
 		final Header2 value = parseAndVerify( Row.EOF2, Header2.class );
 
 		assertThat( value.indicator(), is( Row.EOF2 ) );
-		assertThat( value.format(), is( "F" ) );
-		assertThat( value.block(), is( "00512" ) );
-		assertThat( value.offset(), is( "00" ) );
-		assertThat( value.record(), is( "00106" ) );
+		assertThat( value.format(), is( FORMAT ) );
+		assertThat( value.block(), is( BLOCK ) );
+		assertThat( value.offset(), is( OFFSET ) );
+		assertThat( value.record(), is( RECORD ) );
 	}
 
 	@Test
@@ -214,11 +254,11 @@ public class Standard18MapperTest
 	{
 		final UserTrailer value = parseAndVerify( Row.UTL1, UserTrailer.class );
 
-		assertThat( value.creditCount(), is( 10 ) );
-		assertThat( value.creditValue(), is( new BigDecimal( "0.55" ) ) );
-		assertThat( value.debitCount(), is( 1 ) );
-		assertThat( value.debitValue(), is( new BigDecimal( "0.55" ) ) );
-		assertThat( value.ddiCount(), is( 0 ) );
+		assertThat( value.creditCount(), is( CREDIT_COUNT ) );
+		assertThat( value.creditValue(), is( VALUE ) );
+		assertThat( value.debitCount(), is( DEBIT_COUNT ) );
+		assertThat( value.debitValue(), is( VALUE ) );
+		assertThat( value.ddiCount(), is( DDI_COUNT ) );
 		assertThat( value.serviceUser(), is( nullValue() ) );
 	}
 
@@ -244,28 +284,28 @@ public class Standard18MapperTest
 		verify( consumer ).accept( eq( Row.VOL1 ), argument.capture() );
 		final Volume value = argument.getValue();
 
-		assertThat( value.serialNo(), is( "173922" ) );
+		assertThat( value.serialNo(), is( SERIAL_NO ) );
 		assertThat( value.accessibility(), is( nullValue() ) );
-		assertThat( value.userNumber(), is( "100101" ) );
+		assertThat( value.userNumber(), is( SUN ) );
 		assertThat( value.label(), is( nullValue() ) );
 	}
 
 	@Test
 	public final void testGetStringMissing()
 	{
-		assertThat( standard18Mapper.getString( createDummyRecord(), "MISSING" ), is( nullValue() ) );
+		assertThat( standard18Mapper.getString( createDummyRecord(), MISSING ), is( nullValue() ) );
 	}
 
 	@Test
 	public final void testGetLongMissing()
 	{
-		assertThat( standard18Mapper.getLong( createDummyRecord(), "MISSING" ), is( 0L ) );
+		assertThat( standard18Mapper.getLong( createDummyRecord(), MISSING ), is( nullValue() ) );
 	}
 
 	@Test
 	public final void testGetIntMissing()
 	{
-		assertThat( standard18Mapper.getInt( createDummyRecord(), "MISSING" ), is( 0 ) );
+		assertThat( standard18Mapper.getInt( createDummyRecord(), MISSING ), is( 0 ) );
 	}
 
 	protected RowRecord createDummyRecord()

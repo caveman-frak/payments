@@ -1,6 +1,7 @@
 package uk.co.bluegecko.pay.v1.portfolio.wire;
 
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.constraints.Min;
@@ -12,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import lombok.Builder;
-import lombok.Singular;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import uk.co.bluegecko.pay.view.View;
@@ -20,7 +20,8 @@ import uk.co.bluegecko.pay.view.View;
 
 @JsonDeserialize( builder = Batch.BatchBuilder.class )
 @Value
-@Builder @Accessors( fluent = true )
+@Builder
+@Accessors( fluent = true )
 public class Batch
 {
 
@@ -34,17 +35,24 @@ public class Batch
 	private final Long portfolio;
 	@Length( max = 50 )
 	private final String name;
+	private final String userNumber;
 	private final String set;
 	private final int section;
 	private final int sequence;
 	private final int generation;
 	private final int version;
-	@Singular
 	@JsonView( View.Detailed.class )
 	private final Set< Total > totals;
 
 	@JsonPOJOBuilder( withPrefix = "" )
 	public static final class BatchBuilder
-	{}
+	{
+
+		private BatchBuilder()
+		{
+			totals = Collections.emptySet();
+		}
+
+	}
 
 }

@@ -15,6 +15,11 @@
 	</parent>
 
 	<properties>
+		<assertj.version>3.5.2</assertj.version>
+		<jimfs.version>1.1</jimfs.version>
+		<mockserver-netty.version>3.10.4</mockserver-netty.version>
+		<equals-verifier.version>2.1.7</equals-verifier.version>
+		<cucumber.version>1.2.5</cucumber.version>
 	</properties>
 
 	<dependencies>
@@ -38,6 +43,18 @@
 			<groupId>nl.jqno.equalsverifier</groupId>
 			<artifactId>equalsverifier</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-spring</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -45,22 +62,37 @@
 			<dependency>
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>
-				<version>3.5.2</version>
+				<version>${assertj.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.jimfs</groupId>
 				<artifactId>jimfs</artifactId>
-				<version>1.1</version>
+				<version>${jimfs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.mock-server</groupId>
 				<artifactId>mockserver-netty</artifactId>
-				<version>3.10.4</version>
+				<version>${mockserver-netty.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>nl.jqno.equalsverifier</groupId>
 				<artifactId>equalsverifier</artifactId>
-				<version>2.1.7</version>
+				<version>${equals-verifier.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>info.cukes</groupId>
+				<artifactId>cucumber-java8</artifactId>
+				<version>${cucumber.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>info.cukes</groupId>
+				<artifactId>cucumber-junit</artifactId>
+				<version>${cucumber.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>info.cukes</groupId>
+				<artifactId>cucumber-spring</artifactId>
+				<version>${cucumber.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

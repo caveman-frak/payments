@@ -11,12 +11,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import uk.co.bluegecko.pay.test.data.FakeDataConstants;
 import uk.co.bluegecko.pay.test.harness.TestHarness;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio;
 import uk.co.bluegecko.pay.v1.portfolio.wire.Portfolio.PortfolioBuilder;
 
 
-public class PortfolioTest extends TestHarness
+public class PortfolioTest extends TestHarness implements FakeDataConstants
 {
 
 	private PortfolioBuilder portfolioBuilder;
@@ -25,10 +26,10 @@ public class PortfolioTest extends TestHarness
 	public void setUp() throws Exception
 	{
 		portfolioBuilder = Portfolio.builder()
-				.id( 10L )
-				.name( "PORTFOLIO #1" )
-				.serialNo( "321" )
-				.userNumber( "123456" );
+				.id( PORTFOLIO_ID )
+				.name( PORTFOLIO_NAME )
+				.serialNo( SERIAL_NO )
+				.userNumber( SUN );
 	}
 
 	@Test
@@ -39,14 +40,14 @@ public class PortfolioTest extends TestHarness
 		final String str = write( portfolio );
 
 		assertThat( stripWhitespace( str ),
-				is( "{\"id\":10,\"name\":\"PORTFOLIO#1\",\"serialNo\":\"321\",\"userNumber\":\"123456\"}" ) );
+				is( "{\"id\":102,\"name\":\"PORTFOLIO#1\",\"serialNo\":\"321\",\"userNumber\":\"012345\"}" ) );
 
 		final Portfolio result = read( str, Portfolio.class );
 
-		assertThat( result.id(), is( 10L ) );
-		assertThat( result.name(), is( "PORTFOLIO #1" ) );
-		assertThat( result.serialNo(), is( "321" ) );
-		assertThat( result.userNumber(), is( "123456" ) );
+		assertThat( result.id(), is( PORTFOLIO_ID ) );
+		assertThat( result.name(), is( PORTFOLIO_NAME ) );
+		assertThat( result.serialNo(), is( SERIAL_NO ) );
+		assertThat( result.userNumber(), is( SUN ) );
 	}
 
 	@Test

@@ -53,19 +53,37 @@ public class TransactionCodeTest
 	@Test( expected = IllegalArgumentException.class )
 	public final void testByCodeFail()
 	{
-		TransactionCode.byCode( CreditCode.class, "17" );
+		TransactionCode.byCode( CreditCode.class, "18" );
 	}
 
 	@Test
 	public final void testAllByCodePass()
 	{
-		assertThat( TransactionCode.byCode( "Z4" ), is( CreditCode.INTEREST ) );
+		assertThat( TransactionCode.byCode( "Z5" ), is( CreditCode.DIVIDEND ) );
 	}
 
 	@Test( expected = IllegalArgumentException.class )
 	public final void testAllByCodeFail()
 	{
 		TransactionCode.byCode( "XX" );
+	}
+
+	@Test
+	public final void testCreditType()
+	{
+		assertThat( CreditCode.CREDIT.transactionType(), is( TransactionType.CREDIT ) );
+	}
+
+	@Test
+	public final void testDebitType()
+	{
+		assertThat( DebitCode.REGULAR.transactionType(), is( TransactionType.DEBIT ) );
+	}
+
+	@Test
+	public final void testAuddisType()
+	{
+		assertThat( AuddisCode.NEW.transactionType(), is( TransactionType.AUDDIS ) );
 	}
 
 }
