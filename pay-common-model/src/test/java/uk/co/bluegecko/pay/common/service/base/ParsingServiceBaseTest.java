@@ -3,6 +3,7 @@ package uk.co.bluegecko.pay.common.service.base;
 
 import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,7 +26,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import uk.co.bluegecko.pay.common.service.Mapper;
-import uk.co.bluegecko.pay.common.service.ParsingService;
 
 
 public class ParsingServiceBaseTest
@@ -35,7 +35,7 @@ public class ParsingServiceBaseTest
 	private static final String TYPE = "VOL1";
 	private static final String LINE = "VOL1173922                               100101                                1";
 
-	private ParsingService parsingService;
+	private ParsingServiceBase parsingService;
 
 	@Before
 	public void setUp() throws Exception
@@ -46,9 +46,6 @@ public class ParsingServiceBaseTest
 	@Test
 	public final void testParseWithMap() throws IOException
 	{
-		final Mapper mapper = mock( Mapper.class );
-		when( mapper.name() ).thenReturn( TEST );
-
 		final StreamFactory factory = parsingService.factory();
 		factory.define( new StreamBuilder( TEST ).format( "fixedlength" )
 				.parser( new FixedLengthRecordParserFactory() )
@@ -60,19 +57,35 @@ public class ParsingServiceBaseTest
 								.ignore() )
 						.addField( new FieldBuilder( "text" ).length( 6 ) ) ) );
 
+		final Mapper< TextParsingContext > mapper = mock( Mapper.class );
+		when( mapper.name() ).thenReturn( TEST );
+		when( mapper.addMapping( any( StreamFactory.class ) ) ).thenReturn( factory );
+		when( mapper.newContext( any( BeanReader.class ) ) )
+				.thenAnswer( invocation -> new TextParsingContext( invocation.getArgumentAt( 0, BeanReader.class ) ) );
+
 		try (Reader dataFile = new StringReader( LINE ))
 		{
-			parsingService.parse( dataFile, factory, mapper );
+			parsingService.parse( dataFile, mapper );
 
 			@SuppressWarnings( "rawtypes" )
 			final ArgumentCaptor< Map > record = ArgumentCaptor.forClass( Map.class );
-			final ArgumentCaptor< BeanReader > reader = ArgumentCaptor.forClass( BeanReader.class );
+			final ArgumentCaptor< TextParsingContext > contect = ArgumentCaptor.forClass( TextParsingContext.class );
 
-			verify( mapper, times( 1 ) ).map( record.capture(), reader.capture() );
+			verify( mapper, times( 1 ) ).map( record.capture(), contect.capture() );
 
 			final Map< String, Object > value = record.getValue();
 			assertThat( value, hasEntry( "text", "173922" ) );
 		}
+	}
+
+	private static final class TextParsingContext extends AbstractParsingContext
+	{
+
+		public TextParsingContext( final BeanReader reader )
+		{
+			super( reader );
+		}
+
 	}
 
 }

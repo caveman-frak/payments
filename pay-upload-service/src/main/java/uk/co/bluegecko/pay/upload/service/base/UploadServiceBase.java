@@ -42,13 +42,13 @@ public class UploadServiceBase implements UploadService
 	{
 		final Standard18Mapper standard18Mapper = new Standard18Mapper();
 
-		standard18Mapper.add( Row.INSTR,
+		standard18Mapper.addRow( Row.INSTR,
 				( final Row row, final Object value ) -> streamingService.sendInstruction( ( Instruction ) value ) );
 
 		logger.info( "processing: {}", file.getOriginalFilename() );
 
 		parsingService.parse( new InputStreamReader( file.getInputStream(), StandardCharsets.UTF_8 ),
-				standard18Mapper.addMapping( parsingService.factory() ), standard18Mapper );
+				standard18Mapper );
 
 		return 0;
 	}

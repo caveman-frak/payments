@@ -29,7 +29,7 @@ import uk.co.bluegecko.pay.bacs.std18.model.Volume;
 import uk.co.bluegecko.pay.common.service.Mapper;
 
 
-public class Standard18Mapper implements Mapper
+public class Standard18Mapper implements Mapper< Standard18Context >
 {
 
 	// argument position
@@ -103,6 +103,7 @@ public class Standard18Mapper implements Mapper
 	private static final String FIXED_LENGTH = "fixedlength";
 	private static final String PENCE_HANDLER = "penceHandler";
 	private static final String JULIAN_DATE_HANDLER = "julianDateHandler";
+
 	private final Map< Row, BiConsumer< Row, Object > > consumers;
 
 	public Standard18Mapper()
@@ -111,9 +112,17 @@ public class Standard18Mapper implements Mapper
 	}
 
 	@Override
-	public void map( final Object record, final BeanReader reader )
+	public Standard18Context newContext( final BeanReader reader )
 	{
+		return new Standard18Context( reader );
+	}
+
+	@Override
+	public void map( final Object record, final Standard18Context context )
+	{
+		final BeanReader reader = context.reader();
 		final String recordName = reader.getRecordName();
+
 		if ( recordName.equals( Row.VOL1.name() ) )
 		{
 			consume( record, Row.VOL1, r -> ( Volume ) r );
@@ -145,12 +154,14 @@ public class Standard18Mapper implements Mapper
 		else if ( recordName.equals( Row.CONTRA.name() ) )
 		{
 			consume( record, Row.CONTRA, r -> ( ( Contra ) r ).toBuilder()
+					.index( context.index() )
 					.lineNo( reader.getLineNumber() )
 					.build() );
 		}
-		else
+		else if ( recordName.equals( Row.INSTR.name() ) )
 		{
 			consume( record, Row.INSTR, r -> ( ( Instruction ) r ).toBuilder()
+					.index( context.index() )
 					.lineNo( reader.getLineNumber() )
 					.build() );
 		}
@@ -162,7 +173,7 @@ public class Standard18Mapper implements Mapper
 		return STANDARD_18;
 	}
 
-	public Standard18Mapper add( final Row row, final BiConsumer< Row, Object > consumer )
+	public Standard18Mapper addRow( final Row row, final BiConsumer< Row, Object > consumer )
 	{
 		consumers.put( row, consumer );
 		return this;
@@ -173,6 +184,7 @@ public class Standard18Mapper implements Mapper
 		return consumers.containsKey( row );
 	}
 
+	@Override
 	public StreamFactory addMapping( final StreamFactory factory )
 	{
 		factory.define( new StreamBuilder( name() ).format( FIXED_LENGTH )

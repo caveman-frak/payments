@@ -18,7 +18,6 @@ import java.time.Month;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.beanio.StreamFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -161,7 +160,7 @@ public class Standard18MapperTest
 	{
 		final Instruction value = parseAndVerify( Row.INSTR, Instruction.class );
 
-		assertThat( value.index(), is( 0 ) );
+		assertThat( value.index(), is( 1 ) );
 		assertThat( value.lineNo(), is( 1 ) );
 		assertThat( value.origin()
 				.sortCode(), is( SORT_CODE ) );
@@ -187,7 +186,7 @@ public class Standard18MapperTest
 	{
 		final Contra value = parseAndVerify( Row.CONTRA, Contra.class );
 
-		assertThat( value.index(), is( 0 ) );
+		assertThat( value.index(), is( 1 ) );
 		assertThat( value.lineNo(), is( 1 ) );
 		assertThat( value.destination()
 				.sortCode(), is( SORT_CODE ) );
@@ -255,27 +254,59 @@ public class Standard18MapperTest
 	@Test
 	public final void testParseNoConsumer() throws IOException
 	{
-		standard18Mapper.add( Row.VOL1, consumer );
+		standard18Mapper.addRow( Row.VOL1, consumer );
 
-		parse( reader( LINES[Row.INSTR.ordinal()] ), standard18Mapper.addMapping( parsingService.factory() ) );
+		parse( reader( LINES[Row.INSTR.ordinal()] ) );
 
 		verify( consumer, never() ).accept( any(), any() );
 	}
 
+	@Test
+	public final void testParseInvalidLine() throws IOException
+	{
+		standard18Mapper.addRow( Row.HDR1, consumer );
+
+		parse( reader( "HDR1A100101S  1100101173922         08194       000000                          " ) );
+
+		verify( consumer, never() ).accept( any(), any() );
+	}
+
+	@Test
+	public final void testParseFileVerifyNumbering() throws IOException
+	{
+		standard18Mapper.addRow( Row.INSTR, consumer );
+		standard18Mapper.addRow( Row.CONTRA, consumer );
+
+		parse( reader( LINES ) );
+
+		final ArgumentCaptor< Instruction > argInstruction = ArgumentCaptor.forClass( Instruction.class );
+		final ArgumentCaptor< Contra > argContra = ArgumentCaptor.forClass( Contra.class );
+		verify( consumer ).accept( eq( Row.INSTR ), argInstruction.capture() );
+		verify( consumer ).accept( eq( Row.CONTRA ), argContra.capture() );
+
+		final Instruction instruction = argInstruction.getValue();
+		assertThat( instruction.index(), is( 1 ) );
+		assertThat( instruction.lineNo(), is( 5 ) );
+
+		final Contra contra = argContra.getValue();
+		assertThat( contra.index(), is( 2 ) );
+		assertThat( contra.lineNo(), is( 6 ) );
+	}
+
 	protected < T > T parseAndVerify( final Row row, final Class< T > type ) throws IOException
 	{
-		standard18Mapper.add( row, consumer );
+		standard18Mapper.addRow( row, consumer );
 
-		parse( reader( LINES[row.ordinal()] ), standard18Mapper.addMapping( parsingService.factory() ) );
+		parse( reader( LINES[row.ordinal()] ) );
 
 		final ArgumentCaptor< T > argument = ArgumentCaptor.forClass( type );
 		verify( consumer ).accept( eq( row ), argument.capture() );
 		return argument.getValue();
 	}
 
-	protected void parse( final Reader dataFile, final StreamFactory factory ) throws IOException
+	protected void parse( final Reader dataFile ) throws IOException
 	{
-		parsingService.parse( dataFile, factory, standard18Mapper );
+		parsingService.parse( dataFile, standard18Mapper );
 	}
 
 	protected Reader reader( final String... lines )

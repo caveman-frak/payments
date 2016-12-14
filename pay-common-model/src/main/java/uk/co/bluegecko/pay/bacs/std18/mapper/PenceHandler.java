@@ -16,7 +16,14 @@ public class PenceHandler implements TypeHandler
 	@Override
 	public Object parse( final String text ) throws TypeConversionException
 	{
-		return new BigDecimal( text ).divide( HUNDRED );
+		try
+		{
+			return new BigDecimal( text ).divide( HUNDRED );
+		}
+		catch ( final NumberFormatException ex )
+		{
+			throw new TypeConversionException( "Invalid Pence value '" + text + "'", ex );
+		}
 	}
 
 	@Override

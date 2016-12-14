@@ -9,7 +9,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -22,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import org.beanio.StreamFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -69,8 +67,6 @@ public class FileParserServiceBaseTest extends TestHarness
 		fileParserService = new FileParserServiceBase( parsingService );
 		cli = CliFactory.createCli( ParserCmdLine.class );
 		parserSettings = cli.parseArguments( FILE_1 );
-
-		when( parsingService.factory() ).thenReturn( StreamFactory.newInstance() );
 	}
 
 	@Test
@@ -112,8 +108,7 @@ public class FileParserServiceBaseTest extends TestHarness
 			fileParserService.processFiles( Arrays.asList( fileNames )
 					.stream(), "", fileSystem, parserSettings );
 		}
-		verify( parsingService, times( 2 ) ).parse( any( Reader.class ), any( StreamFactory.class ),
-				any( Mapper.class ) );
+		verify( parsingService, times( 2 ) ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
 	@Test
@@ -126,7 +121,7 @@ public class FileParserServiceBaseTest extends TestHarness
 
 			fileParserService.parseFile( file, parserSettings );
 		}
-		verify( parsingService, never() ).parse( any( Reader.class ), any( StreamFactory.class ), any( Mapper.class ) );
+		verify( parsingService, never() ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
 	@Test
@@ -139,8 +134,7 @@ public class FileParserServiceBaseTest extends TestHarness
 
 			fileParserService.processFiles( parserSettings, fileSystem );
 		}
-		verify( parsingService, times( 1 ) ).parse( any( Reader.class ), any( StreamFactory.class ),
-				any( Mapper.class ) );
+		verify( parsingService, times( 1 ) ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
 	@Test

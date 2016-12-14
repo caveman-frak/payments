@@ -13,8 +13,15 @@ public class JulianDateHandler implements TypeHandler
 	@Override
 	public Object parse( final String text ) throws TypeConversionException
 	{
-		final long day = Long.valueOf( text.trim() );
-		return LocalDate.ofEpochDay( day );
+		try
+		{
+			final long day = Long.valueOf( text.trim() );
+			return LocalDate.ofEpochDay( day );
+		}
+		catch ( final NumberFormatException ex )
+		{
+			throw new TypeConversionException( "Invalid Julian Date value '" + text + "'", ex );
+		}
 	}
 
 	@Override
