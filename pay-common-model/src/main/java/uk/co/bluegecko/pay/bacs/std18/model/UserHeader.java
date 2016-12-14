@@ -26,6 +26,9 @@ public class UserHeader
 	public static final class UserHeaderBuilder implements BuilderConstants
 	{
 
+		public UserHeaderBuilder()
+		{}
+
 		public UserHeaderBuilder processingDate( final LocalDate processingDate )
 		{
 			this.processingDate = processingDate;

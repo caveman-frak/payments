@@ -72,7 +72,7 @@ public class FileParserServiceBase extends AbstractFileService implements FilePa
 	{
 		final Standard18Mapper standard18Mapper = createMapper( parserSettings );
 
-		parsingService.parse( dataFile, standard18Mapper.mappingFile(), standard18Mapper );
+		parsingService.parse( dataFile, standard18Mapper.addMapping( parsingService.factory() ), standard18Mapper );
 	}
 
 	protected Standard18Mapper createMapper( final ParserSettings parserSettings )

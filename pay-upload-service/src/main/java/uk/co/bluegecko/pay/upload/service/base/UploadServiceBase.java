@@ -48,7 +48,7 @@ public class UploadServiceBase implements UploadService
 		logger.info( "processing: {}", file.getOriginalFilename() );
 
 		parsingService.parse( new InputStreamReader( file.getInputStream(), StandardCharsets.UTF_8 ),
-				standard18Mapper.mappingFile(), standard18Mapper );
+				standard18Mapper.addMapping( parsingService.factory() ), standard18Mapper );
 
 		return 0;
 	}

@@ -17,4 +17,12 @@ public class Volume
 	private final String userNumber;
 	private final String label;
 
+	public static final class VolumeBuilder
+	{
+
+		public VolumeBuilder()
+		{}
+
+	}
+
 }

@@ -30,6 +30,9 @@ public class Header1
 	public static final class Header1Builder
 	{
 
+		public Header1Builder()
+		{}
+
 		public Header1Builder created( final LocalDate created )
 		{
 			this.created = created;
@@ -39,9 +42,7 @@ public class Header1
 
 		public Header1Builder created( final long julianDate )
 		{
-			created = LocalDate.ofEpochDay( julianDate );
-
-			return this;
+			return created( LocalDate.ofEpochDay( julianDate ) );
 		}
 
 		public Header1Builder expires( final LocalDate expires )
@@ -53,9 +54,7 @@ public class Header1
 
 		public Header1Builder expires( final long julianDate )
 		{
-			expires = LocalDate.ofEpochDay( julianDate );
-
-			return this;
+			return expires( LocalDate.ofEpochDay( julianDate ) );
 		}
 
 	}

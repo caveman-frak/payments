@@ -47,6 +47,9 @@ public class Instruction
 	public static final class InstructionBuilder implements BuilderConstants
 	{
 
+		public InstructionBuilder()
+		{}
+
 		public InstructionBuilder processingDate( final LocalDate processingDate )
 		{
 			this.processingDate = processingDate;
@@ -56,9 +59,7 @@ public class Instruction
 
 		public InstructionBuilder processingDate( final long julianDate )
 		{
-			processingDate = LocalDate.ofEpochDay( julianDate );
-
-			return this;
+			return processingDate( LocalDate.ofEpochDay( julianDate ) );
 		}
 
 		public InstructionBuilder amount( final BigDecimal amount )
@@ -70,9 +71,30 @@ public class Instruction
 
 		public InstructionBuilder amount( final String pence )
 		{
-			amount = new BigDecimal( pence ).divide( HUNDRED );
+			return amount( new BigDecimal( pence ).divide( HUNDRED ) );
+		}
 
-			return this;
+		/*
+		 * Required to steam.io support
+		 */
+		public void destinationBuilder( final Account.AccountBuilder builder )
+		{
+			destination( builder.build() );
+		}
+
+		public Account.AccountBuilder destinationBuilder()
+		{
+			return destination.toBuilder();
+		}
+
+		public void originBuilder( final Account.AccountBuilder builder )
+		{
+			origin( builder.build() );
+		}
+
+		public Account.AccountBuilder originBuilder()
+		{
+			return origin.toBuilder();
 		}
 
 	}
