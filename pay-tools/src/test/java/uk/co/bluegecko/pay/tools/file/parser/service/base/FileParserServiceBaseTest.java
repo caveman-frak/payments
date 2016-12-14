@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -109,7 +108,7 @@ public class FileParserServiceBaseTest extends TestHarness
 			fileParserService.processFiles( Arrays.asList( fileNames )
 					.stream(), "", fileSystem, parserSettings );
 		}
-		verify( parsingService, times( 2 ) ).parse( any( Reader.class ), any( Reader.class ), any( Mapper.class ) );
+		verify( parsingService, times( 2 ) ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
 	@Test
@@ -122,7 +121,7 @@ public class FileParserServiceBaseTest extends TestHarness
 
 			fileParserService.parseFile( file, parserSettings );
 		}
-		verify( parsingService, never() ).parse( any( Reader.class ), any( Reader.class ), any( Mapper.class ) );
+		verify( parsingService, never() ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
 	@Test
@@ -135,7 +134,7 @@ public class FileParserServiceBaseTest extends TestHarness
 
 			fileParserService.processFiles( parserSettings, fileSystem );
 		}
-		verify( parsingService, only() ).parse( any( Reader.class ), any( Reader.class ), any( Mapper.class ) );
+		verify( parsingService, times( 1 ) ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
 	@Test

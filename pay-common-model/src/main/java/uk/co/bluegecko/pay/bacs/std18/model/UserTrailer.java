@@ -34,9 +34,7 @@ public class UserTrailer
 
 		public UserTrailerBuilder debitValue( final String pence )
 		{
-			debitValue = new BigDecimal( pence ).divide( HUNDRED );
-
-			return this;
+			return debitValue( new BigDecimal( pence ).divide( HUNDRED ) );
 		}
 
 		public UserTrailerBuilder creditValue( final BigDecimal creditValue )
@@ -48,9 +46,7 @@ public class UserTrailer
 
 		public UserTrailerBuilder creditValue( final String pence )
 		{
-			creditValue = new BigDecimal( pence ).divide( HUNDRED );
-
-			return this;
+			return creditValue( new BigDecimal( pence ).divide( HUNDRED ) );
 		}
 
 	}

@@ -20,7 +20,7 @@ import uk.co.bluegecko.pay.view.View;
 
 
 @Value
-@Builder
+@Builder( toBuilder = true )
 @Accessors( fluent = true )
 public class Instruction
 {
@@ -56,9 +56,7 @@ public class Instruction
 
 		public InstructionBuilder processingDate( final long julianDate )
 		{
-			processingDate = LocalDate.ofEpochDay( julianDate );
-
-			return this;
+			return processingDate( LocalDate.ofEpochDay( julianDate ) );
 		}
 
 		public InstructionBuilder amount( final BigDecimal amount )
@@ -70,9 +68,7 @@ public class Instruction
 
 		public InstructionBuilder amount( final String pence )
 		{
-			amount = new BigDecimal( pence ).divide( HUNDRED );
-
-			return this;
+			return amount( new BigDecimal( pence ).divide( HUNDRED ) );
 		}
 
 	}

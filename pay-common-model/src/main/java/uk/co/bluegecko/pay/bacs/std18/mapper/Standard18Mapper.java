@@ -1,17 +1,22 @@
 package uk.co.bluegecko.pay.bacs.std18.mapper;
 
 
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.apache.commons.lang3.StringUtils;
+import org.beanio.BeanReader;
+import org.beanio.StreamFactory;
+import org.beanio.builder.FieldBuilder;
+import org.beanio.builder.GroupBuilder;
+import org.beanio.builder.RecordBuilder;
+import org.beanio.builder.SegmentBuilder;
+import org.beanio.builder.StreamBuilder;
+import org.beanio.stream.fixedlength.FixedLengthRecordParserFactory;
 
-import net.sf.flatpack.Record;
 import uk.co.bluegecko.pay.bacs.std18.model.Account;
 import uk.co.bluegecko.pay.bacs.std18.model.Contra;
 import uk.co.bluegecko.pay.bacs.std18.model.Header1;
@@ -24,67 +29,151 @@ import uk.co.bluegecko.pay.bacs.std18.model.Volume;
 import uk.co.bluegecko.pay.common.service.Mapper;
 
 
-public class Standard18Mapper implements Mapper
+public class Standard18Mapper implements Mapper< Standard18Context >
 {
 
-	private static final String MAPPING_FILE = "/mapping/standard18.pzmap.xml";
+	// argument position
+	private static final String ARG_1 = "#1";
+	private static final String ARG_2 = "#2";
+	private static final String ARG_3 = "#3";
+	private static final String ARG_4 = "#4";
+	private static final String ARG_5 = "#5";
+	private static final String ARG_6 = "#6";
+	private static final String ARG_7 = "#7";
+	private static final String ARG_8 = "#8";
+	private static final String ARG_9 = "#9";
+	private static final String ARG_10 = "#10";
+	private static final String ARG_11 = "#11";
+	private static final String ARG_12 = "#12";
 
-	private static final String SERIAL_NO = "SERIAL_NO";
-	private static final String USER_NUMBER = "USER_NUMBER";
-	private static final String LABEL = "LABEL";
-	private static final String SET = "SET";
-	private static final String SECTION = "SECTION";
-	private static final String SEQUENCE = "SEQUENCE";
-	private static final String GENERATION = "GENERATION";
-	private static final String VERSION = "VERSION";
-	private static final String CREATED = "CREATED";
-	private static final String EXPIRES = "EXPIRES";
-	private static final String ACCESSIBILITY = "ACCESSIBILITY";
-	private static final String BLOCK_COUNT = "BLOCK_COUNT";
-	private static final String SYSTEM_CODE = "SYSTEM_CODE";
-	private static final String FORMAT = "FORMAT";
-	private static final String BLOCK = "BLOCK";
-	private static final String RECORD = "RECORD";
-	private static final String OFFSET = "OFFSET";
-	private static final String DEST = "DEST";
-	private static final String CURRENCY = "CURRENCY";
-	private static final String COUNTRY = "COUNTRY";
-	private static final String WORK_CODE = "WORK_CODE";
-	private static final String FILE = "FILE";
-	private static final String AUDIT = "AUDIT";
-	private static final String USER_NAME = "USER_NAME";
-	private static final String DEST_NAME = "DEST_NAME";
-	private static final String DEST_REF = "DEST_REF";
-	private static final String RTI = "RTI";
-	private static final String PROCESS_DATE = "PROCESS_DATE";
-	private static final String DEST_SORT_CODE = "DEST_SORT_CODE";
-	private static final String DEST_AC_NUMBER = "DEST_AC_NUMBER";
-	private static final String DEST_AC_TYPE = "DEST_AC_TYPE";
-	private static final String TRANS_CODE = "TRANS_CODE";
-	private static final String ORIG_SORT_CODE = "ORIG_SORT_CODE";
-	private static final String ORIG_AC_NUMBER = "ORIG_AC_NUMBER";
-	private static final String ORIG_AC_NAME = "ORIG_AC_NAME";
-	private static final String FREE = "FREE";
-	private static final String AMOUNT = "AMOUNT";
-	private static final String NARRATIVE = "NARRATIVE";
-	private static final String PROCESSING = "PROCESSING";
-	private static final String DEBIT_VALUE = "DEBIT_VALUE";
-	private static final String CREDIT_VALUE = "CREDIT_VALUE";
-	private static final String DEBIT_COUNT = "DEBIT_COUNT";
-	private static final String CREDIT_COUNT = "CREDIT_COUNT";
-	private static final String DDI_COUNT = "DDI_COUNT";
-	private static final String SERVICE_USER = "SERVICE_USER";
+	// fields
+	private static final String BATCH = "batch";
+	private static final String INDICATOR = "indicator";
+	private static final String SERIAL_NO = "serialNo";
+	private static final String USER_NUMBER = "userNumber";
+	private static final String LABEL = "label";
+	private static final String SET = "set";
+	private static final String SECTION = "section";
+	private static final String SEQUENCE = "sequence";
+	private static final String GENERATION = "generation";
+	private static final String VERSION = "version";
+	private static final String CREATED = "created";
+	private static final String EXPIRES = "expires";
+	private static final String ACCESSIBILITY = "accessibility";
+	private static final String BLOCK_COUNT = "blockCount";
+	private static final String SYSTEM_CODE = "systemCode";
+	private static final String FORMAT = "format";
+	private static final String BLOCK = "block";
+	private static final String RECORD = "record";
+	private static final String OFFSET = "offset";
+	private static final String DEST = "dest";
+	private static final String CURRENCY = "currency";
+	private static final String COUNTRY = "country";
+	private static final String WORK_CODE = "workCode";
+	private static final String FILE = "file";
+	private static final String AUDIT = "audit";
+	private static final String DEBIT_VALUE = "debitValue";
+	private static final String CREDIT_VALUE = "creditValue";
+	private static final String DEBIT_COUNT = "debitCount";
+	private static final String CREDIT_COUNT = "creditCount";
+	private static final String DDI_COUNT = "ddiCount";
+	private static final String SERVICE_USER = "serviceUser";
+	private static final String FREE_FORMAT = "freeFormat";
+	private static final String NARRATIVE = "narrative";
+	private static final String CONTRA = "contra";
+	private static final String DESTINATION = "destination";
+	private static final String TYPE = "type";
+	private static final String TRANSACTION_TYPE = "transactionType";
+	private static final String ORIGIN = "origin";
+	private static final String SORT_CODE = "sortCode";
+	private static final String NUMBER = "number";
+	private static final String NAME = "name";
+	private static final String RTI = "rti";
+	private static final String AMOUNT = "amount";
+	private static final String REFERENCE = "reference";
+	private static final String PROCESSING_DATE = "processingDate";
+	private static final String LINE_NO = "lineNo";
+	private static final String INDEX = "index";
+
+	// values
+	private static final String ZERO = "0";
+	private static final String EMPTY = "";
+
+	private static final String STANDARD_18 = "standard18";
+	private static final String FIXED_LENGTH = "fixedlength";
+	private static final String PENCE_HANDLER = "penceHandler";
+	private static final String JULIAN_DATE_HANDLER = "julianDateHandler";
 
 	private final Map< Row, BiConsumer< Row, Object > > consumers;
-
-	private int index = 0;
 
 	public Standard18Mapper()
 	{
 		consumers = new EnumMap<>( Row.class );
 	}
 
-	public Standard18Mapper add( final Row row, final BiConsumer< Row, Object > consumer )
+	@Override
+	public Standard18Context newContext( final BeanReader reader )
+	{
+		return new Standard18Context( reader );
+	}
+
+	@Override
+	public void map( final Object record, final Standard18Context context )
+	{
+		final BeanReader reader = context.reader();
+		final String recordName = reader.getRecordName();
+
+		if ( recordName.equals( Row.VOL1.name() ) )
+		{
+			consume( record, Row.VOL1, r -> ( Volume ) r );
+		}
+		else if ( recordName.equals( Row.HDR1.name() ) )
+		{
+			consume( record, Row.HDR1, r -> ( Header1 ) r );
+		}
+		else if ( recordName.equals( Row.HDR2.name() ) )
+		{
+			consume( record, Row.HDR2, r -> ( Header2 ) r );
+		}
+		else if ( recordName.equals( Row.UHL1.name() ) )
+		{
+			consume( record, Row.UHL1, r -> ( UserHeader ) r );
+		}
+		else if ( recordName.equals( Row.EOF1.name() ) )
+		{
+			consume( record, Row.EOF1, r -> ( Header1 ) r );
+		}
+		else if ( recordName.equals( Row.EOF2.name() ) )
+		{
+			consume( record, Row.EOF2, r -> ( Header2 ) r );
+		}
+		else if ( recordName.equals( Row.UTL1.name() ) )
+		{
+			consume( record, Row.UTL1, r -> ( UserTrailer ) r );
+		}
+		else if ( recordName.equals( Row.CONTRA.name() ) )
+		{
+			consume( record, Row.CONTRA, r -> ( ( Contra ) r ).toBuilder()
+					.index( context.index() )
+					.lineNo( reader.getLineNumber() )
+					.build() );
+		}
+		else if ( recordName.equals( Row.INSTR.name() ) )
+		{
+			consume( record, Row.INSTR, r -> ( ( Instruction ) r ).toBuilder()
+					.index( context.index() )
+					.lineNo( reader.getLineNumber() )
+					.build() );
+		}
+	}
+
+	@Override
+	public String name()
+	{
+		return STANDARD_18;
+	}
+
+	public Standard18Mapper addRow( final Row row, final BiConsumer< Row, Object > consumer )
 	{
 		consumers.put( row, consumer );
 		return this;
@@ -96,52 +185,26 @@ public class Standard18Mapper implements Mapper
 	}
 
 	@Override
-	public void map( final Record record )
+	public StreamFactory addMapping( final StreamFactory factory )
 	{
-		if ( record.isRecordID( Row.VOL1.name() ) )
-		{
-			consume( record, Row.VOL1, ( final Record r ) -> volume( r ) );
-		}
-		else if ( record.isRecordID( Row.HDR1.name() ) )
-		{
-			consume( record, Row.HDR1, ( final Record r ) -> header1( r, Row.HDR1 ) );
-		}
-		else if ( record.isRecordID( Row.HDR2.name() ) )
-		{
-			consume( record, Row.HDR2, ( final Record r ) -> header2( r, Row.HDR2 ) );
-		}
-		else if ( record.isRecordID( Row.UHL1.name() ) )
-		{
-			consume( record, Row.UHL1, ( final Record r ) -> userHeader( r ) );
-		}
-		else if ( record.isRecordID( Row.EOF1.name() ) )
-		{
-			consume( record, Row.EOF1, ( final Record r ) -> header1( r, Row.EOF1 ) );
-		}
-		else if ( record.isRecordID( Row.EOF2.name() ) )
-		{
-			consume( record, Row.EOF2, ( final Record r ) -> header2( r, Row.EOF2 ) );
-		}
-		else if ( record.isRecordID( Row.UTL1.name() ) )
-		{
-			consume( record, Row.UTL1, ( final Record r ) -> userTrailer( r ) );
-		}
-		else if ( record.isRecordID( Row.CONTRA.name() ) )
-		{
-			consume( record, Row.CONTRA, ( final Record r ) -> contra( r ) );
-		}
-		else
-		{
-			consume( record, Row.INSTR, ( final Record r ) -> instruction( r ) );
-		}
+		factory.define( new StreamBuilder( name() ).format( FIXED_LENGTH )
+				.addTypeHandler( JULIAN_DATE_HANDLER, LocalDate.class, new JulianDateHandler() )
+				.addTypeHandler( PENCE_HANDLER, BigDecimal.class, new PenceHandler() )
+				.parser( new FixedLengthRecordParserFactory() )
+				.addRecord( createVolumeRecord().order( 1 ) )
+				.addGroup( new GroupBuilder( BATCH ).order( 2 )
+						.addRecord( createHeader1Record( Row.HDR1 ).order( 3 ) )
+						.addRecord( createHeader2Record( Row.HDR2 ).order( 4 ) )
+						.addRecord( createUserHeaderRecord().order( 5 ) )
+						.addRecord( createContraRecord().order( 6 ) )
+						.addRecord( createInstructionRecord().order( 6 ) )
+						.addRecord( createHeader1Record( Row.EOF1 ).order( 7 ) )
+						.addRecord( createHeader2Record( Row.EOF2 ).order( 8 ) )
+						.addRecord( createUserTrailerRecord().order( 9 ) ) ) );
+		return factory;
 	}
 
-	public Reader mappingFile()
-	{
-		return new InputStreamReader( getClass().getResourceAsStream( MAPPING_FILE ), StandardCharsets.UTF_8 );
-	}
-
-	protected void consume( final Record record, final Row row, final Function< Record, Object > mapper )
+	protected void consume( final Object record, final Row row, final Function< Object, Object > mapper )
 	{
 		if ( consumers.containsKey( row ) )
 		{
@@ -150,135 +213,471 @@ public class Standard18Mapper implements Mapper
 		}
 	}
 
-	protected Volume volume( final Record record )
+	protected RecordBuilder createVolumeRecord()
 	{
-		return Volume.builder()
-				.serialNo( getString( record, SERIAL_NO ) )
-				.accessibility( getString( record, ACCESSIBILITY ) )
-				.userNumber( getString( record, USER_NUMBER ) )
-				.label( getString( record, LABEL ) )
-				.build();
+		return new RecordBuilder( Row.VOL1.name() ).type( Volume.class )
+				.length( 80 )
+				.occurs( 0, 1 )
+				.addField( new FieldBuilder( INDICATOR ).occurs( 1 )
+						.at( 0 )
+						.length( 4 )
+						.rid()
+						.literal( Row.VOL1.name() )
+						.ignore() )
+				.addField( new FieldBuilder( SERIAL_NO ).getter( SERIAL_NO )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 4 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( ACCESSIBILITY ).getter( ACCESSIBILITY )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 40 )
+						.length( 1 ) )
+				.addField( new FieldBuilder( USER_NUMBER ).getter( USER_NUMBER )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 41 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( LABEL ).getter( LABEL )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 79 )
+						.length( 1 ) );
 	}
 
-	protected Header1 header1( final Record record, final Row row )
+	protected RecordBuilder createHeader1Record( final Row row )
 	{
-		return Header1.builder()
-				.indicator( row )
-				.file( getString( record, FILE ) )
-				.set( getString( record, SET ) )
-				.section( getInt( record, SECTION ) )
-				.sequence( getInt( record, SEQUENCE ) )
-				.generation( getInt( record, GENERATION ) )
-				.version( getInt( record, VERSION ) )
-				.created( getLong( record, CREATED ) )
-				.expires( getLong( record, EXPIRES ) )
-				.accessibility( getString( record, ACCESSIBILITY ) )
-				.blockCount( getString( record, BLOCK_COUNT ) )
-				.systemCode( getString( record, SYSTEM_CODE ) )
-				.build();
+		return new RecordBuilder( row.name() ).type( Header1.class )
+				.length( 80 )
+				.occurs( 0, 1 )
+				.addField( new FieldBuilder( INDICATOR ).occurs( 1 )
+						.getter( INDICATOR )
+						.setter( ARG_1 )
+						.at( 0 )
+						.length( 4 )
+						.rid()
+						.literal( row.name() ) )
+				.addField( new FieldBuilder( FILE ).getter( FILE )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 4 )
+						.length( 17 ) )
+				.addField( new FieldBuilder( SET ).getter( SET )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 21 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( SECTION ).getter( SECTION )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 27 )
+						.length( 4 )
+						.defaultValue( ZERO ) )
+				.addField( new FieldBuilder( SEQUENCE ).getter( SEQUENCE )
+						.setter( ARG_5 )
+						.occurs( 1 )
+						.at( 31 )
+						.length( 4 )
+						.defaultValue( ZERO ) )
+				.addField( new FieldBuilder( GENERATION ).getter( GENERATION )
+						.setter( ARG_6 )
+						.occurs( 1 )
+						.at( 35 )
+						.length( 4 ) )
+				.addField( new FieldBuilder( VERSION ).getter( VERSION )
+						.setter( ARG_7 )
+						.occurs( 1 )
+						.at( 39 )
+						.length( 2 )
+						.defaultValue( ZERO ) )
+				.addField( new FieldBuilder( CREATED ).getter( CREATED )
+						.setter( ARG_8 )
+						.trim()
+						.typeHandler( JULIAN_DATE_HANDLER )
+						.occurs( 1 )
+						.at( 41 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( EXPIRES ).getter( EXPIRES )
+						.setter( ARG_9 )
+						.trim()
+						.typeHandler( JULIAN_DATE_HANDLER )
+						.occurs( 1 )
+						.at( 47 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( ACCESSIBILITY ).getter( ACCESSIBILITY )
+						.setter( ARG_10 )
+						.occurs( 1 )
+						.at( 53 )
+						.length( 1 ) )
+				.addField( new FieldBuilder( BLOCK_COUNT ).getter( BLOCK_COUNT )
+						.setter( ARG_11 )
+						.occurs( 1 )
+						.at( 54 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( SYSTEM_CODE ).getter( SYSTEM_CODE )
+						.setter( ARG_12 )
+						.occurs( 1 )
+						.at( 60 )
+						.length( 13 ) );
 	}
 
-	protected Header2 header2( final Record record, final Row row )
+	protected RecordBuilder createHeader2Record( final Row row )
 	{
-		return Header2.builder()
-				.indicator( row )
-				.format( getString( record, FORMAT ) )
-				.block( getString( record, BLOCK ) )
-				.record( getString( record, RECORD ) )
-				.offset( getString( record, OFFSET ) )
-				.build();
+		return new RecordBuilder( row.name() ).type( Header2.class )
+				.length( 80 )
+				.occurs( 0, 1 )
+				.addField( new FieldBuilder( INDICATOR ).occurs( 1 )
+						.getter( INDICATOR )
+						.setter( ARG_1 )
+						.at( 0 )
+						.length( 4 )
+						.rid()
+						.literal( row.name() ) )
+				.addField( new FieldBuilder( FORMAT ).getter( FORMAT )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 4 )
+						.length( 1 ) )
+				.addField( new FieldBuilder( BLOCK ).getter( BLOCK )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 5 )
+						.length( 5 ) )
+				.addField( new FieldBuilder( RECORD ).getter( RECORD )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 10 )
+						.length( 5 ) )
+				.addField( new FieldBuilder( OFFSET ).getter( OFFSET )
+						.setter( ARG_5 )
+						.occurs( 1 )
+						.at( 50 )
+						.length( 2 ) );
 	}
 
-	protected UserHeader userHeader( final Record record )
+	protected RecordBuilder createUserHeaderRecord()
 	{
-		return UserHeader.builder()
-				.processingDate( getLong( record, PROCESSING ) )
-				.dest( getString( record, DEST ) )
-				.currency( getString( record, CURRENCY ) )
-				.country( getString( record, COUNTRY ) )
-				.workCode( getString( record, WORK_CODE ) )
-				.file( getString( record, FILE ) )
-				.audit( getString( record, AUDIT ) )
-				.build();
+		return new RecordBuilder( Row.UHL1.name() ).type( UserHeader.class )
+				.length( 80 )
+				.occurs( 0, 1 )
+				.addField( new FieldBuilder( INDICATOR ).occurs( 1 )
+						.at( 0 )
+						.length( 4 )
+						.rid()
+						.literal( Row.UHL1.name() )
+						.ignore() )
+				.addField( new FieldBuilder( PROCESSING_DATE ).getter( PROCESSING_DATE )
+						.setter( ARG_1 )
+						.trim()
+						.typeHandler( JULIAN_DATE_HANDLER )
+						.occurs( 1 )
+						.at( 4 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( DEST ).getter( DEST )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 10 )
+						.length( 10 ) )
+				.addField( new FieldBuilder( CURRENCY ).getter( CURRENCY )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 20 )
+						.length( 2 ) )
+				.addField( new FieldBuilder( COUNTRY ).getter( COUNTRY )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 22 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( WORK_CODE ).getter( WORK_CODE )
+						.setter( ARG_5 )
+						.occurs( 1 )
+						.at( 28 )
+						.length( 9 ) )
+				.addField( new FieldBuilder( FILE ).getter( FILE )
+						.setter( ARG_6 )
+						.occurs( 1 )
+						.at( 37 )
+						.length( 3 ) )
+				.addField( new FieldBuilder( AUDIT ).getter( AUDIT )
+						.setter( ARG_7 )
+						.occurs( 1 )
+						.at( 47 )
+						.length( 7 ) );
 	}
 
-	protected Instruction instruction( final Record record )
+	protected RecordBuilder createUserTrailerRecord()
 	{
-		return Instruction.builder()
-				.index( index++ )
-				.lineNo( record.getRowNo() )
-				.origin( Account.builder()
-						.sortCode( getString( record, ORIG_SORT_CODE ) )
-						.number( getString( record, ORIG_AC_NUMBER ) )
-						.name( getString( record, USER_NAME ) )
-						.build() )
-				.destination( Account.builder()
-						.sortCode( getString( record, DEST_SORT_CODE ) )
-						.number( getString( record, DEST_AC_NUMBER ) )
-						.type( getString( record, DEST_AC_TYPE ) )
-						.name( getString( record, DEST_NAME ) )
-						.build() )
-				.reference( getString( record, DEST_REF ) )
-				.transactionType( getString( record, TRANS_CODE ) )
-				.rti( getString( record, RTI ) )
-				.amount( getString( record, AMOUNT ) )
-				.processingDate( getLong( record, PROCESS_DATE ) )
-				.build();
+		return new RecordBuilder( Row.UTL1.name() ).type( UserTrailer.class )
+				.length( 80 )
+				.occurs( 0, 1 )
+				.addField( new FieldBuilder( INDICATOR ).occurs( 1 )
+						.at( 0 )
+						.length( 4 )
+						.rid()
+						.literal( Row.UTL1.name() )
+						.ignore() )
+				.addField( new FieldBuilder( DEBIT_VALUE ).getter( DEBIT_VALUE )
+						.setter( ARG_1 )
+						.trim()
+						.typeHandler( PENCE_HANDLER )
+						.occurs( 1 )
+						.at( 4 )
+						.length( 13 ) )
+				.addField( new FieldBuilder( CREDIT_VALUE ).getter( CREDIT_VALUE )
+						.setter( ARG_2 )
+						.trim()
+						.typeHandler( PENCE_HANDLER )
+						.occurs( 1 )
+						.at( 17 )
+						.length( 13 ) )
+				.addField( new FieldBuilder( DEBIT_COUNT ).getter( DEBIT_COUNT )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 30 )
+						.length( 7 ) )
+				.addField( new FieldBuilder( CREDIT_COUNT ).getter( CREDIT_COUNT )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 37 )
+						.length( 7 ) )
+				.addField( new FieldBuilder( DDI_COUNT ).getter( DDI_COUNT )
+						.setter( ARG_5 )
+						.occurs( 1 )
+						.at( 52 )
+						.length( 7 ) )
+				.addField( new FieldBuilder( SERVICE_USER ).getter( SERVICE_USER )
+						.setter( ARG_6 )
+						.occurs( 1 )
+						.at( 59 )
+						.length( 21 ) );
 	}
 
-	protected Contra contra( final Record record )
+	protected RecordBuilder createContraRecord()
 	{
-		return Contra.builder()
-				.index( index++ )
-				.lineNo( record.getRowNo() )
-				.destination( Account.builder()
-						.sortCode( getString( record, DEST_SORT_CODE ) )
-						.number( getString( record, DEST_AC_NUMBER ) )
-						.type( getString( record, DEST_AC_TYPE ) )
-						.build() )
-				.transactionType( getString( record, TRANS_CODE ) )
-				.origin( Account.builder()
-						.sortCode( getString( record, ORIG_SORT_CODE ) )
-						.number( getString( record, ORIG_AC_NUMBER ) )
-						.name( getString( record, ORIG_AC_NAME ) )
-						.build() )
-				.freeFormat( getString( record, FREE ) )
-				.amount( getString( record, AMOUNT ) )
-				.narrative( getString( record, NARRATIVE ) )
-				.processingDate( getLong( record, PROCESSING ) )
-				.build();
+		return new RecordBuilder( Row.CONTRA.name() ).type( Contra.class )
+				.minLength( 100 )
+				.maxLength( 106 )
+				.occurs( 0, -1 )
+				.addField( new FieldBuilder( CONTRA ).occurs( 1 )
+						.at( 64 )
+						.length( 6 )
+						.rid()
+						.literal( Row.CONTRA.name() )
+						.ignore() )
+				.addField( new FieldBuilder( INDEX ).getter( INDEX )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( ZERO ) )
+				.addField( new FieldBuilder( LINE_NO ).getter( LINE_NO )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( ZERO ) )
+				.addSegment( createContraOriginSegment() )
+				.addSegment( createContraDestinationSegment() )
+				.addField( new FieldBuilder( TRANSACTION_TYPE ).getter( TRANSACTION_TYPE )
+						.setter( ARG_5 )
+						.occurs( 1 )
+						.at( 15 )
+						.length( 2 ) )
+				.addField( new FieldBuilder( FREE_FORMAT ).getter( FREE_FORMAT )
+						.setter( ARG_6 )
+						.occurs( 1 )
+						.at( 31 )
+						.length( 4 ) )
+				.addField( new FieldBuilder( AMOUNT ).getter( AMOUNT )
+						.setter( ARG_7 )
+						.typeHandler( PENCE_HANDLER )
+						.occurs( 1 )
+						.at( 35 )
+						.length( 11 ) )
+				.addField( new FieldBuilder( NARRATIVE ).getter( NARRATIVE )
+						.setter( ARG_8 )
+						.occurs( 1 )
+						.at( 46 )
+						.length( 18 ) )
+				.addField( new FieldBuilder( PROCESSING_DATE ).getter( PROCESSING_DATE )
+						.setter( ARG_9 )
+						.typeHandler( JULIAN_DATE_HANDLER )
+						.occurs( 0, 1 )
+						.at( 100 )
+						.length( 6 ) );
 	}
 
-	protected UserTrailer userTrailer( final Record record )
+	protected SegmentBuilder createContraDestinationSegment()
 	{
-		return UserTrailer.builder()
-				.debitValue( getString( record, DEBIT_VALUE ) )
-				.creditValue( getString( record, CREDIT_VALUE ) )
-				.debitCount( getInt( record, DEBIT_COUNT ) )
-				.creditCount( getInt( record, CREDIT_COUNT ) )
-				.ddiCount( getInt( record, DDI_COUNT ) )
-				.serviceUser( getString( record, SERVICE_USER ) )
-				.build();
+		return new SegmentBuilder( DESTINATION ).type( Account.class )
+				.getter( DESTINATION )
+				.setter( ARG_4 )
+				.addField( new FieldBuilder( SORT_CODE ).getter( SORT_CODE )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 0 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( NUMBER ).getter( NUMBER )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 6 )
+						.length( 8 ) )
+				.addField( new FieldBuilder( NAME ).getter( NAME )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( EMPTY ) )
+				.addField( new FieldBuilder( TYPE ).getter( TYPE )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 14 )
+						.length( 1 ) );
 	}
 
-	protected String getString( final Record record, final String key )
+	protected SegmentBuilder createContraOriginSegment()
 	{
-		return record.contains( key ) ? record.getString( key ) : null;
+		return new SegmentBuilder( ORIGIN ).type( Account.class )
+				.getter( ORIGIN )
+				.setter( ARG_3 )
+				.addField( new FieldBuilder( SORT_CODE ).getter( SORT_CODE )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 17 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( NUMBER ).getter( NUMBER )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 23 )
+						.length( 8 ) )
+				.addField( new FieldBuilder( NAME ).getter( NAME )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 82 )
+						.length( 18 ) )
+				.addField( new FieldBuilder( TYPE ).getter( TYPE )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( EMPTY ) );
 	}
 
-	protected Integer getInt( final Record record, final String key )
+	protected RecordBuilder createInstructionRecord()
 	{
-		return isNotBlank( record, key ) ? record.getInt( key ) : 0;
+		return new RecordBuilder( Row.INSTR.name() ).type( Instruction.class )
+				.minLength( 100 )
+				.maxLength( 106 )
+				.occurs( 0, 1 )
+				.addField( new FieldBuilder( INDICATOR ).occurs( 1 )
+						.rid()
+						.at( 0 )
+						.length( 4 )
+						.regex( "\\d{4}" )
+						.ignore() )
+				.addField( new FieldBuilder( CONTRA ).occurs( 1 )
+						.rid()
+						.at( 0 )
+						.length( 6 )
+						.regex( "((?!CONTRA).)*" )
+						.ignore() )
+				.addField( new FieldBuilder( INDEX ).getter( INDEX )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( ZERO ) )
+				.addField( new FieldBuilder( LINE_NO ).getter( LINE_NO )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( ZERO ) )
+				.addSegment( createInstructionOriginSegment() )
+				.addSegment( createInstructionDestinationSegment() )
+				.addField( new FieldBuilder( TRANSACTION_TYPE ).getter( TRANSACTION_TYPE )
+						.setter( ARG_5 )
+						.occurs( 1 )
+						.at( 15 )
+						.length( 2 ) )
+				.addField( new FieldBuilder( RTI ).getter( RTI )
+						.setter( ARG_6 )
+						.occurs( 1 )
+						.at( 31 )
+						.length( 4 ) )
+				.addField( new FieldBuilder( AMOUNT ).getter( AMOUNT )
+						.setter( ARG_7 )
+						.typeHandler( PENCE_HANDLER )
+						.occurs( 1 )
+						.at( 35 )
+						.length( 11 ) )
+				.addField( new FieldBuilder( REFERENCE ).getter( REFERENCE )
+						.setter( ARG_8 )
+						.occurs( 1 )
+						.at( 64 )
+						.length( 18 ) )
+				.addField( new FieldBuilder( PROCESSING_DATE ).getter( PROCESSING_DATE )
+						.setter( ARG_9 )
+						.typeHandler( JULIAN_DATE_HANDLER )
+						.occurs( 0, 1 )
+						.at( 100 )
+						.length( 6 ) );
 	}
 
-	protected Long getLong( final Record record, final String key )
+	protected SegmentBuilder createInstructionOriginSegment()
 	{
-		return isNotBlank( record, key ) ? record.getLong( key ) : null;
+		return new SegmentBuilder( ORIGIN ).type( Account.class )
+				.getter( ORIGIN )
+				.setter( ARG_3 )
+				.addField( new FieldBuilder( SORT_CODE ).getter( SORT_CODE )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 17 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( NUMBER ).getter( NUMBER )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 23 )
+						.length( 8 ) )
+				.addField( new FieldBuilder( NAME ).getter( NAME )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 46 )
+						.length( 18 ) )
+				.addField( new FieldBuilder( TYPE ).getter( TYPE )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 1 )
+						.length( 0 )
+						.defaultValue( EMPTY ) );
 	}
 
-	protected boolean isNotBlank( final Record record, final String key )
+	protected SegmentBuilder createInstructionDestinationSegment()
 	{
-		return record.contains( key ) && StringUtils.isNotBlank( record.getString( key ) );
+		return new SegmentBuilder( DESTINATION ).type( Account.class )
+				.getter( DESTINATION )
+				.setter( ARG_4 )
+				.addField( new FieldBuilder( SORT_CODE ).getter( SORT_CODE )
+						.setter( ARG_1 )
+						.occurs( 1 )
+						.at( 0 )
+						.length( 6 ) )
+				.addField( new FieldBuilder( NUMBER ).getter( NUMBER )
+						.setter( ARG_2 )
+						.occurs( 1 )
+						.at( 6 )
+						.length( 8 ) )
+				.addField( new FieldBuilder( NAME ).getter( NAME )
+						.setter( ARG_3 )
+						.occurs( 1 )
+						.at( 82 )
+						.length( 18 ) )
+				.addField( new FieldBuilder( TYPE ).getter( TYPE )
+						.setter( ARG_4 )
+						.occurs( 1 )
+						.at( 14 )
+						.length( 1 ) );
 	}
 
 }

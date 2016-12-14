@@ -15,8 +15,7 @@
 	</parent>
 
 	<properties>
-		<flatpack.version>4.0.1</flatpack.version>
-		<jdom.version>1.1</jdom.version>
+		<beanio.version>2.1.0</beanio.version>
 	</properties>
 
 	<dependencies>
@@ -30,12 +29,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.flatpack</groupId>
-			<artifactId>flatpack</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
+			<groupId>org.beanio</groupId>
+			<artifactId>beanio</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -46,14 +41,9 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>net.sf.flatpack</groupId>
-				<artifactId>flatpack</artifactId>
-				<version>${flatpack.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jdom</groupId>
-				<artifactId>jdom</artifactId>
-				<version>${jdom.version}</version>
+				<groupId>org.beanio</groupId>
+				<artifactId>beanio</artifactId>
+				<version>${beanio.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -3,35 +3,80 @@ package uk.co.bluegecko.pay.common.service.base;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collection;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.beanio.BeanReader;
+import org.beanio.BeanReaderErrorHandler;
+import org.beanio.BeanReaderException;
+import org.beanio.InvalidRecordException;
+import org.beanio.RecordContext;
+import org.beanio.StreamFactory;
 import org.springframework.stereotype.Service;
 
-import net.sf.flatpack.DataSet;
-import net.sf.flatpack.Parser;
-import net.sf.flatpack.brparse.BuffReaderParseFactory;
+import lombok.extern.slf4j.Slf4j;
 import uk.co.bluegecko.pay.common.service.Mapper;
+import uk.co.bluegecko.pay.common.service.ParsingContext;
 import uk.co.bluegecko.pay.common.service.ParsingService;
 
 
 @Service
-public class ParsingServiceBase implements ParsingService
+@Slf4j
+public class ParsingServiceBase implements ParsingService, BeanReaderErrorHandler
 {
 
-	@Override
-	public void parse( final Reader dataFile, final Reader mappingFile, final Mapper mapper ) throws IOException
+	public StreamFactory factory()
 	{
-		final Parser parser = BuffReaderParseFactory.getInstance()
-				.newFixedLengthParser( mappingFile, dataFile );
+		final StreamFactory factory = StreamFactory.newInstance();
+		return factory;
+	}
 
-		parser.setHandlingShortLines( true );
-		parser.setIgnoreExtraColumns( true );
-		parser.setNullEmptyStrings( true );
-		final DataSet dataSet = parser.parse();
+	@Override
+	public void parse( final Reader dataFile, final Mapper mapper ) throws IOException
+	{
+		final StreamFactory factory = mapper.addMapping( factory() );
 
-		while ( dataSet.next() )
+		final BeanReader reader = factory.createReader( mapper.name(), dataFile );
+		try
 		{
-			mapper.map( dataSet.getRecord()
-					.get() );
+			reader.setErrorHandler( this );
+			final ParsingContext context = mapper.newContext( reader );
+
+			Object obj;
+			while ( ( obj = reader.read() ) != null )
+			{
+				mapper.map( obj, context );
+			}
+		}
+		finally
+		{
+			reader.close();
+		}
+	}
+
+	@Override
+	public void handleError( final BeanReaderException ex ) throws Exception
+	{
+		if ( ex instanceof InvalidRecordException )
+		{
+			log.warn( ex.getLocalizedMessage() );
+			final RecordContext recordContext = ex.getRecordContext();
+			for ( final String error : recordContext.getRecordErrors() )
+			{
+				log.warn( error );
+			}
+			for ( final Map.Entry< String, Collection< String > > fieldErrors : recordContext.getFieldErrors()
+					.entrySet() )
+			{
+				log.warn( String.format( "Field '%s': %s", fieldErrors.getKey(),
+						StringUtils.join( fieldErrors.getValue(), ',' ) ) );
+			}
+		}
+		else
+		{
+			log.warn( ex.getLocalizedMessage() );
+			throw ex;
 		}
 	}
 

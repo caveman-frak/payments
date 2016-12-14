@@ -16,17 +16,21 @@ import uk.co.bluegecko.pay.common.model.BuilderConstants;
 
 
 @Value
-@Builder
+@Builder( toBuilder = true )
 @Accessors( fluent = true )
 public class Contra
 {
 
 	@Min( 1 )
 	private final int index;
-	private final int lineNo;
-	private final Account destination;
+	private final Integer lineNo;
 	private final Account origin;
+	private final Account destination;
+	@Pattern( regexp = "[A-Z0-9]{2}" )
+	@Length( min = 2, max = 2 )
 	private final String transactionType;
+	@Pattern( regexp = Constants.BACS_CHARACTERS )
+	@Length( max = 4 )
 	private final String freeFormat;
 	private final BigDecimal amount;
 	@Pattern( regexp = Constants.BACS_CHARACTERS )
@@ -46,9 +50,7 @@ public class Contra
 
 		public ContraBuilder processingDate( final long julianDate )
 		{
-			processingDate = LocalDate.ofEpochDay( julianDate );
-
-			return this;
+			return processingDate( LocalDate.ofEpochDay( julianDate ) );
 		}
 
 		public ContraBuilder amount( final BigDecimal amount )
@@ -60,9 +62,7 @@ public class Contra
 
 		public ContraBuilder amount( final String pence )
 		{
-			amount = new BigDecimal( pence ).divide( HUNDRED );
-
-			return this;
+			return amount( new BigDecimal( pence ).divide( HUNDRED ) );
 		}
 
 	}

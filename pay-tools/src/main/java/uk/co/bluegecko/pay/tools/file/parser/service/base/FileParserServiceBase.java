@@ -72,7 +72,7 @@ public class FileParserServiceBase extends AbstractFileService implements FilePa
 	{
 		final Standard18Mapper standard18Mapper = createMapper( parserSettings );
 
-		parsingService.parse( dataFile, standard18Mapper.mappingFile(), standard18Mapper );
+		parsingService.parse( dataFile, standard18Mapper );
 	}
 
 	protected Standard18Mapper createMapper( final ParserSettings parserSettings )
@@ -81,24 +81,24 @@ public class FileParserServiceBase extends AbstractFileService implements FilePa
 
 		if ( parserSettings.instructions() )
 		{
-			standard18Mapper.add( Row.INSTR, printRow() );
+			standard18Mapper.addRow( Row.INSTR, printRow() );
 		}
 		if ( parserSettings.contras() )
 		{
-			standard18Mapper.add( Row.CONTRA, printRow() );
+			standard18Mapper.addRow( Row.CONTRA, printRow() );
 		}
 		if ( parserSettings.headers() )
 		{
-			standard18Mapper.add( Row.VOL1, printRow() );
-			standard18Mapper.add( Row.HDR1, printRow() );
-			standard18Mapper.add( Row.HDR2, printRow() );
-			standard18Mapper.add( Row.UHL1, printRow() );
+			standard18Mapper.addRow( Row.VOL1, printRow() );
+			standard18Mapper.addRow( Row.HDR1, printRow() );
+			standard18Mapper.addRow( Row.HDR2, printRow() );
+			standard18Mapper.addRow( Row.UHL1, printRow() );
 		}
 		if ( parserSettings.trailers() )
 		{
-			standard18Mapper.add( Row.EOF1, printRow() );
-			standard18Mapper.add( Row.EOF2, printRow() );
-			standard18Mapper.add( Row.UTL1, printRow() );
+			standard18Mapper.addRow( Row.EOF1, printRow() );
+			standard18Mapper.addRow( Row.EOF2, printRow() );
+			standard18Mapper.addRow( Row.UTL1, printRow() );
 		}
 
 		return standard18Mapper;

@@ -26,8 +26,8 @@ public class UploadServiceBaseTest
 {
 
 	private static final String FILE_NAME = "test.txt";
-	private static final String VOL_LINE = "VOL1173922                               100101                                1                          ";
-	private static final String INST_LINE = "0100390105996309940202421315692000000000000006BSDSAF 00000000006REF&LT 00000000006NAME   00000000006 14308     ";
+	private static final String VOL_LINE = "VOL1173922                               100101                                1";
+	private static final String INST_LINE = "0100390105996309940202421315692000000000000006BSDSAF 00000000006REF&LT 00000000006NAME   00000000006 14308";
 
 	private StreamingService streamingService;
 	private UploadService uploadService;
