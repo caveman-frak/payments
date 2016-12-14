@@ -31,6 +31,7 @@ import uk.co.bluegecko.pay.common.service.Mapper;
 public class ParsingServiceBaseTest
 {
 
+	private static final String TEXT = "text";
 	private static final String TEST = "test";
 	private static final String TYPE = "VOL1";
 	private static final String LINE = "VOL1173922                               100101                                1";
@@ -55,7 +56,7 @@ public class ParsingServiceBaseTest
 								.rid()
 								.literal( TYPE )
 								.ignore() )
-						.addField( new FieldBuilder( "text" ).length( 6 ) ) ) );
+						.addField( new FieldBuilder( TEXT ).length( 6 ) ) ) );
 
 		final Mapper< TextParsingContext > mapper = mock( Mapper.class );
 		when( mapper.name() ).thenReturn( TEST );
@@ -74,7 +75,7 @@ public class ParsingServiceBaseTest
 			verify( mapper, times( 1 ) ).map( record.capture(), contect.capture() );
 
 			final Map< String, Object > value = record.getValue();
-			assertThat( value, hasEntry( "text", "173922" ) );
+			assertThat( value, hasEntry( TEXT, "173922" ) );
 		}
 	}
 

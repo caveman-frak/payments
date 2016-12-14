@@ -75,6 +75,7 @@ public class ParsingServiceBase implements ParsingService, BeanReaderErrorHandle
 		}
 		else
 		{
+			log.warn( ex.getLocalizedMessage() );
 			throw ex;
 		}
 	}

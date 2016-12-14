@@ -18,6 +18,7 @@ import java.time.Month;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.beanio.UnidentifiedRecordException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -262,11 +263,31 @@ public class Standard18MapperTest
 	}
 
 	@Test
-	public final void testParseInvalidLine() throws IOException
+	public final void testParseInvalidField() throws IOException
 	{
 		standard18Mapper.addRow( Row.HDR1, consumer );
 
 		parse( reader( "HDR1A100101S  1100101173922         08194       000000                          " ) );
+
+		verify( consumer, never() ).accept( any(), any() );
+	}
+
+	@Test
+	public final void testParseInvalidRecord() throws IOException
+	{
+		standard18Mapper.addRow( Row.HDR1, consumer );
+
+		parse( reader( "HDR1A100101S  11001011739220001000108194 08192 000000" ) );
+
+		verify( consumer, never() ).accept( any(), any() );
+	}
+
+	@Test( expected = UnidentifiedRecordException.class )
+	public final void testParseUnidentifiedRecord() throws IOException
+	{
+		standard18Mapper.addRow( Row.HDR1, consumer );
+
+		parse( reader( "XXX1A100101S  11001011739220001000108194 08192 000000                          " ) );
 
 		verify( consumer, never() ).accept( any(), any() );
 	}
