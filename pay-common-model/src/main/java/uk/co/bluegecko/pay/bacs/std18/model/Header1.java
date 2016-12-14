@@ -30,9 +30,6 @@ public class Header1
 	public static final class Header1Builder
 	{
 
-		public Header1Builder()
-		{}
-
 		public Header1Builder created( final LocalDate created )
 		{
 			this.created = created;

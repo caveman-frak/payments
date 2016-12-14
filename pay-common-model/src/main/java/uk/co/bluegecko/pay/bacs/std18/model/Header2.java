@@ -18,12 +18,4 @@ public class Header2
 	private final String record;
 	private final String offset;
 
-	public static final class Header2Builder
-	{
-
-		public Header2Builder()
-		{}
-
-	}
-
 }

@@ -20,7 +20,7 @@ import uk.co.bluegecko.pay.view.View;
 
 
 @Value
-@Builder
+@Builder( toBuilder = true )
 @Accessors( fluent = true )
 public class Instruction
 {
@@ -47,9 +47,6 @@ public class Instruction
 	public static final class InstructionBuilder implements BuilderConstants
 	{
 
-		public InstructionBuilder()
-		{}
-
 		public InstructionBuilder processingDate( final LocalDate processingDate )
 		{
 			this.processingDate = processingDate;
@@ -72,29 +69,6 @@ public class Instruction
 		public InstructionBuilder amount( final String pence )
 		{
 			return amount( new BigDecimal( pence ).divide( HUNDRED ) );
-		}
-
-		/*
-		 * Required to steam.io support
-		 */
-		public void destinationBuilder( final Account.AccountBuilder builder )
-		{
-			destination( builder.build() );
-		}
-
-		public Account.AccountBuilder destinationBuilder()
-		{
-			return destination.toBuilder();
-		}
-
-		public void originBuilder( final Account.AccountBuilder builder )
-		{
-			origin( builder.build() );
-		}
-
-		public Account.AccountBuilder originBuilder()
-		{
-			return origin.toBuilder();
 		}
 
 	}

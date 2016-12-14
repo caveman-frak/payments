@@ -50,13 +50,10 @@ public class Standard18MapperTest
 	private static final String COUNTRY = "0000BB";
 	private static final String BLOCK = "00512";
 	private static final String LABEL = "1";
-	private static final String BLOCK_COUNT = "000000";
 	private static final int SECTION = 1;
 	private static final int SEQUENCE = 1;
-	private static final int GENERATION = 0;
-	private static final int VERSION = 0;
-	private static final int VERSION_2 = 4;
-	private static final int GENERATION_2 = 819;
+	private static final int GENERATION = 819;
+	private static final int VERSION = 4;
 	private static final String FILE = "A100101S  1100101";
 	private static final String SUN = "100101";
 	private static final String SERIAL_NO = "173922";
@@ -79,7 +76,7 @@ public class Standard18MapperTest
 
 	private static final String[] LINES =
 		{ "VOL1173922                               100101                                1",
-				"HDR1A100101S  110010117392200010001       08194 08192 000000                    ",
+				"HDR1A100101S  11001011739220001000108194 08192 000000                           ",
 				"HDR2F0051200106                                   00                            ",
 				"UHL1 14308999999    AA0000BB4 MULTI  001       AUD0000                          ",
 				"0100390105996309940202421315692/00000000000055BSDSAF 00000000055REF&LT 00000000055NAME   00000000055 14308",
@@ -126,10 +123,10 @@ public class Standard18MapperTest
 		assertThat( value.sequence(), is( SEQUENCE ) );
 		assertThat( value.generation(), is( GENERATION ) );
 		assertThat( value.version(), is( VERSION ) );
-		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 8 ) ) );
-		assertThat( value.expires(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
+		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
+		assertThat( value.expires(), is( LocalDate.of( 1970, Month.JANUARY, 1 ) ) );
 		assertThat( value.accessibility(), is( EMPTY ) );
-		assertThat( value.blockCount(), is( BLOCK_COUNT ) );
+		assertThat( value.blockCount(), is( EMPTY ) );
 		assertThat( value.systemCode(), is( EMPTY ) );
 	}
 
@@ -221,8 +218,8 @@ public class Standard18MapperTest
 		assertThat( value.set(), is( SERIAL_NO ) );
 		assertThat( value.section(), is( SECTION ) );
 		assertThat( value.sequence(), is( SEQUENCE ) );
-		assertThat( value.generation(), is( GENERATION_2 ) );
-		assertThat( value.version(), is( VERSION_2 ) );
+		assertThat( value.generation(), is( GENERATION ) );
+		assertThat( value.version(), is( VERSION ) );
 		assertThat( value.created(), is( LocalDate.of( 1992, Month.JUNE, 6 ) ) );
 		assertThat( value.expires(), is( LocalDate.of( 1970, Month.JANUARY, 1 ) ) );
 		assertThat( value.accessibility(), is( EMPTY ) );

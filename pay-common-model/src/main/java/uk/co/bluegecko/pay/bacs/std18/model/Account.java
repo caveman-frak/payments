@@ -14,7 +14,7 @@ import uk.co.bluegecko.pay.view.View;
 
 
 @Value
-@Builder( toBuilder = true )
+@Builder
 @Accessors( fluent = true )
 public class Account
 {
@@ -30,13 +30,5 @@ public class Account
 	@Pattern( regexp = "[0-9]?" )
 	@JsonView( View.Detailed.class )
 	private final String type;
-
-	public static final class AccountBuilder
-	{
-
-		public AccountBuilder()
-		{}
-
-	}
 
 }

@@ -25,9 +25,6 @@ public class UserTrailer
 	public static final class UserTrailerBuilder implements BuilderConstants
 	{
 
-		public UserTrailerBuilder()
-		{}
-
 		public UserTrailerBuilder debitValue( final BigDecimal debitValue )
 		{
 			this.debitValue = debitValue;

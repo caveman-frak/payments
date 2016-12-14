@@ -16,7 +16,7 @@ import uk.co.bluegecko.pay.common.model.BuilderConstants;
 
 
 @Value
-@Builder
+@Builder( toBuilder = true )
 @Accessors( fluent = true )
 public class Contra
 {
@@ -24,8 +24,8 @@ public class Contra
 	@Min( 1 )
 	private final int index;
 	private final Integer lineNo;
-	private final Account destination;
 	private final Account origin;
+	private final Account destination;
 	@Pattern( regexp = "[A-Z0-9]{2}" )
 	@Length( min = 2, max = 2 )
 	private final String transactionType;
@@ -40,9 +40,6 @@ public class Contra
 
 	public static final class ContraBuilder implements BuilderConstants
 	{
-
-		public ContraBuilder()
-		{}
 
 		public ContraBuilder processingDate( final LocalDate processingDate )
 		{
@@ -66,29 +63,6 @@ public class Contra
 		public ContraBuilder amount( final String pence )
 		{
 			return amount( new BigDecimal( pence ).divide( HUNDRED ) );
-		}
-
-		/*
-		 * Required to steam.io support
-		 */
-		public void destinationBuilder( final Account.AccountBuilder builder )
-		{
-			destination( builder.build() );
-		}
-
-		public Account.AccountBuilder destinationBuilder()
-		{
-			return destination.toBuilder();
-		}
-
-		public void originBuilder( final Account.AccountBuilder builder )
-		{
-			origin( builder.build() );
-		}
-
-		public Account.AccountBuilder originBuilder()
-		{
-			return origin.toBuilder();
 		}
 
 	}
