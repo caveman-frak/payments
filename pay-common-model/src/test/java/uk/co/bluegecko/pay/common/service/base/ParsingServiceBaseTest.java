@@ -3,7 +3,7 @@ package uk.co.bluegecko.pay.common.service.base;
 
 import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -62,7 +62,7 @@ public class ParsingServiceBaseTest
 		when( mapper.name() ).thenReturn( TEST );
 		when( mapper.addMapping( any( StreamFactory.class ) ) ).thenReturn( factory );
 		when( mapper.newContext( any( BeanReader.class ) ) )
-				.thenAnswer( invocation -> new TextParsingContext( invocation.getArgumentAt( 0, BeanReader.class ) ) );
+				.thenAnswer( invocation -> new TextParsingContext( invocation.getArgument( 0 ) ) );
 
 		try (Reader dataFile = new StringReader( LINE ))
 		{
