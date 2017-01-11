@@ -1,0 +1,3 @@
+[submodule "pay-config"]
+	path = pay-config
+	url = https://github.com/caveman-frak/payments-config.git
