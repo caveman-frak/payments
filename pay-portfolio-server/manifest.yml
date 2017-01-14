@@ -1,0 +1,10 @@
+---
+applications:
+- name: pay-portfolio
+  memory: 1G
+  random-route: true
+  path: target/pay-portfolio-server-0.0.1-SNAPSHOT-exec.jar
+  services:
+   - pay-rabbitmq
+
+
