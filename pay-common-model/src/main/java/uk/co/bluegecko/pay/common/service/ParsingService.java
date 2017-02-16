@@ -8,6 +8,7 @@ import java.io.Reader;
 public interface ParsingService
 {
 
-	public void parse( final Reader dataFile, final Mapper mapper ) throws IOException;
+	public < T extends ParsingContext > void parse( final Reader dataFile, final Mapper< T > mapper )
+			throws IOException;
 
 }

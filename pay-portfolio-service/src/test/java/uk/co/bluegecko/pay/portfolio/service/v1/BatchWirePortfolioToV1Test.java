@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,18 +31,9 @@ public class BatchWirePortfolioToV1Test extends FakeDataFactory
 
 		final uk.co.bluegecko.pay.v1.portfolio.wire.Batch wireBatch = wireService.toWire( batch );
 
-		assertThat( wireBatch.id(), is( batch.id() ) );
-		assertThat( wireBatch.portfolio(), is( batch.portfolio()
+		assertBatch( batch, wireBatch, is( batch.portfolio()
 				.get()
 				.id() ) );
-		assertThat( wireBatch.index(), is( batch.index() ) );
-		assertThat( wireBatch.name(), is( batch.name() ) );
-		assertThat( wireBatch.userNumber(), is( batch.userNumber() ) );
-		assertThat( wireBatch.generation(), is( batch.generation() ) );
-		assertThat( wireBatch.section(), is( batch.section() ) );
-		assertThat( wireBatch.sequence(), is( batch.sequence() ) );
-		assertThat( wireBatch.set(), is( batch.set() ) );
-		assertThat( wireBatch.version(), is( batch.version() ) );
 	}
 
 	@Test
@@ -51,16 +43,7 @@ public class BatchWirePortfolioToV1Test extends FakeDataFactory
 
 		final uk.co.bluegecko.pay.v1.portfolio.wire.Batch wireBatch = wireService.toWire( batch );
 
-		assertThat( wireBatch.id(), is( batch.id() ) );
-		assertThat( wireBatch.portfolio(), is( nullValue() ) );
-		assertThat( wireBatch.index(), is( batch.index() ) );
-		assertThat( wireBatch.name(), is( batch.name() ) );
-		assertThat( wireBatch.userNumber(), is( batch.userNumber() ) );
-		assertThat( wireBatch.generation(), is( batch.generation() ) );
-		assertThat( wireBatch.section(), is( batch.section() ) );
-		assertThat( wireBatch.sequence(), is( batch.sequence() ) );
-		assertThat( wireBatch.set(), is( batch.set() ) );
-		assertThat( wireBatch.version(), is( batch.version() ) );
+		assertBatch( batch, wireBatch, nullValue() );
 	}
 
 	@Test
@@ -70,10 +53,27 @@ public class BatchWirePortfolioToV1Test extends FakeDataFactory
 
 		final Batch batch = wireService.fromWire( wireBatch );
 
-		assertThat( batch.id(), is( wireBatch.id() ) );
 		assertThat( batch.portfolio()
 				.get()
 				.id(), is( wireBatch.portfolio() ) );
+		assertBatch( wireBatch, batch );
+	}
+
+	@Test
+	public final void testFromWireNoPortfolio()
+	{
+		final uk.co.bluegecko.pay.v1.portfolio.wire.Batch wireBatch = createWireBatch();
+
+		final Batch batch = wireService.fromWire( wireBatch );
+
+		assertThat( batch.portfolio()
+				.isPresent(), is( false ) );
+		assertBatch( wireBatch, batch );
+	}
+
+	protected void assertBatch( final uk.co.bluegecko.pay.v1.portfolio.wire.Batch wireBatch, final Batch batch )
+	{
+		assertThat( batch.id(), is( wireBatch.id() ) );
 		assertThat( wireBatch.index(), is( batch.index() ) );
 		assertThat( wireBatch.name(), is( batch.name() ) );
 		assertThat( wireBatch.userNumber(), is( batch.userNumber() ) );
@@ -84,24 +84,19 @@ public class BatchWirePortfolioToV1Test extends FakeDataFactory
 		assertThat( batch.version(), is( wireBatch.version() ) );
 	}
 
-	@Test
-	public final void testFromWireNoPortfolio()
+	protected void assertBatch( final Batch batch, final uk.co.bluegecko.pay.v1.portfolio.wire.Batch wireBatch,
+			final Matcher< Object > portfolioMatcher )
 	{
-		final uk.co.bluegecko.pay.v1.portfolio.wire.Batch wireBatch = createWireBatch();
-
-		final Batch batch = wireService.fromWire( wireBatch );
-
-		assertThat( batch.id(), is( wireBatch.id() ) );
-		assertThat( batch.portfolio()
-				.isPresent(), is( false ) );
+		assertThat( wireBatch.id(), is( batch.id() ) );
+		assertThat( wireBatch.portfolio(), is( portfolioMatcher ) );
 		assertThat( wireBatch.index(), is( batch.index() ) );
 		assertThat( wireBatch.name(), is( batch.name() ) );
 		assertThat( wireBatch.userNumber(), is( batch.userNumber() ) );
-		assertThat( batch.generation(), is( wireBatch.generation() ) );
-		assertThat( batch.section(), is( wireBatch.section() ) );
-		assertThat( batch.sequence(), is( wireBatch.sequence() ) );
-		assertThat( batch.set(), is( wireBatch.set() ) );
-		assertThat( batch.version(), is( wireBatch.version() ) );
+		assertThat( wireBatch.generation(), is( batch.generation() ) );
+		assertThat( wireBatch.section(), is( batch.section() ) );
+		assertThat( wireBatch.sequence(), is( batch.sequence() ) );
+		assertThat( wireBatch.set(), is( batch.set() ) );
+		assertThat( wireBatch.version(), is( batch.version() ) );
 	}
 
 }

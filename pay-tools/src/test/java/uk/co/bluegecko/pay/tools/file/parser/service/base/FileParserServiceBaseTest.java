@@ -5,7 +5,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -93,6 +93,7 @@ public class FileParserServiceBaseTest extends TestHarness
 		assertThat( mapper.isSet( Row.EOF1 ), is( false ) );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@Test
 	public final void testProcessFiles() throws IOException
 	{
@@ -111,6 +112,7 @@ public class FileParserServiceBaseTest extends TestHarness
 		verify( parsingService, times( 2 ) ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@Test
 	public final void testParseFile() throws IOException
 	{
@@ -124,6 +126,7 @@ public class FileParserServiceBaseTest extends TestHarness
 		verify( parsingService, never() ).parse( any( Reader.class ), any( Mapper.class ) );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	@Test
 	public final void testProcessFilesCmdLine() throws IOException
 	{

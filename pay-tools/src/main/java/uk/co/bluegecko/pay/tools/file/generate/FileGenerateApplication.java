@@ -1,4 +1,4 @@
-package uk.co.bluegecko.pay.tools.file.upload;
+package uk.co.bluegecko.pay.tools.file.generate;
 
 
 import java.io.IOException;
@@ -25,19 +25,18 @@ import uk.co.bluegecko.pay.tools.file.upload.service.FileUploadService;
 
 
 @SpringBootApplication
-public class FileUploadApplication
+public class FileGenerateApplication
 {
 
-	private static final Logger logger = LoggerFactory.getLogger( FileUploadApplication.class );
+	private static final Logger logger = LoggerFactory.getLogger( FileGenerateApplication.class );
 
 	public static void main( final String... args )
 	{
-		new SpringApplicationBuilder().sources( FileUploadApplication.class )
+		new SpringApplicationBuilder().sources( FileGenerateApplication.class )
 				.profiles( "dev" )
 				.properties( "spring.application.name:file-upload" )
 				.web( WebApplicationType.NONE )
-				.run( args )
-				.close();
+				.run( args );
 	}
 
 	@Bean

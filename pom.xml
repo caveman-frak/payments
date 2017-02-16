@@ -8,6 +8,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<prerequisites>
+		<maven>3.1</maven>
+	</prerequisites>
+
 	<name>Payments Parent</name>
 	<description>Payments Parent and Build File</description>
 
@@ -88,12 +92,10 @@
 		<git-commit-plugin.version>2.2.1</git-commit-plugin.version>
 		<jacoco-plugin.version>0.7.8-SNAPSHOT</jacoco-plugin.version>
 		<!-- dependency versions -->
-		<spring-cloud-sleuth.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-sleuth.version>
 		<spring-platform.version>Cairo-BUILD-SNAPSHOT</spring-platform.version>
 		<spring-boot.version>${spring-boot-plugin.version}</spring-boot.version>
-		<spring-cloud.version>Camden.BUILD-SNAPSHOT</spring-cloud.version>
-		<spring-cloud-stream.version>1.0.4.BUILD-SNAPSHOT</spring-cloud-stream.version>
-		<reactor-core.version>3.0.2.RELEASE</reactor-core.version>
+		<spring-cloud.version>Dalston.BUILD-SNAPSHOT</spring-cloud.version>
+		<reactor-core.version>3.0.4.RELEASE</reactor-core.version>
 		<!-- build and run properties -->
 		<integration.skip>${maven.test.skip}</integration.skip>
 	</properties>
@@ -116,16 +118,6 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-buffer</artifactId>
-				<version>4.0.34.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-sleuth-core</artifactId>
-				<version>${spring-cloud-sleuth.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>io.spring.platform</groupId>
 				<artifactId>platform-bom</artifactId>
 				<version>${spring-platform.version}</version>
@@ -143,13 +135,6 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-stream-dependencies</artifactId>
-				<version>${spring-cloud-stream.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
