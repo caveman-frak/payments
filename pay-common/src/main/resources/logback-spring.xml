@@ -10,7 +10,7 @@
 	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
 
 	<springProperty scope="context" name="application-name" source="spring.application.name" default="unknown-app"/>
-	
+
 	<appender name="PAPERTRAIL" class="com.papertrailapp.logback.Syslog4jAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>%-5level %logger{35}: %m%n%xEx</pattern>
@@ -28,14 +28,14 @@
 			<maxMessageLength>128000</maxMessageLength>
 		</syslogConfig>
 	</appender>
-	
+
 	<springProfile name="!test">
 		<root level="INFO">
 			<appender-ref ref="PAPERTRAIL" />
 		</root>
 	</springProfile>
 
-	<!-- By default, the level of the root level is set to WARN -->
+	<!-- By default, the level of the root level is set to INFO -->
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />
 	</root>

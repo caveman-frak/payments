@@ -76,6 +76,7 @@
 		<module>pay-portfolio-service</module>
 		<module>pay-portfolio-server</module>
 		<module>pay-tools</module>
+		<module>pay-ui</module>
 	</modules>
 
 	<properties>

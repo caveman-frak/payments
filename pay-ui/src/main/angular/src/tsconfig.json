@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": "",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "mapRoot": "./",
+    "module": "ES6",
+    "moduleResolution": "node",
+    "outDir": "../../../../target/angular",
+    "sourceMap": true,
+    "target": "ES5",
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "jsx": "None"
+  },
+  "compileOnSave": true
+}
