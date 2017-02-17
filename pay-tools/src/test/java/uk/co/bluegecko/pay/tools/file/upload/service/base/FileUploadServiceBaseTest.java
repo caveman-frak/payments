@@ -26,12 +26,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockserver.junit.MockServerRule;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.lexicalscope.jewel.cli.Cli;
 import com.lexicalscope.jewel.cli.CliFactory;
 
@@ -56,7 +56,7 @@ public class FileUploadServiceBaseTest extends TestHarness
 	public final FileSystemRule fileSystemRule = new FileSystemRule();
 
 	@Rule
-	public MockServerRule serverRule = new MockServerRule( this );
+	public WireMockRule serverRule = new WireMockRule();
 
 	private final RestTemplate restTemplate = new RestTemplateBuilder().build();
 	private final MockRestServiceServer server = MockRestServiceServer.createServer( restTemplate );
@@ -148,7 +148,7 @@ public class FileUploadServiceBaseTest extends TestHarness
 
 	private URI createURI( final boolean useServerPort ) throws URISyntaxException
 	{
-		final int port = useServerPort ? serverRule.getPort() : 9090;
+		final int port = useServerPort ? serverRule.port() : 9090;
 		return new URI( "http", null, "localhost", port, "/", null, null );
 	}
 

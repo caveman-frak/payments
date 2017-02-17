@@ -33,7 +33,7 @@ public class ParsingServiceBase implements ParsingService, BeanReaderErrorHandle
 	}
 
 	@Override
-	public void parse( final Reader dataFile, final Mapper mapper ) throws IOException
+	public < T extends ParsingContext > void parse( final Reader dataFile, final Mapper< T > mapper ) throws IOException
 	{
 		final StreamFactory factory = mapper.addMapping( factory() );
 
@@ -41,7 +41,7 @@ public class ParsingServiceBase implements ParsingService, BeanReaderErrorHandle
 		try
 		{
 			reader.setErrorHandler( this );
-			final ParsingContext context = mapper.newContext( reader );
+			final T context = mapper.newContext( reader );
 
 			Object obj;
 			while ( ( obj = reader.read() ) != null )

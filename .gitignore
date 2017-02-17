@@ -19,3 +19,5 @@ vagrant/software/*.tar
 logs
 rebel*.xml
 .springBeans
+node_modules
+node

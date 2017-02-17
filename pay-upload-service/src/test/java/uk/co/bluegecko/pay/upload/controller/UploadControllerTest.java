@@ -3,8 +3,8 @@ package uk.co.bluegecko.pay.upload.controller;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +48,7 @@ public class UploadControllerTest extends TestHarness
 	{
 		final MockMultipartFile multipartFile = new MockMultipartFile( FILE, "test.txt", "text/plain",
 				"Spring Framework".getBytes() );
-		mvc.perform( fileUpload( UPLOAD ).file( multipartFile ) )
+		mvc.perform( multipart( UPLOAD ).file( multipartFile ) )
 				.andExpect( status().isAccepted() )
 				.andExpect( header().string( "Location", "http://localhost/status/0" ) );
 

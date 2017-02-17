@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -34,8 +35,9 @@ public class FileParserApplication
 		new SpringApplicationBuilder().sources( FileParserApplication.class, ParsingServiceBase.class )
 				.profiles( "dev" )
 				.properties( "spring.application.name:file-parser" )
-				.web( false )
-				.run( args );
+				.web( WebApplicationType.NONE )
+				.run( args )
+				.close();
 	}
 
 	@Bean
