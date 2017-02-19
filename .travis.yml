@@ -16,3 +16,7 @@ after_success:
 
 notifications:
   slack: bluegecko:1BNjFIg5CpOTsAMiMGWNjzTg
+  
+cache:
+  directories:
+  - $HOME/.m2

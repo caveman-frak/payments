@@ -29,9 +29,14 @@
 		</syslogConfig>
 	</appender>
 
+	<logger name="liquibase" level="INFO" additivity="true" />
+	<logger name="org.springframework" level="INFO" additivity="true" />
+	<logger name="uk.co.bluegecko" level="INFO" additivity="true" />
+
 	<springProfile name="!test">
 		<root level="INFO">
 			<appender-ref ref="PAPERTRAIL" />
+			<appender-ref ref="CONSOLE" />
 		</root>
 	</springProfile>
 

@@ -13,20 +13,19 @@
 
 	<logger name="liquibase" level="INFO" additivity="true" />
 	<logger name="org.springframework" level="INFO" additivity="true" />
-	<logger name="org.glassfish.jersey" level="INFO" additivity="true" />
 	<logger name="uk.co.bluegecko" level="INFO" additivity="true" />
 
-	<springProfile name="test">
+	<springProfile name="verbose">
 		<logger name="uk.co.bluegecko" level="DEBUG" additivity="true" />
 	</springProfile>
-	<springProfile name="dev,prod">
+	<springProfile name="prod">
 		<root level="WARN">
 			<appender-ref ref="STDOUT" />
 		</root>
 	</springProfile>
 
-	<!-- By default, the level of the root level is set to WARN -->
-	<root level="WARN">
+	<!-- By default, the level of the root level is set to INFO -->
+	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
 

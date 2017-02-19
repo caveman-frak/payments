@@ -4,20 +4,15 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": ["es6", "dom"],
     "mapRoot": "./",
-    "module": "ES6",
+    "module": "es6",
     "moduleResolution": "node",
     "outDir": "../../../../target/angular",
     "sourceMap": true,
-    "target": "ES5",
+    "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
-    ],
-    "jsx": "None"
-  },
-  "compileOnSave": true
+    ]
+  }
 }
