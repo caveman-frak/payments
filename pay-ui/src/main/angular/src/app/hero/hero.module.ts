@@ -5,8 +5,10 @@ import { HttpModule } from '@angular/http';
 
 import { HeroRoutingModule } from './hero-routing.module';
 import { HeroComponent } from './hero.component';
+import { HeroService } from './hero.service';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
 import { HeroListComponent } from '../hero-list/hero-list.component';
+import { HeroDashboardComponent } from '../hero-dashboard/hero-dashboard.component';
 
 @NgModule({
   imports: [
@@ -18,9 +20,10 @@ import { HeroListComponent } from '../hero-list/hero-list.component';
   declarations: [
     HeroComponent,
     HeroDetailComponent,
-    HeroListComponent
+    HeroListComponent,
+    HeroDashboardComponent
   ],
-  providers: [],
+  providers: [HeroService],
   bootstrap: [
     HeroComponent]
 })
