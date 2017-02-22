@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Hero, HEROES } from './hero';
+import { Hero } from './hero';
 
 @Component({
   selector: 'hero-root',

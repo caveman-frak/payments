@@ -1,7 +1,10 @@
-<h1>{{title}}</h1>
-
-<nav>
-	<a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-	<a routerLink="/heroes" routerLinkActive="active">Heroes</a>
-</nav>
+<md-toolbar>
+	<h1>{{title}}</h1>
+</md-toolbar>
+<md-sidenav>
+	<nav>
+		<a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+		<a routerLink="/heroes" routerLinkActive="active">Heroes</a>
+	</nav>
+</md-sidenav>
 <router-outlet></router-outlet>
