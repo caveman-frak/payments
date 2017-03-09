@@ -1,10 +1,22 @@
-<md-toolbar>
-	<h1>{{title}}</h1>
-</md-toolbar>
-<md-sidenav>
-	<nav>
-		<a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-		<a routerLink="/heroes" routerLinkActive="active">Heroes</a>
-	</nav>
-</md-sidenav>
+<div>
+	<h1 i18n>Tour of Heroes</h1>
+</div>
+<ngb-tabset type="tabs">
+	<ngb-tab>
+		<template ngbTabTitle>
+			<a routerLink="/dashboard" routerLinkActive="active" i18n>Dashboard</a>
+		</template>
+		<template ngbTabContent></template>
+	</ngb-tab>
+	<ngb-tab>
+		<template ngbTabTitle>
+			<a routerLink="/heroes" routerLinkActive="active" i18n>Heroes</a>
+		</template>
+		<template ngbTabContent></template>
+	</ngb-tab>
+	<ngb-tab [disabled]="true">
+		<template ngbTabTitle i18n>Details</template>
+		<template ngbTabContent></template>
+	</ngb-tab>
+</ngb-tabset>
 <router-outlet></router-outlet>

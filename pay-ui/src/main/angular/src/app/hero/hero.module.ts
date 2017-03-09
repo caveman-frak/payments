@@ -1,9 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { MaterialModule,  } from '@angular/material';
-import  'hammerjs';
+
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 //Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -22,8 +22,8 @@ import { HeroSearchComponent } from './search/hero-search.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    MaterialModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
+    NgbModule.forRoot(),
     HeroRoutingModule
   ],
   declarations: [
@@ -33,9 +33,13 @@ import { HeroSearchComponent } from './search/hero-search.component';
     HeroDashboardComponent,
     HeroSearchComponent
   ],
-  providers: [HeroService],
+  providers: [
+    Title,
+    HeroService
+  ],
   bootstrap: [
-    HeroComponent]
+    HeroComponent
+  ]
 })
 
 export class HeroModule { }

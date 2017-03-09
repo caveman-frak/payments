@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title }     from '@angular/platform-browser';
 
 import { Hero } from './hero';
 
@@ -8,6 +9,16 @@ import { Hero } from './hero';
   styleUrls: ['./hero.component.styl'],
 })
 
-export class HeroComponent {
-  title = 'Tour of Heroes';
+export class HeroComponent implements OnInit {
+
+  public constructor(private titleService: Title ) { }
+
+  ngOnInit(): void {
+    this.setTitle("Heroes");
+  }
+
+  public setTitle( newTitle: string) {
+    this.titleService.setTitle( newTitle );
+  }
+
 }

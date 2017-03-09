@@ -1,13 +1,21 @@
 <div *ngIf="hero">
-	<h2>{{hero.name}} details!</h2>
-	<div>
-		<label>id: </label>{{hero.id}}
-	</div>
-	<div>
-		<label>name: </label>
-		<input [(ngModel)]="hero.name"
-			placeholder="name" />
-	</div>
-	<button (click)="save()">Save</button>
-	<button (click)="goBack()">Back</button>
+	<form>
+		<h2 i18n>{{hero.name}} details!</h2>
+		<div class="form-group">
+			<label for="identifier" i18n>Identifier: </label>
+			<input class="form-control" id="identifier" disabled
+				[(ngModel)]="hero.id"
+				[ngModelOptions]="{standalone: true}"
+				placeholder="id" />
+		</div>
+		<div class="form-group">
+			<label for="name" i18n>Name: </label>
+			<input class="form-control" id="name" required
+				[(ngModel)]="hero.name"
+				[ngModelOptions]="{standalone: true}"
+				placeholder="name" />
+		</div>
+		<button type="submit" class="btn btn-success" (click)="save()">Save</button>
+		<button class="btn" (click)="goBack()">Back</button>
+	</form>
 </div>
